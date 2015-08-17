@@ -17,7 +17,7 @@ using namespace std;
 
 class Point : public GraphicObject {
 private:
-	const string POINT_TYPE = "point";
+	//const string POINT_TYPE = "point";
 
 public:
 	Point(string name, list<Coordinate> coords);

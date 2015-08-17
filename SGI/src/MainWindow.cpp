@@ -19,10 +19,6 @@ MainWindow::MainWindow() {
 	window = GTK_WIDGET (gtk_builder_get_object (builder, "mainWindow"));
 	gtk_builder_connect_signals (builder, NULL);
 	g_object_unref (G_OBJECT (builder));
-
-	GtkWidget *drawingArea = GTK_WIDGET (gtk_builder_get_object(builder, "drawingArea"));
-
-
 	gtk_widget_show (window);
 	gtk_main ();
 }

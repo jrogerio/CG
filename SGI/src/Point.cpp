@@ -9,7 +9,7 @@
 
 Point::Point(string name, list<Coordinate> coords): GraphicObject(name, coords) {
 	// TODO Auto-generated constructor stub
-	_type = POINT_TYPE;
+	//_type = POINT_TYPE;
 }
 
 Point::~Point() {

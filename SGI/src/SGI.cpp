@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "view/MainWindow.h"
+#include "MainWindow.h"
 
 int main (int argc, char *argv[])
 {
