@@ -8,6 +8,8 @@
 #ifndef SRC_WINDOW_H_
 #define SRC_WINDOW_H_
 
+#include "GraphicObject.h"
+
 class Window {
 public:
 	Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner);

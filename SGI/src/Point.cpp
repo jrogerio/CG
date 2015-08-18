@@ -10,6 +10,6 @@
 
 
 Point::Point(string name, Coordinate coord) :
-		GraphicObject(name, GraphicObjectType::POINT, vector<Coordinate>()) {
+		GraphicObject(name, point, vector<Coordinate>()) {
 		_coords.push_back(coord);
 }

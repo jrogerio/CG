@@ -5,8 +5,8 @@
  *      Author: plab
  */
 
-#ifndef SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_
-#define SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_
+#ifndef SRC_GRAPHICOBJECT_H_
+#define SRC_GRAPHICOBJECT_H_
 
 #include <string>
 #include <vector>
@@ -18,17 +18,14 @@ struct Coordinate {
 	Coordinate(double x, double y): _x(x), _y(y) {
 	}
 
-	double x() { return _x; }
-	double y() { return _y; }
-
-private:
+public:
 	double _x,_y;
 };
 
-enum class GraphicObjectType {
-	POINT,
-	LINE,
-	POLYGON
+enum GraphicObjectType {
+	point,
+	line,
+	polygon
 };
 
 // ---------------------------
@@ -48,4 +45,4 @@ protected:
 	vector<Coordinate> _coords;
 };
 
-#endif /* SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_ */
+#endif /* SRC_GRAPHICOBJECT_H_ */

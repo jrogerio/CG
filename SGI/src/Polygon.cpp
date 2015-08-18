@@ -8,5 +8,5 @@
 #include "Polygon.h"
 
 Polygon::Polygon(string name, vector<Coordinate> coords) :
-		GraphicObject(name, GraphicObjectType::POLYGON, coords) {
+		GraphicObject(name, polygon, coords) {
 }

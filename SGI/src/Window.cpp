@@ -45,3 +45,4 @@ void Window::zoomOut(int steps) {
 	_upperRightCorner._x += steps;
 	_upperRightCorner._y += steps;
 }
+
