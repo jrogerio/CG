@@ -5,11 +5,11 @@
  *      Author: plab
  */
 
-#ifndef MODEL_GRAPHICOBJECT_GRAPHICOBJECT_H_
-#define MODEL_GRAPHICOBJECT_GRAPHICOBJECT_H_
+#ifndef SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_
+#define SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_
 
 #include <string>
-#include <list>
+#include <vector>
 
 using namespace std;
 
@@ -25,21 +25,27 @@ private:
 	double _x,_y;
 };
 
+enum class GraphicObjectType {
+	POINT,
+	LINE,
+	POLYGON
+};
+
 // ---------------------------
 
 class GraphicObject {
 public:
-	GraphicObject(string name, list<Coordinate> coords);
+	GraphicObject(string name,  GraphicObjectType type, vector<Coordinate> coords);
 	virtual ~GraphicObject();
 
 	string name();
-	string type();
-	list<Coordinate> coords();
+	GraphicObjectType type();
+	vector<Coordinate> coords();
 
 protected:
 	string _name;
-	string _type;
-	list<Coordinate> _coords;
+	GraphicObjectType _type;
+	vector<Coordinate> _coords;
 };
 
-#endif /* MODEL_GRAPHICOBJECT_GRAPHICOBJECT_H_ */
+#endif /* SRC_GRAPHICOBJECT_GRAPHICOBJECT_H_ */

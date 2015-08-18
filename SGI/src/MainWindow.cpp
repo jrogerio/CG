@@ -8,7 +8,6 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow() {
-	// TODO Auto-generated constructor stub
 	GtkBuilder              *builder;
 	GtkWidget               *window;
 	GError *error = NULL;
@@ -24,7 +23,6 @@ MainWindow::MainWindow() {
 }
 
 MainWindow::~MainWindow() {
-	// TODO Auto-generated destructor stub
 }
 
 void MainWindow::onWindowDestroy(GtkWidget* object, gpointer user_data)

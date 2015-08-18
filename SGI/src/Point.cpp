@@ -6,13 +6,10 @@
  */
 
 #include "Point.h"
+#include <vector>
 
-Point::Point(string name, list<Coordinate> coords): GraphicObject(name, coords) {
-	// TODO Auto-generated constructor stub
-	//_type = POINT_TYPE;
+
+Point::Point(string name, Coordinate coord) :
+		GraphicObject(name, GraphicObjectType::POINT, vector<Coordinate>()) {
+		_coords.push_back(coord);
 }
-
-Point::~Point() {
-	// TODO Auto-generated destructor stub
-}
-

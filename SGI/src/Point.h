@@ -5,23 +5,19 @@
  *      Author: plab
  */
 
-#ifndef MODEL_GRAPHICOBJECT_POINT_H_
-#define MODEL_GRAPHICOBJECT_POINT_H_
+#ifndef SRC_GRAPHICOBJECT_POINT_H_
+#define SRC_GRAPHICOBJECT_POINT_H_
 
 #include <string>
-#include <list>
 
 #include "GraphicObject.h"
 
 using namespace std;
 
 class Point : public GraphicObject {
-private:
-	//const string POINT_TYPE = "point";
 
 public:
-	Point(string name, list<Coordinate> coords);
-	virtual ~Point();
+	Point(string name, Coordinate coord);
 };
 
-#endif /* MODEL_GRAPHICOBJECT_POINT_H_ */
+#endif /* SRC_GRAPHICOBJECT_POINT_H_ */

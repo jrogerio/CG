@@ -7,26 +7,22 @@
 
 #include "GraphicObject.h"
 
-GraphicObject::GraphicObject(string name, list<Coordinate> coords): _name(name), _coords(coords) {
-	// TODO Auto-generated constructor stub
-
+GraphicObject::GraphicObject(string name, GraphicObjectType type,
+		vector<Coordinate> coords) :
+		_name(name), _type(type), _coords(coords) {
 }
 
 GraphicObject::~GraphicObject() {
-	// TODO Auto-generated destructor stub
 }
 
-string GraphicObject::name()
-{
+string GraphicObject::name() {
 	return _name;
 }
 
-string GraphicObject::type()
-{
+GraphicObjectType GraphicObject::type() {
 	return _type;
 }
 
-list<Coordinate> GraphicObject::coords()
-{
+vector<Coordinate> GraphicObject::coords() {
 	return _coords;
 }
