@@ -15,18 +15,17 @@ extern "C"
 	{
 		window->drawObjects(cr);
 
-	   return FALSE;
+		return FALSE;
 	}
 
-	void click_cb(GtkWidget *widget, MainWindow *window)
+	void add_object_cb(GtkWidget *widget, MainWindow *window)
 	{
-		window->addObject();
+		window->showAddObject();
 	}
 }
 
 
 MainWindow::MainWindow() {
-	GtkBuilder *builder;
 	GtkWidget *window;
 	GtkWidget *btnAddObject;
 
@@ -46,11 +45,14 @@ MainWindow::MainWindow() {
 
 	btnAddObject = GTK_WIDGET (gtk_builder_get_object (builder, "addObj"));
 	g_signal_connect (G_OBJECT(btnAddObject), "clicked",
-						G_CALLBACK(click_cb), this);
+						G_CALLBACK(add_object_cb), this);
 
-	gtk_builder_connect_signals (builder, this);
+	popup = GTK_WIDGET (gtk_builder_get_object (builder, "addObjectWindow"));
+	g_signal_connect (G_OBJECT(popup), "delete_event",
+							G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
 	g_object_unref (G_OBJECT (builder));
-	gtk_widget_show (window);
+	gtk_widget_show_all (window);
 	gtk_main ();
 }
 
@@ -105,4 +107,9 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 	cairo_line_to(cr, coords.front()._x, coords.front()._y);
 
 	cairo_stroke(cr);
+}
+
+void MainWindow::showAddObject()
+{
+	gtk_window_present( GTK_WINDOW(popup) );
 }

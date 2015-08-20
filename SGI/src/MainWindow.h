@@ -15,8 +15,10 @@
 
 class MainWindow {
 private:
+	GtkBuilder *builder;
 	GtkWidget *drawingArea;
 	World *world;
+	GtkWidget *popup;
 
 public:
 
@@ -26,6 +28,7 @@ public:
 	void addObject();
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
+	void showAddObject();
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */
