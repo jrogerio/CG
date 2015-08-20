@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class Polygon : GraphicObject {
+class Polygon : public GraphicObject {
 public:
 	Polygon(string name, vector<Coordinate> coords);
 };

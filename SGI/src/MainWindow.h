@@ -10,13 +10,21 @@
 
 #include <gtk/gtk.h>
 
+#include "World.h"
+#include "GraphicObject.h"
+
 class MainWindow {
 private:
-	void onWindowDestroy(GtkWidget *object, gpointer user_data);
+	GtkWidget *drawingArea;
+	World *world;
 
 public:
+
 	MainWindow();
 	virtual ~MainWindow();
+
+	void addObject();
+	void drawObjects(cairo_t *cr);
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */

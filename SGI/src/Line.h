@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class Line : GraphicObject{
+class Line : public GraphicObject{
 public:
 	Line(string name, Coordinate first, Coordinate second);
 };
