@@ -25,6 +25,7 @@ public:
 
 	void addObject();
 	void drawObjects(cairo_t *cr);
+	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */

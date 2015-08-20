@@ -13,6 +13,7 @@
 class Window {
 public:
 	Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner);
+
 	void moveUp(int steps);
 	void moveDown(int steps);
 	void moveLeft(int steps);

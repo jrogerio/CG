@@ -12,6 +12,7 @@
 
 #include "GraphicObject.h"
 #include "Line.h"
+#include "Polygon.h";
 
 using namespace std;
 
@@ -24,6 +25,7 @@ public:
 	virtual ~World();
 
 	void addLine(string name, Coordinate begin, Coordinate end);
+	void addPolygon(string name, vector<Coordinate> coords);
 	vector<GraphicObject> getObjects();
 };
 

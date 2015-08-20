@@ -19,6 +19,11 @@ void World::addLine(string name, Coordinate begin, Coordinate end) {
 	displayFile.push_back(Line(name, begin, end));
 }
 
-vector<GraphicObject> World::getObjects(){
-	return vector<GraphicObject>();
+void World::addPolygon(string name, vector<Coordinate> coords) {
+	displayFile.push_back(Polygon(name, coords));
 }
+
+vector<GraphicObject> World::getObjects(){
+	return displayFile;
+}
+

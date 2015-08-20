@@ -9,17 +9,21 @@
 
 #include "MainWindow.h"
 
-static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, MainWindow window)
+extern "C"
 {
-	window.drawObjects(cr);
+	gboolean draw_cb(GtkWidget *widget, cairo_t *cr, MainWindow *window)
+	{
+		window->drawObjects(cr);
 
-   return TRUE;
+	   return FALSE;
+	}
+
+	void click_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->addObject();
+	}
 }
 
-static void click_cb(GtkWidget *widget, MainWindow window)
-{
-	window.addObject();
-}
 
 MainWindow::MainWindow() {
 	GtkBuilder *builder;
@@ -30,13 +34,15 @@ MainWindow::MainWindow() {
 
 	// Init builder and loads xml description of ui
 	builder = gtk_builder_new ();
+
 	gtk_builder_add_from_file (builder, "main.glade", NULL);
+
 
 	window = GTK_WIDGET (gtk_builder_get_object (builder, "mainWindow"));
 
 	drawingArea = GTK_WIDGET (gtk_builder_get_object (builder, "drawingArea"));
 	g_signal_connect (G_OBJECT (drawingArea), "draw",
-	                    G_CALLBACK (draw_cb), NULL);
+	                    G_CALLBACK (draw_cb), this);
 
 	btnAddObject = GTK_WIDGET (gtk_builder_get_object (builder, "addObj"));
 	g_signal_connect (G_OBJECT(btnAddObject), "clicked",
@@ -54,38 +60,49 @@ MainWindow::~MainWindow() {
 
 void MainWindow::addObject()
 {
-	Coordinate begin(10,10);
-	Coordinate end(100,100);
+	//Coordinate begin(10,10);
+	//Coordinate end(100,100);
 
-	world->addLine("teste", begin, end);
+	vector<Coordinate> coords;
+	coords.push_back(Coordinate(10,60));
+	coords.push_back(Coordinate(60,10));
+	coords.push_back(Coordinate(110,60));
+	coords.push_back(Coordinate(60,110));
+	coords.push_back(Coordinate(110,60));
+	coords.push_back(Coordinate(60,110));
+
+	world->addPolygon("teste", coords);
 	gtk_widget_queue_draw(drawingArea);
 }
 
 void MainWindow::drawObjects(cairo_t *cr) {
 	/* Set color for background */
-	//cairo_set_source_rgb(cr, 1, 1, 1);
+	cairo_set_source_rgb(cr, 1, 1, 1);
 	/* fill in the background color*/
-	//cairo_paint(cr);
+	cairo_paint(cr);
 
-	//cairo_set_source_rgb(cr, ((double) rand() / (RAND_MAX)), ((double) rand() / (RAND_MAX)), ((double) rand() / (RAND_MAX)));
-	//cairo_set_line_width(cr, 1);
+	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_set_line_width(cr, 1);
 
 	vector<GraphicObject> objects = world->getObjects();
 
-	//if (objects.size() > 0) {
-		//GraphicObject go = objects[0];
-		//vector<Coordinate> coords = go.coords();
+	if (objects.size() > 0) {
+		GraphicObject go = objects[0];
+		vector<Coordinate> coords = go.coords();
 
-		//cairo_move_to(cr, coords[0]._x, coords[0]._y);
+		drawSingleObject(cr, coords);
+	}
+}
 
-		//for (uint i = 1; i < coords.size(); i++) {
-		//	cairo_line_to(cr, coords[i]._x, coords[i]._y);
-		//}
+void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 
-		//cairo_stroke(cr);
-	//}
+	cairo_move_to(cr, coords[0]._x, coords[0]._y);
 
-	//cairo_move_to(cr, 10, 10);
-	//cairo_line_to(cr, 100,100);
-	//cairo_stroke(cr);
+	for (uint i = 1; i < coords.size(); i++) {
+		cairo_line_to(cr, coords[i]._x, coords[i]._y);
+	}
+
+	cairo_line_to(cr, coords.front()._x, coords.front()._y);
+
+	cairo_stroke(cr);
 }
