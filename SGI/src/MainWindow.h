@@ -12,13 +12,16 @@
 
 #include "World.h"
 #include "GraphicObject.h"
+#include "AddObjectWindow.h"
 
 class MainWindow {
 private:
 	GtkBuilder *builder;
 	GtkWidget *drawingArea;
 	World *world;
+	//AddObjectWindow *addObjectWindow;
 	GtkWidget *popup;
+	GtkGrid *polygonGrid;
 
 public:
 
@@ -28,6 +31,8 @@ public:
 	void addObject();
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
+	void addCoordComponent();
+	GtkWidget* createSpinButton();
 	void showAddObject();
 };
 
