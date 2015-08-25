@@ -32,7 +32,8 @@ MainWindow::MainWindow() {
 
 	// Init builder and loads xml description of ui
 	builder = gtk_builder_new ();
-	gtk_builder_add_from_file (builder, "main.glade", NULL);
+	gchar *ids[] = {"mainWindow", "drawingArea", "addObj", "addObjectWindow", "polygonGrid", "coordTemplate"};
+	gtk_builder_add_objects_from_file(builder, "main.glade", ids, NULL);
 
 	window = GTK_WIDGET (gtk_builder_get_object (builder, "mainWindow"));
 
@@ -54,26 +55,7 @@ MainWindow::MainWindow() {
 
 	polygonGrid = GTK_GRID (gtk_builder_get_object (builder, "polygonGrid"));
 
-	GtkWidget *coordTemplate = GTK_WIDGET (gtk_builder_get_object (builder, "coordTemplate"));
-	GtkWidget templateCopy;
-
-
-	gtk_grid_remove_row(polygonGrid, 2);
-	gtk_widget_set_parent_window(coordTemplate, NULL);
-	//gtk_widget_set_parent(coordTemplate, NULL);
-	std::memcpy(&templateCopy, coordTemplate, sizeof(GtkWidget));
-	gtk_widget_set_parent_window(&templateCopy, NULL);
-
-	//GtkWidget *teste = createSpinButton();
-	//gtk_widget_set_size_request(teste, 100, 50);
-	//gtk_grid_attach(polygonGrid, teste, 0, 0, 1, 1);
-	//GtkWidget *btn = gtk_button_new_with_label("TESTE");
-	//gtk_grid_remove_row(polygonGrid, 3);
-	//gtk_widget_show(btn);
-	//gtk_grid_insert_row(polygonGrid, 3);
-	//gtk_widget_set_parent_window(&templateCopy, NULL);
-	//gtk_grid_attach( polygonGrid , &templateCopy, 0,2,1,1);
-	//addCoordComponent();
+	addCoordComponent();
 
 	g_object_unref (G_OBJECT (builder));
 	gtk_widget_show_all (window);
@@ -134,22 +116,34 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 }
 
 void MainWindow::addCoordComponent() {
-	/*GtkGrid *coordGrid = gtk_grid_new();
-	gtk_grid_insert_row(coordGrid, 0);
+	GtkWidget *coordGrid = gtk_grid_new();
+	GtkWidget *label1 = gtk_label_new("X: ");
+	GtkWidget *label2 = gtk_label_new(" Y: ");
+	GtkWidget *entry1 = gtk_entry_new();
+	GtkWidget *entry2 = gtk_entry_new();
 
-	for (int i = 0; i < 4; i++) {
-		gtk_grid_insert_column(coordGrid, i);
-	}
+	gtk_widget_show(label1);
+	gtk_widget_show(label2);
+	gtk_widget_show(entry1);
+	gtk_widget_show(entry2);
 
-	gtk_grid_attach(coordGrid, GTK_WIDGET( gtk_label_new("X: ") ), 0, 0, 1, 1);
-	gtk_grid_attach(coordGrid, GTK_WIDGET( gtk_label_new("Y: ") ), 2, 0, 1, 1);
+	gtk_grid_attach( GTK_GRID(coordGrid), label1, 0,0,1,1);
+	gtk_grid_attach(GTK_GRID(coordGrid), entry1, 1,0,1,1);
+	gtk_grid_attach(GTK_GRID(coordGrid), label2, 2,0,1,1);
+	gtk_grid_attach(GTK_GRID(coordGrid), entry2, 3,0,1,1);
 
-	gtk_entry_set_placeholder_text(entryX, "0");
-	*/
+	gtk_widget_show(coordGrid);
 
-	GtkWidget *teste = createSpinButton();
-	gtk_widget_show(teste);
-	gtk_grid_attach(polygonGrid, teste, 0, 3, 1, 1);
+	GtkWidget *coordLabel = gtk_label_new("Coordenada:");
+	gtk_widget_show(coordLabel);
+	gtk_label_set_justify( GTK_LABEL(coordLabel), GTK_JUSTIFY_LEFT);
+
+	gtk_widget_set_halign(coordLabel, GTK_ALIGN_START);
+	gtk_widget_set_margin_left(coordLabel, 4);
+	gtk_widget_set_margin_left(coordGrid, 12);
+
+	gtk_grid_attach(polygonGrid, coordLabel, 0, 3, 1, 1);
+	gtk_grid_attach(polygonGrid, coordGrid, 0, 4, 1, 1);
 }
 
 GtkWidget* MainWindow::createSpinButton() {
