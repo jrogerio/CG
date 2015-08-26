@@ -16,12 +16,14 @@
 
 class MainWindow {
 private:
+	int rowCount = 7;
+
 	GtkBuilder *builder;
 	GtkWidget *drawingArea;
 	World *world;
-	//AddObjectWindow *addObjectWindow;
 	GtkWidget *popup;
 	GtkGrid *polygonGrid;
+	GtkWidget *buttonsGrid;
 
 public:
 
@@ -31,7 +33,10 @@ public:
 	void addObject();
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
+
 	void addCoordComponent();
+	void removeCoordComponent();
+
 	GtkWidget* createSpinButton();
 	void showAddObject();
 };
