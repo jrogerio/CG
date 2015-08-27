@@ -44,7 +44,9 @@ public:
 	void removeCoordComponent();
 
 	GtkWidget* createSpinButton();
-	void showAddObject();
+
+	void showAddPopup();
+	void closeAddPopup();
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */

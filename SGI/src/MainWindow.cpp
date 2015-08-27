@@ -21,7 +21,7 @@ extern "C"
 
 	void add_object_cb(GtkWidget *widget, MainWindow *window)
 	{
-		window->showAddObject();
+		window->showAddPopup();
 	}
 
 	void add_coord_cb(GtkWidget *widget, MainWindow *window)
@@ -32,6 +32,11 @@ extern "C"
 	void remove_coord_cb(GtkWidget *widget, MainWindow *window)
 	{
 		window->removeCoordComponent();
+	}
+
+	void close_add_popup_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->closeAddPopup();
 	}
 }
 
@@ -63,8 +68,12 @@ MainWindow::MainWindow() {
 							G_CALLBACK(add_coord_cb), this);
 
 	GtkWidget *removeButton = GTK_WIDGET (gtk_builder_get_object(builder, "removeCoord"));
-		g_signal_connect (G_OBJECT(removeButton), "clicked",
-								G_CALLBACK(remove_coord_cb), this);
+	g_signal_connect (G_OBJECT(removeButton), "clicked",
+							G_CALLBACK(remove_coord_cb), this);
+
+	GtkWidget *cancelButton = GTK_WIDGET (gtk_builder_get_object(builder, "cancelButton"));
+	g_signal_connect (G_OBJECT(cancelButton), "clicked",
+							G_CALLBACK(close_add_popup_cb), this);
 
 	world = new World();
 
@@ -133,11 +142,20 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 }
 
 void MainWindow::addCoordComponent() {
+	GtkAdjustment *adjustment1 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
+	GtkAdjustment *adjustment2 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
+
 	GtkWidget *coordGrid = gtk_grid_new();
 	GtkWidget *labelX = gtk_label_new("X: ");
 	GtkWidget *labelY = gtk_label_new("Y: ");
-	GtkWidget *entry1 = gtk_entry_new();
-	GtkWidget *entry2 = gtk_entry_new();
+	GtkWidget *entry1 = gtk_spin_button_new(adjustment1, 1, 0);
+	GtkWidget *entry2 = gtk_spin_button_new(adjustment2, 1, 0);
+
+	gtk_widget_set_size_request(entry1, 50, -1);
+	gtk_widget_set_size_request(entry2, 50, -1);
+
+	gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(entry1), true );
+	gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(entry2), true );
 
 	gtk_widget_show(labelX);
 	gtk_widget_show(labelY);
@@ -183,23 +201,31 @@ GtkWidget* MainWindow::createSpinButton() {
 	return gtk_spin_button_new(adjustment, 1, G_MAXUINT);
 }
 
-void MainWindow::showAddObject()
-{
+void MainWindow::showAddPopup() {
 	gtk_window_present( GTK_WINDOW(popup) );
+}
+
+void MainWindow::closeAddPopup() {
+	gtk_window_close( GTK_WINDOW(popup) );
 }
 
 vector<vector<Coordinate> > MainWindow::mapToViewport() {
 	vector<vector<Coordinate> > coords = vector<vector<Coordinate> >();
 	vector<GraphicObject> objects = world->getObjects();
+
 	for (int i = 0; i < objects.size(); ++i) {
 		vector<Coordinate> newcoords = vector<Coordinate>();
 		GraphicObject obj = objects[i];
+
 		for (int i = 0; i < obj.coords().size(); ++i) {
 			int x = ((obj.coords()[i]._x - window->Xmin())/(window->Xmax() - window->Xmin())) * (Xvmax - Xvmin);
 			int y = (1 - (obj.coords()[i]._y - window->Ymin())/(window->Ymax() - window->Ymin())) * (Yvmax - Yvmin);
+
 			newcoords.push_back(Coordinate(x, y));
 		}
+
 		coords.push_back(newcoords);
 	}
+
 	return coords;
 }
