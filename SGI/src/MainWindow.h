@@ -28,7 +28,7 @@ private:
 	GtkGrid *polygonGrid;
 	GtkWidget *buttonsGrid;
 
-	vector<vector<Coordinate>> mapToViewport();
+	vector<vector<Coordinate> > mapToViewport();
 
 public:
 

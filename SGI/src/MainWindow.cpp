@@ -188,11 +188,11 @@ void MainWindow::showAddObject()
 	gtk_window_present( GTK_WINDOW(popup) );
 }
 
-vector<vector<Coordinate>> MainWindow::mapToViewport() {
-	vector<vector<Coordinate>> coords = vector();
+vector<vector<Coordinate> > MainWindow::mapToViewport() {
+	vector<vector<Coordinate> > coords = vector<vector<Coordinate> >();
 	vector<GraphicObject> objects = world->getObjects();
 	for (int i = 0; i < objects.size(); ++i) {
-		vector<Coordinate> newcoords = vector();
+		vector<Coordinate> newcoords = vector<Coordinate>();
 		GraphicObject obj = objects[i];
 		for (int i = 0; i < obj.coords().size(); ++i) {
 			int x = ((obj.coords()[i]._x - window->Xmin())/(window->Xmax() - window->Xmin())) * (Xvmax - Xvmin);
