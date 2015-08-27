@@ -37,6 +37,9 @@ extern "C"
 
 
 MainWindow::MainWindow() {
+
+
+
 	GtkWidget *window;
 	GtkWidget *btnAddObject;
 
@@ -183,4 +186,20 @@ GtkWidget* MainWindow::createSpinButton() {
 void MainWindow::showAddObject()
 {
 	gtk_window_present( GTK_WINDOW(popup) );
+}
+
+vector<vector<Coordinate>> MainWindow::mapToViewport() {
+	vector<vector<Coordinate>> coords = vector();
+	vector<GraphicObject> objects = world->getObjects();
+	for (int i = 0; i < objects.size(); ++i) {
+		vector<Coordinate> newcoords = vector();
+		GraphicObject obj = objects[i];
+		for (int i = 0; i < obj.coords().size(); ++i) {
+			int x = ((obj.coords()[i]._x - window->Xmin())/(window->Xmax() - window->Xmin())) * (Xvmax - Xvmin);
+			int y = (1 - (obj.coords()[i]._y - window->Ymin())/(window->Ymax() - window->Ymin())) * (Yvmax - Yvmin);
+			newcoords.push_back(Coordinate(x, y));
+		}
+		coords.push_back(newcoords);
+	}
+	return coords;
 }

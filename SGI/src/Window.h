@@ -20,6 +20,10 @@ public:
 	void moveRight(int steps);
 	void zoomIn(int steps);
 	void zoomOut(int steps);
+	int Xmin();
+	int Ymin();
+	int Xmax();
+	int Ymax();
 
 private:
 	Coordinate _lowerLeftCorner, _upperRightCorner;

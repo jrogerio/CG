@@ -46,3 +46,19 @@ void Window::zoomOut(int steps) {
 	_upperRightCorner._y += steps;
 }
 
+int Window::Xmin() {
+	return _lowerLeftCorner._x;
+}
+
+int Window::Ymin() {
+	return _lowerLeftCorner._y;
+}
+
+int Window::Xmax() {
+	return _upperRightCorner._x;
+}
+
+int Window::Ymax() {
+	return _upperRightCorner._y;
+}
+

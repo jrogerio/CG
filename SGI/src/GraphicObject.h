@@ -35,9 +35,9 @@ public:
 	GraphicObject(string name,  GraphicObjectType type, vector<Coordinate> coords);
 	virtual ~GraphicObject();
 
-	string name();
-	GraphicObjectType type();
-	vector<Coordinate> coords();
+	string name() const;
+	GraphicObjectType type() const;
+	vector<Coordinate> coords() const;
 
 protected:
 	string _name;

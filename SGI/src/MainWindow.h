@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 
 #include "World.h"
+#include "Window.h"
 #include "GraphicObject.h"
 #include "AddObjectWindow.h"
 
@@ -20,10 +21,14 @@ private:
 
 	GtkBuilder *builder;
 	GtkWidget *drawingArea;
+	int Xvmin, Yvmin, Xvmax, Yvmax;
 	World *world;
+	Window *window;
 	GtkWidget *popup;
 	GtkGrid *polygonGrid;
 	GtkWidget *buttonsGrid;
+
+	vector<vector<Coordinate>> mapToViewport();
 
 public:
 
@@ -31,6 +36,7 @@ public:
 	virtual ~MainWindow();
 
 	void addObject();
+
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
 

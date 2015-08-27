@@ -15,6 +15,10 @@ World::~World() {
 	// TODO Auto-generated destructor stub
 }
 
+void World::addPoint(string name, Coordinate point) {
+	displayFile.push_back(Point(name, point));
+}
+
 void World::addLine(string name, Coordinate begin, Coordinate end) {
 	displayFile.push_back(Line(name, begin, end));
 }

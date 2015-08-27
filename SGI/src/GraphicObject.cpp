@@ -15,14 +15,14 @@ GraphicObject::GraphicObject(string name, GraphicObjectType type,
 GraphicObject::~GraphicObject() {
 }
 
-string GraphicObject::name() {
+string GraphicObject::name() const {
 	return _name;
 }
 
-GraphicObjectType GraphicObject::type() {
+GraphicObjectType GraphicObject::type() const {
 	return _type;
 }
 
-vector<Coordinate> GraphicObject::coords() {
+vector<Coordinate> GraphicObject::coords() const {
 	return _coords;
 }

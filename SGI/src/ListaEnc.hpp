@@ -6,17 +6,20 @@
  */
 
 #include "Elemento.hpp"
+#include <iostream>
 
 template<typename T>
 class ListaEnc {
 
 private:
-	Elemento<T>* head;
-	int size;
+	Elemento<T> *_head;
+	int _size;
 
 public:
-	ListaEnc();
-	~ListaEnc();
+	ListaEnc() :
+			_head(0), _size(0) {
+	}
+	//~ListaEnc(); // a completar
 
 	// inicio
 	void adicionaNoInicio(const T& dado);
@@ -31,8 +34,42 @@ public:
 	T retiraDaPosicao(int pos);
 
 	//fim
-	void adiciona(const T& dado);
-	T retira();
+	void adiciona(const T& dado) {
+		Elemento<T> *element = new Elemento<T>(dado, 0);
+
+		if (_size == 0) {
+			_head = element;
+		} else {
+			Elemento<T> *last = _head;
+			while (last->next() != 0) {
+				last = last->next();
+			}
+			last->next(element);
+		}
+		++_size;
+	}
+
+	T retira() {
+		Elemento<T> *new_last = _head;
+		if (_size < 2) {
+			T returned = _head->info();
+			delete _head;
+			_head = 0;
+			--_size;
+			return returned;
+		} else {
+			while (new_last->next()->next() != 0) {
+				new_last = new_last->next();
+			}
+			T returned = new_last->next()->info();
+			delete new_last->next();
+			new_last->next(0);
+			--_size;
+			return returned;
+		}
+	}
+
+
 
 	// especifico
 	T retiraEspecifico(const T& dado);
