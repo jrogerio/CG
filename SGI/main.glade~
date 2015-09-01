@@ -525,7 +525,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkNotebook" id="notebook2">
+          <object class="GtkNotebook" id="objNotebook">
             <property name="height_request">200</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -700,6 +700,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjReta1</property>
+                        <property name="numeric">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -713,6 +714,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjReta2</property>
+                        <property name="numeric">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -766,6 +768,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjReta3</property>
+                        <property name="numeric">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -779,6 +782,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjReta4</property>
+                        <property name="numeric">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -866,6 +870,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly1</property>
                                 <property name="climb_rate">1</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -879,6 +884,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly2</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
@@ -932,6 +938,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly3</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -945,6 +952,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly4</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>
@@ -998,6 +1006,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly5</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1011,6 +1020,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">adjPoly6</property>
+                                <property name="numeric">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">3</property>

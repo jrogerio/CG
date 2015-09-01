@@ -38,17 +38,19 @@ extern "C"
 	{
 		window->closeAddPopup();
 	}
+
+	void add_obj_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->addObject();
+	}
 }
 
 
 MainWindow::MainWindow() {
 
-
-
 	GtkWidget *window;
 	GtkWidget *btnAddObject;
 
-	// Init builder and loads xml description of ui
 	builder = gtk_builder_new ();
 	gtk_builder_add_from_file(builder, "main.glade", NULL);
 
@@ -63,6 +65,10 @@ MainWindow::MainWindow() {
 	g_signal_connect (G_OBJECT(btnAddObject), "clicked",
 						G_CALLBACK(add_object_cb), this);
 
+	objNotebook = GTK_WIDGET (gtk_builder_get_object (builder, "objNotebook"));
+	g_signal_connect (G_OBJECT(btnAddObject), "clicked",
+						G_CALLBACK(add_object_cb), this);
+
 	GtkWidget *addButton = GTK_WIDGET (gtk_builder_get_object(builder, "addCoord"));
 	g_signal_connect (G_OBJECT(addButton), "clicked",
 							G_CALLBACK(add_coord_cb), this);
@@ -74,6 +80,10 @@ MainWindow::MainWindow() {
 	GtkWidget *cancelButton = GTK_WIDGET (gtk_builder_get_object(builder, "cancelButton"));
 	g_signal_connect (G_OBJECT(cancelButton), "clicked",
 							G_CALLBACK(close_add_popup_cb), this);
+
+	GtkWidget *okButton = GTK_WIDGET (gtk_builder_get_object(builder, "okButton"));
+	g_signal_connect (G_OBJECT(okButton), "clicked",
+								G_CALLBACK(add_obj_cb), this);
 
 	world = new World();
 
@@ -97,16 +107,43 @@ void MainWindow::addObject()
 	//Coordinate begin(10,10);
 	//Coordinate end(100,100);
 
-	vector<Coordinate> coords;
-	coords.push_back(Coordinate(10,60));
-	coords.push_back(Coordinate(60,10));
-	coords.push_back(Coordinate(110,60));
-	coords.push_back(Coordinate(60,110));
-	coords.push_back(Coordinate(110,60));
-	coords.push_back(Coordinate(60,110));
+//	vector<Coordinate> coords;
+//	coords.push_back(Coordinate(10,60));
+//	coords.push_back(Coordinate(60,10));
+//	coords.push_back(Coordinate(110,60));
+//	coords.push_back(Coordinate(60,110));
+//	coords.push_back(Coordinate(110,60));
+//	coords.push_back(Coordinate(60,110));
+//
+//	world->addPolygon("teste", coords);
+//	gtk_widget_queue_draw(drawingArea);
 
-	world->addPolygon("teste", coords);
-	gtk_widget_queue_draw(drawingArea);
+
+	gdouble x, y;
+	gint xIndex = 1, yIndex = 3;
+	int pageIndex = gtk_notebook_get_current_page( GTK_NOTEBOOK(objNotebook) );
+	GtkGrid *objGrid = GTK_GRID( gtk_notebook_get_nth_page( GTK_NOTEBOOK(objNotebook), pageIndex ) );
+	GtkSpinButton *input;
+
+	switch (pageIndex) {
+		case 0:
+			// addPoint
+			//input = GTK_SPIN_BUTTON( gtk_grid_get_child_at( objGrid, xIndex, 1 ) );
+			//x = gtk_spin_button_get_value(input);
+
+//			input = GTK_SPIN_BUTTON( gtk_grid_get_child_at(objGrid, yIndex, 1) );
+//			y = gtk_spin_button_get_value(input);
+
+			break;
+		case 1:
+			// addLine
+			x= 0;
+			break;
+		default:
+			// addPolygon
+			x = 0;
+			break;
+	}
 }
 
 void MainWindow::drawObjects(cairo_t *cr) {

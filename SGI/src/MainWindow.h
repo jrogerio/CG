@@ -28,6 +28,8 @@ private:
 	GtkGrid *polygonGrid;
 	GtkWidget *buttonsGrid;
 
+	GtkWidget *objNotebook;
+
 	vector<vector<Coordinate> > mapToViewport();
 
 public:
