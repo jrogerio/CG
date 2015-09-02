@@ -7,7 +7,7 @@
 
 #include "World.h"
 
-World::World() {
+World::World() : window(Coordinate(0,0), Coordinate(550,200)) {
 	// TODO Auto-generated constructor stub
 }
 
@@ -31,3 +31,6 @@ vector<GraphicObject> World::getObjects(){
 	return displayFile;
 }
 
+Window World::getWindow() {
+	return window;
+}

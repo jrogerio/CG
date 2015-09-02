@@ -17,18 +17,22 @@
 
 class MainWindow {
 private:
+	const char* MAIN_WINDOW = "mainWindow";
+	const char* DRAWING_AREA = "drawingArea";
+	const char* ADD_OBJ_WINDOW = "addObjectWindow";
+	const char* POLYGON_GRID = "polygonGrid";
+	const char* BUTTONS_GRID = "buttonsGrid";
+	const char* OBJ_NAME = "objName";
+	const char* OBJ_NOTEBOOK = "objNotebook";
+	const char* OBJ_STORE = "objStore";
+
 	int rowCount = 7;
 
 	GtkBuilder *builder;
-	GtkWidget *drawingArea;
-	int Xvmin, Yvmin, Xvmax, Yvmax;
 	World *world;
-	Window *window;
-	GtkWidget *popup;
-	GtkGrid *polygonGrid;
-	GtkWidget *buttonsGrid;
+	//int Xvmin, Yvmin, Xvmax, Yvmax;
 
-	GtkWidget *objNotebook;
+	//Window *window;
 
 	vector<vector<Coordinate> > mapToViewport();
 
@@ -37,14 +41,16 @@ public:
 	MainWindow();
 	virtual ~MainWindow();
 
+	void connectSignals();
+
 	void addObject();
+	Coordinate readCoordFrom(GtkGrid *objGrid, int lineIndicator);
 
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
 
 	void addCoordComponent();
 	void removeCoordComponent();
-
 	GtkWidget* createSpinButton();
 
 	void showAddPopup();

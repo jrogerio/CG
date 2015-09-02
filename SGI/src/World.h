@@ -14,12 +14,14 @@
 #include "Point.h"
 #include "Line.h"
 #include "Polygon.h"
+#include "Window.h"
 
 using namespace std;
 
 class World {
 private:
 	vector<GraphicObject> displayFile;
+	Window window;
 
 public:
 	World();
@@ -29,6 +31,8 @@ public:
 	void addLine(string name, Coordinate begin, Coordinate end);
 	void addPolygon(string name, vector<Coordinate> coords);
 	vector<GraphicObject> getObjects();
+
+	Window getWindow();
 };
 
 #endif /* SRC_WORLD_H_ */
