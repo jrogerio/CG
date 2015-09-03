@@ -25,16 +25,16 @@ private:
 	const char* OBJ_NAME = "objName";
 	const char* OBJ_NOTEBOOK = "objNotebook";
 	const char* OBJ_STORE = "objStore";
+	const char* STEP_SPIN_BTN = "stepSpinBtn";
+	const char* MOVE_UP_BTN = "btnUp";
+
+	const int MARGIN = 0;
 
 	int rowCount = 7;
 
 	GtkBuilder *builder;
 	World *world;
-	//int Xvmin, Yvmin, Xvmax, Yvmax;
 
-	//Window *window;
-
-	vector<vector<Coordinate> > mapToViewport();
 
 public:
 
@@ -55,6 +55,11 @@ public:
 
 	void showAddPopup();
 	void closeAddPopup();
+
+	void moveUp();
+	void moveDown();
+
+	vector<vector<Coordinate> > mapToViewport();
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */

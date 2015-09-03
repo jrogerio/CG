@@ -7,7 +7,7 @@
 
 #include "World.h"
 
-World::World() : window(Coordinate(0,0), Coordinate(550,200)) {
+World::World() : window(Coordinate(0,0), Coordinate(550,500)) {
 	// TODO Auto-generated constructor stub
 }
 

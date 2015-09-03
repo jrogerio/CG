@@ -13,8 +13,11 @@ Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
 }
 
 void Window::moveUp(int steps) {
-	_lowerLeftCorner._y += steps;
-	_upperRightCorner._y += steps;
+	//_lowerLeftCorner._y += steps;
+	//_upperRightCorner._y += steps;
+
+	_lowerLeftCorner = Coordinate(_lowerLeftCorner._x, _lowerLeftCorner._y + steps);
+	_upperRightCorner = Coordinate(_upperRightCorner._x, _upperRightCorner._y + steps);
 }
 
 void Window::moveDown(int steps) {

@@ -46,33 +46,33 @@ extern "C"
 
 	void move_up_cb(GtkWidget *widget, MainWindow *window)
 	{
-		window->addObject();
+		window->moveUp();
 	}
 
-	void move_down_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
-
-	void move_left_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
-
-	void move_right_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
-
-	void zoom_in_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
-
-	void zoom_out_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
+//	void move_down_cb(GtkWidget *widget, MainWindow *window)
+//	{
+//		window->moveUp();
+//	}
+//
+//	void move_left_cb(GtkWidget *widget, MainWindow *window)
+//	{
+//		window->addObject();
+//	}
+//
+//	void move_right_cb(GtkWidget *widget, MainWindow *window)
+//	{
+//		window->addObject();
+//	}
+//
+//	void zoom_in_cb(GtkWidget *widget, MainWindow *window)
+//	{
+//		window->addObject();
+//	}
+//
+//	void zoom_out_cb(GtkWidget *widget, MainWindow *window)
+//	{
+//		window->addObject();
+//	}
 }
 
 
@@ -119,6 +119,10 @@ void MainWindow::connectSignals() {
 	GtkWidget *addObjWindow = GTK_WIDGET (gtk_builder_get_object (builder, ADD_OBJ_WINDOW));
 	g_signal_connect (G_OBJECT(addObjWindow), "delete_event",
 							G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+	GtkWidget *moveUpButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_UP_BTN));
+	g_signal_connect (G_OBJECT(moveUpButton), "clicked",
+							G_CALLBACK(move_up_cb), this);
 }
 
 void MainWindow::addObject()
@@ -299,6 +303,18 @@ void MainWindow::closeAddPopup() {
 	gtk_window_close( addObjWindow );
 }
 
+void MainWindow::moveUp() {
+	Window window = world->getWindow();
+	window.moveUp(100);
+
+	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
+	gtk_widget_queue_draw( drawingArea );
+}
+
+void MainWindow::moveDown() {
+
+}
+
 vector<vector<Coordinate> > MainWindow::mapToViewport() {
 	vector<vector<Coordinate> > coords;
 	vector<GraphicObject> objects = world->getObjects();
@@ -311,19 +327,13 @@ vector<vector<Coordinate> > MainWindow::mapToViewport() {
 
 	int x,y;
 
-	for (int i = 0; i < objects.size(); ++i) {
+	for (uint i = 0; i < objects.size(); ++i) {
 		vector<Coordinate> newcoords;
 		GraphicObject obj = objects[i];
 
-		for (int j = 0; j < obj.coords().size(); ++j) {
-			x = ((obj.coords()[j]._x - window.Xmin())/(window.Xmax() - window.Xmin())) * (Xvmax - 0);
-			y = (1 - (obj.coords()[j]._y - window.Ymin())/(window.Ymax() - window.Ymin())) * (Yvmax - 0);
-
-			//x = obj.coords()[j]._x;
-			//y = obj.coords()[j]._y;
-
-			//x = 10 * j;
-			//y = 20 * j;
+		for (uint j = 0; j < obj.coords().size(); ++j) {
+			x = ((obj.coords()[j]._x - window.Xmin())/(window.Xmax() - window.Xmin())) * (Xvmax - MARGIN);
+			y = (1 - (obj.coords()[j]._y - window.Ymin())/(window.Ymax() - window.Ymin())) * (Yvmax - MARGIN);
 
 			newcoords.push_back(Coordinate(x, y));
 		}
