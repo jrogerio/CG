@@ -26,7 +26,13 @@ private:
 	const char* OBJ_NOTEBOOK = "objNotebook";
 	const char* OBJ_STORE = "objStore";
 	const char* STEP_SPIN_BTN = "stepSpinBtn";
+
 	const char* MOVE_UP_BTN = "btnUp";
+	const char* MOVE_DOWN_BTN = "btnDown";
+	const char* MOVE_LEFT_BTN = "btnLeft";
+	const char* MOVE_RIGHT_BTN = "btnRight";
+	const char* ZOOM_IN_BTN = "btnZoomIn";
+	const char* ZOOM_OUT_BTN = "btnZoomOut";
 
 	const int MARGIN = 0;
 
@@ -35,13 +41,13 @@ private:
 	GtkBuilder *builder;
 	World *world;
 
+	void connectSignals();
+	void updateViewport();
 
 public:
 
 	MainWindow();
 	virtual ~MainWindow();
-
-	void connectSignals();
 
 	void addObject();
 	Coordinate readCoordFrom(GtkGrid *objGrid, int lineIndicator);
@@ -58,6 +64,10 @@ public:
 
 	void moveUp();
 	void moveDown();
+	void moveLeft();
+	void moveRight();
+	void zoomIn();
+	void zoomOut();
 
 	vector<vector<Coordinate> > mapToViewport();
 };

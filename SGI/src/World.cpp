@@ -34,3 +34,27 @@ vector<GraphicObject> World::getObjects(){
 Window World::getWindow() {
 	return window;
 }
+
+void World::moveUpWindow(int step) {
+	window.moveUp(step);
+}
+
+void World::moveDownWindow(int step) {
+	window.moveDown(step);
+}
+
+void World::moveLeftWindow(int step) {
+	window.moveLeft(step);
+}
+
+void World::moveRightWindow(int step) {
+	window.moveRight(step);
+}
+
+void World::zoomInWindow(int step) {
+	window.zoomIn(step);
+}
+
+void World::zoomOutWindow(int step) {
+	window.zoomOut(step);
+}

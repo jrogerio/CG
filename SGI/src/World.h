@@ -33,6 +33,13 @@ public:
 	vector<GraphicObject> getObjects();
 
 	Window getWindow();
+
+	void moveUpWindow(int step);
+	void moveDownWindow(int step);
+	void moveLeftWindow(int step);
+	void moveRightWindow(int step);
+	void zoomInWindow(int step);
+	void zoomOutWindow(int step);
 };
 
 #endif /* SRC_WORLD_H_ */

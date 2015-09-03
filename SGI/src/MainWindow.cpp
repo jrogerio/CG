@@ -49,30 +49,30 @@ extern "C"
 		window->moveUp();
 	}
 
-//	void move_down_cb(GtkWidget *widget, MainWindow *window)
-//	{
-//		window->moveUp();
-//	}
-//
-//	void move_left_cb(GtkWidget *widget, MainWindow *window)
-//	{
-//		window->addObject();
-//	}
-//
-//	void move_right_cb(GtkWidget *widget, MainWindow *window)
-//	{
-//		window->addObject();
-//	}
-//
-//	void zoom_in_cb(GtkWidget *widget, MainWindow *window)
-//	{
-//		window->addObject();
-//	}
-//
-//	void zoom_out_cb(GtkWidget *widget, MainWindow *window)
-//	{
-//		window->addObject();
-//	}
+	void move_down_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->moveDown();
+	}
+
+	void move_left_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->moveLeft();
+	}
+
+	void move_right_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->moveRight();
+	}
+
+	void zoom_in_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->zoomIn();
+	}
+
+	void zoom_out_cb(GtkWidget *widget, MainWindow *window)
+	{
+		window->zoomOut();
+	}
 }
 
 
@@ -123,6 +123,31 @@ void MainWindow::connectSignals() {
 	GtkWidget *moveUpButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_UP_BTN));
 	g_signal_connect (G_OBJECT(moveUpButton), "clicked",
 							G_CALLBACK(move_up_cb), this);
+
+	GtkWidget *moveDownButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_DOWN_BTN));
+	g_signal_connect (G_OBJECT(moveDownButton), "clicked",
+							G_CALLBACK(move_down_cb), this);
+
+	GtkWidget *moveLeftButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_LEFT_BTN));
+	g_signal_connect (G_OBJECT(moveLeftButton), "clicked",
+							G_CALLBACK(move_left_cb), this);
+
+	GtkWidget *moveRightButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_RIGHT_BTN));
+	g_signal_connect (G_OBJECT(moveRightButton), "clicked",
+							G_CALLBACK(move_right_cb), this);
+
+	GtkWidget *zoomIntButton = GTK_WIDGET (gtk_builder_get_object (builder, ZOOM_IN_BTN));
+	g_signal_connect (G_OBJECT(zoomIntButton), "clicked",
+							G_CALLBACK(zoom_in_cb), this);
+
+	GtkWidget *zoomOutButton = GTK_WIDGET (gtk_builder_get_object (builder, ZOOM_OUT_BTN));
+	g_signal_connect (G_OBJECT(zoomOutButton), "clicked",
+							G_CALLBACK(zoom_out_cb), this);
+}
+
+void MainWindow::updateViewport() {
+	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
+	gtk_widget_queue_draw( drawingArea );
 }
 
 void MainWindow::addObject()
@@ -304,15 +329,45 @@ void MainWindow::closeAddPopup() {
 }
 
 void MainWindow::moveUp() {
-	Window window = world->getWindow();
-	window.moveUp(100);
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->moveUpWindow( gtk_spin_button_get_value( stepInput ) );
 
-	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
-	gtk_widget_queue_draw( drawingArea );
+	updateViewport();
 }
 
 void MainWindow::moveDown() {
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->moveDownWindow( gtk_spin_button_get_value( stepInput ) );
 
+	updateViewport();
+}
+
+void MainWindow::moveLeft() {
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->moveLeftWindow( gtk_spin_button_get_value( stepInput ) );
+
+	updateViewport();
+}
+
+void MainWindow::moveRight() {
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->moveRightWindow( gtk_spin_button_get_value( stepInput ) );
+
+	updateViewport();
+}
+
+void MainWindow::zoomIn() {
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->zoomInWindow( gtk_spin_button_get_value( stepInput ) );
+
+	updateViewport();
+}
+
+void MainWindow::zoomOut() {
+	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
+	world->zoomOutWindow( gtk_spin_button_get_value( stepInput ) );
+
+	updateViewport();
 }
 
 vector<vector<Coordinate> > MainWindow::mapToViewport() {

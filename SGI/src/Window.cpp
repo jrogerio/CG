@@ -36,15 +36,15 @@ void Window::moveRight(int steps) {
 }
 
 void Window::zoomIn(int steps) {
-	_lowerLeftCorner._x -= steps;
-	_lowerLeftCorner._y -= steps;
+	_lowerLeftCorner._x += steps;
+	_lowerLeftCorner._y += steps;
 	_upperRightCorner._x -= steps;
 	_upperRightCorner._y -= steps;
 }
 
 void Window::zoomOut(int steps) {
-	_lowerLeftCorner._x += steps;
-	_lowerLeftCorner._y += steps;
+	_lowerLeftCorner._x -= steps;
+	_lowerLeftCorner._y -= steps;
 	_upperRightCorner._x += steps;
 	_upperRightCorner._y += steps;
 }
