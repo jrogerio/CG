@@ -8,18 +8,17 @@
 #ifndef SRC_WINDOW_H_
 #define SRC_WINDOW_H_
 
+#include <math.h>
+
 #include "GraphicObject.h"
 
 class Window {
 public:
 	Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner);
 
-	void moveUp(int steps);
-	void moveDown(int steps);
-	void moveLeft(int steps);
-	void moveRight(int steps);
-	void zoomIn(int steps);
-	void zoomOut(int steps);
+	void move(Coordinate step);
+	void zoom(int step);
+
 	int Xmin();
 	int Ymin();
 	int Xmax();

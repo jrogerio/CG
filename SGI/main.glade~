@@ -262,6 +262,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="adjustment">stepAdjust</property>
+                                        <property name="numeric">True</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>

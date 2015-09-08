@@ -12,41 +12,28 @@ Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
 
 }
 
-void Window::moveUp(int steps) {
-	//_lowerLeftCorner._y += steps;
-	//_upperRightCorner._y += steps;
+void Window::move(Coordinate step) {
+	double xFactor = (_upperRightCorner._x - _lowerLeftCorner._x) * step._x / 100.0;
+	double yFactor = (_upperRightCorner._y - _lowerLeftCorner._y) * step._y / 100.0;
 
-	_lowerLeftCorner = Coordinate(_lowerLeftCorner._x, _lowerLeftCorner._y + steps);
-	_upperRightCorner = Coordinate(_upperRightCorner._x, _upperRightCorner._y + steps);
+	_lowerLeftCorner._x += xFactor;
+	_upperRightCorner._x += xFactor;
+
+	_lowerLeftCorner._y += yFactor;
+	_upperRightCorner._y += yFactor;
 }
 
-void Window::moveDown(int steps) {
-	_lowerLeftCorner._y -= steps;
-	_upperRightCorner._y -= steps;
-}
+void Window::zoom(int step) {
+	int halfWidth = (_upperRightCorner._x - _lowerLeftCorner._x) / 2;
+	int halfHeight = (_upperRightCorner._y - _lowerLeftCorner._y) / 2;
 
-void Window::moveLeft(int steps) {
-	_lowerLeftCorner._x -= steps;
-	_upperRightCorner._x -= steps;
-}
+	double xFactor = min<double>(halfWidth - 1, halfWidth * step / 100.0);
+	double yFactor = min<double>(halfHeight - 1, halfHeight * step / 100.0);
 
-void Window::moveRight(int steps) {
-	_lowerLeftCorner._x += steps;
-	_upperRightCorner._x += steps;
-}
-
-void Window::zoomIn(int steps) {
-	_lowerLeftCorner._x += steps;
-	_lowerLeftCorner._y += steps;
-	_upperRightCorner._x -= steps;
-	_upperRightCorner._y -= steps;
-}
-
-void Window::zoomOut(int steps) {
-	_lowerLeftCorner._x -= steps;
-	_lowerLeftCorner._y -= steps;
-	_upperRightCorner._x += steps;
-	_upperRightCorner._y += steps;
+	_lowerLeftCorner._x += xFactor;
+	_lowerLeftCorner._y += yFactor;
+	_upperRightCorner._x -= xFactor;
+	_upperRightCorner._y -= yFactor;
 }
 
 int Window::Xmin() {

@@ -7,7 +7,7 @@
 
 #include "World.h"
 
-World::World() : window(Coordinate(0,0), Coordinate(550,500)) {
+World::World() : window(Coordinate(0,0), Coordinate(550, 550)) {
 	// TODO Auto-generated constructor stub
 }
 
@@ -36,25 +36,25 @@ Window World::getWindow() {
 }
 
 void World::moveUpWindow(int step) {
-	window.moveUp(step);
+	window.move( Coordinate(0, step) );
 }
 
 void World::moveDownWindow(int step) {
-	window.moveDown(step);
+	window.move( Coordinate(0, -step) );
 }
 
 void World::moveLeftWindow(int step) {
-	window.moveLeft(step);
+	window.move( Coordinate(-step, 0) );
 }
 
 void World::moveRightWindow(int step) {
-	window.moveRight(step);
+	window.move( Coordinate(step, 0) );
 }
 
 void World::zoomInWindow(int step) {
-	window.zoomIn(step);
+	window.zoom(step);
 }
 
 void World::zoomOutWindow(int step) {
-	window.zoomOut(step);
+	window.zoom(-step);
 }
