@@ -14,6 +14,7 @@
 #include "Window.h"
 #include "GraphicObject.h"
 #include "AddObjectWindow.h"
+#include "Matrix.h"
 
 class MainWindow {
 private:
@@ -40,6 +41,10 @@ private:
 
 	GtkBuilder *builder;
 	World *world;
+
+	Matrix<2,2,int> a;
+	Matrix<2,2,int> b;
+	Matrix<2,2,int> c;
 
 	void connectSignals();
 	void updateViewport();
