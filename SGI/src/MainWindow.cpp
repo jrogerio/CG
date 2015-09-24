@@ -83,22 +83,6 @@ MainWindow::MainWindow() {
 	world = new World();
 	connectSignals();
 
-	a.setValueOn(0,0,1);
-	a.setValueOn(0,1,2);
-	a.setValueOn(1,0,3);
-	a.setValueOn(1,1,4);
-
-	b.setValueOn(0,0,1);
-	b.setValueOn(0,1,1);
-	b.setValueOn(1,0,1);
-	b.setValueOn(1,1,1);
-
-	c = a + b;
-
-	int valA = a.valueOn(0,0);
-	int valB = b.valueOn(0,0);
-	int valC = c.valueOn(0,0);
-
 	GtkWidget *window = GTK_WIDGET (gtk_builder_get_object (builder, MAIN_WINDOW));
 	gtk_widget_show_all (window);
 	gtk_main ();

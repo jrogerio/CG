@@ -42,10 +42,6 @@ private:
 	GtkBuilder *builder;
 	World *world;
 
-	Matrix<2,2,int> a;
-	Matrix<2,2,int> b;
-	Matrix<2,2,int> c;
-
 	void connectSignals();
 	void updateViewport();
 
