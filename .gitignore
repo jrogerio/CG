@@ -4,4 +4,9 @@ SGI/Default/
 SGI/.cproject
 SGI/.project
 SGI/.settings/
+SGI/src/.cproject
+SGI/src/.project
+SGI/src/.settings
 .metadata
+*~
+*.save
