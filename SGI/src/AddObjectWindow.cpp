@@ -30,7 +30,7 @@ AddObjectWindow::~AddObjectWindow() {
 }
 
 GObject * AddObjectWindow::g_object_clone(GObject *src) {
-    GObject *dst;
+    //GObject *dst;
     GParameter *params;
     GParamSpec **specs;
     guint n, n_specs, n_params;
@@ -52,7 +52,7 @@ GObject * AddObjectWindow::g_object_clone(GObject *src) {
     g_free(specs);
     g_free(params);
 
-    return dst;
+    return 0;
 }
 
 void AddObjectWindow::addCoordComponent() {
