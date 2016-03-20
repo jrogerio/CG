@@ -7,6 +7,9 @@ SGI/.settings/
 SGI/src/.cproject
 SGI/src/.project
 SGI/src/.settings
+SGI/bin/*
 .metadata
 *~
 *.save
+
+!SGI/bin/.gitkeep
