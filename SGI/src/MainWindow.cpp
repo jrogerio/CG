@@ -159,6 +159,8 @@ void MainWindow::addObject()
 	GtkListStore *objStore = GTK_LIST_STORE( gtk_builder_get_object( builder, OBJ_STORE ) );
 
 	const char* name = gtk_entry_get_text( objName );
+	name = (name[0] == '\0') ? "objeto" : name;
+	
 	int pageIndex = gtk_notebook_get_current_page( GTK_NOTEBOOK(objNotebook) );
 
 	switch (pageIndex) {

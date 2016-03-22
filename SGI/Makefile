@@ -4,7 +4,7 @@ CC=gcc
 BIN=./bin/
 SOURCE=./src/
 
-LIST=$(BIN)SGI
+LIST=$(BIN)vpl_wexecution
 LDLIBS+=`pkg-config --cflags gtk+-3.0` `pkg-config --libs gtk+-3.0`
 CFLAGS+=-rdynamic -lstdc++ -std=c++11 -lm
 
@@ -21,4 +21,4 @@ pre-build: clean
 main-build: $(LIST)
 
 $(BIN)%: $(SOURCE)%.cpp
-	$(CC) -o $(BIN)vpl_wexecution $(SOURCE)* $(LDLIBS) $(CFLAGS)
+	$(CC) -o $(LIST) $(SOURCE)* $(LDLIBS) $(CFLAGS)
