@@ -8,8 +8,6 @@
 #ifndef SRC_MATRIX_H_
 #define SRC_MATRIX_H_
 
-#include <iostream>
-
 template<uint M, uint N, class T>
 class Matrix {
 
@@ -21,7 +19,7 @@ public:
 	~Matrix() {}
 
 	T valueOn(uint row, uint col) {
-		int value = -1;
+		T value = NULL;
 
 		if (row < M && col < N)
 			value = values[row][col];
