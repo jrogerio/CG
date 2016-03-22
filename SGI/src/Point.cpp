@@ -1,8 +1,7 @@
 /*
  * Point.cpp
  *
- *  Created on: 17 de ago de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #include "Point.hpp"

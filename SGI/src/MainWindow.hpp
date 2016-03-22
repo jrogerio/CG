@@ -1,8 +1,7 @@
 /*
  * MainWindow.h
  *
- *  Created on: 17 de ago de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #ifndef VIEW_MAINWINDOW_H_

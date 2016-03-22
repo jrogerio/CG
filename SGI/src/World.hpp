@@ -1,8 +1,7 @@
 /*
  * World.h
  *
- *  Created on: 19 de ago de 2015
- *      Author: joao
+ * Author: joao
  */
 
 #ifndef SRC_WORLD_H_

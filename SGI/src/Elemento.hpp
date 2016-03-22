@@ -1,8 +1,7 @@
 /*
  * Elemento.hpp
  *
- *  Created on: 13 de ago de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #ifndef LINKEDLIST_ELEMENTO_HPP_

@@ -1,8 +1,7 @@
 /*
  * Polygon.h
  *
- *  Created on: 17 de ago de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #ifndef SRC_POLYGON_H_

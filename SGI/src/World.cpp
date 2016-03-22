@@ -1,8 +1,7 @@
 /*
  * World.cpp
  *
- *  Created on: 19 de ago de 2015
- *      Author: joao
+ * Author: joao
  */
 
 #include "World.hpp"

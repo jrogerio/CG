@@ -1,8 +1,7 @@
 /*
  * Matrix.h
  *
- *  Created on: 18 de set de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #include <cstddef>

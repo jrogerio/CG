@@ -1,8 +1,7 @@
 /*
  * ListaEnc.hpp
  *
- *  Created on: 13 de ago de 2015
- *      Author: plab
+ * Author: plab
  */
 
 #include "Elemento.hpp"
