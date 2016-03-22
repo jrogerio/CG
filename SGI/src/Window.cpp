@@ -5,7 +5,7 @@
  *      Author: plab
  */
 
-#include "Window.h"
+#include "Window.hpp"
 
 Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
 		_lowerLeftCorner(lowerLeftCorner), _upperRightCorner(upperRightCorner) {

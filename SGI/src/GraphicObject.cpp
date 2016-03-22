@@ -5,7 +5,7 @@
  *      Author: plab
  */
 
-#include "GraphicObject.h"
+#include "GraphicObject.hpp"
 
 GraphicObject::GraphicObject(string name, GraphicObjectType type,
 		vector<Coordinate> coords) :

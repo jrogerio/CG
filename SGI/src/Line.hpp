@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "GraphicObject.h"
+#include "GraphicObject.hpp"
 
 using namespace std;
 

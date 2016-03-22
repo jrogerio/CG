@@ -5,7 +5,7 @@
  *      Author: plab
  */
 
-#include "Line.h"
+#include "Line.hpp"
 
 Line::Line(string name, Coordinate first, Coordinate second) :
 	GraphicObject(name, line, vector<Coordinate>()) {

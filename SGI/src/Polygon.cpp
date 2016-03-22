@@ -5,7 +5,7 @@
  *      Author: plab
  */
 
-#include "Polygon.h"
+#include "Polygon.hpp"
 
 Polygon::Polygon(string name, vector<Coordinate> coords) :
 		GraphicObject(name, polygon, coords) {

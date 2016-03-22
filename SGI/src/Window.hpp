@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-#include "GraphicObject.h"
+#include "GraphicObject.hpp"
 
 class Window {
 public:

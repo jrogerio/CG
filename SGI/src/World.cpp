@@ -5,7 +5,7 @@
  *      Author: joao
  */
 
-#include "World.h"
+#include "World.hpp"
 
 World::World() : window(Coordinate(0,0), Coordinate(550, 550)) {
 	// TODO Auto-generated constructor stub

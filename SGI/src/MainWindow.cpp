@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "MainWindow.h"
+#include "MainWindow.hpp"
 
 extern "C"
 {

@@ -5,8 +5,16 @@
  *      Author: plab
  */
 
+#include <cstddef>
+
 #ifndef SRC_MATRIX_H_
 #define SRC_MATRIX_H_
+
+#ifndef uint
+#define uint unsigned int
+#else
+#error
+#endif
 
 template<uint M, uint N, class T>
 class Matrix {

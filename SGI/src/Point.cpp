@@ -5,7 +5,7 @@
  *      Author: plab
  */
 
-#include "Point.h"
+#include "Point.hpp"
 #include <vector>
 
 

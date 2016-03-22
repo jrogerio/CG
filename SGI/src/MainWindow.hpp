@@ -10,11 +10,10 @@
 
 #include <gtk/gtk.h>
 
-#include "World.h"
-#include "Window.h"
-#include "GraphicObject.h"
-#include "AddObjectWindow.h"
-#include "Matrix.h"
+#include "World.hpp"
+#include "Window.hpp"
+#include "GraphicObject.hpp"
+#include "Matrix.hpp"
 
 class MainWindow {
 private:

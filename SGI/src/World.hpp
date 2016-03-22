@@ -8,13 +8,13 @@
 #ifndef SRC_WORLD_H_
 #define SRC_WORLD_H_
 
-#include <string.h>
+#include <string>
 
-#include "GraphicObject.h"
-#include "Point.h"
-#include "Line.h"
-#include "Polygon.h"
-#include "Window.h"
+#include "GraphicObject.hpp"
+#include "Point.hpp"
+#include "Line.hpp"
+#include "Polygon.hpp"
+#include "Window.hpp"
 
 using namespace std;
 
