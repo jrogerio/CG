@@ -15,28 +15,46 @@
 #error
 #endif
 
+using namespace std;
+
 template<uint M, uint N, class T>
 class Matrix {
 
 private:
-	T values[M][N];
+	T _values[M][N];
 
 public:
-	Matrix() {}
-	~Matrix() {}
+	Matrix(){}
+	~Matrix(){}
 
 	T valueOn(uint row, uint col) {
-		T value = NULL;
+		T value = 0;
 
 		if (row < M && col < N)
-			value = values[row][col];
+			value = _values[row][col];
 
 		return value;
 	}
 
 	void setValueOn(uint row, uint col, T value) {
 		if (row < M && col < N)
-			values[row][col] = value;
+			_values[row][col] = value;
+	}
+
+	static Matrix<M, N, T> buildIdentity() {
+		Matrix<M,N,T> matrix;
+
+		for (int row = 0; row < M; ++row) {
+			for (int col = 0; col < N; ++col) {
+				matrix.setValueOn(row, col, (T) 0);
+			}
+		}
+
+		for(int diagonal = 0; diagonal < M; diagonal++) {
+			matrix.setValueOn(diagonal, diagonal, (T) 1);
+		}
+
+		return matrix;
 	}
 
 	Matrix<M, N, T> operator+(Matrix<M, N, T>& other) {
@@ -44,7 +62,7 @@ public:
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
-				sum.values[row][col] = values[row][col] + other.values[row][col];
+				sum._values[row][col] = _values[row][col] + other._values[row][col];
 			}
 		}
 
@@ -61,7 +79,7 @@ public:
 				value = 0;
 
 				for (uint n = 0; n < N; ++n) {
-					value += values[row][n] * other.valueOn(n, col);
+					value += _values[row][n] * other.valueOn(n, col);
 				}
 
 				mult.setValueOn(row, col, value);
@@ -76,7 +94,7 @@ public:
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
-				mult.values[row][col] = values[row][col] * scalar;
+				mult._values[row][col] = _values[row][col] * scalar;
 			}
 		}
 

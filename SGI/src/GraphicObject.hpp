@@ -9,6 +9,8 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
+#include "Matrix.hpp"
 
 using namespace std;
 
@@ -42,6 +44,10 @@ protected:
 	string _name;
 	GraphicObjectType _type;
 	vector<Coordinate> _coords;
+
+	Matrix<3, 3, double> _buildTranslationMatrix(Coordinate position);
+	Matrix<3, 3, double> _buildExpansionMatrix(double x_factor, double y_factor);
+	Matrix<3, 3, double> _buildRotationMatrix(double angle);
 };
 
 #endif /* SRC_GRAPHICOBJECT_H_ */

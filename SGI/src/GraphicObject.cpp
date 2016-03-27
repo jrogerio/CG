@@ -39,3 +39,32 @@ Coordinate GraphicObject::centroid() const {
 
 	return Coordinate(new_x, new_y);
 }
+
+Matrix<3, 3, double> GraphicObject::_buildTranslationMatrix(Coordinate position) {
+	Matrix<3, 3, double> matrix = Matrix<3, 3, double>::buildIdentity();
+
+	matrix.setValueOn(2, 0, position._x);
+	matrix.setValueOn(2, 1, position._y);
+
+	return matrix;
+}
+
+Matrix<3, 3, double> GraphicObject::_buildExpansionMatrix(double x_factor, double y_factor) {
+	Matrix<3, 3, double> matrix = Matrix<3, 3, double>::buildIdentity();
+
+	matrix.setValueOn(0, 0, x_factor);
+	matrix.setValueOn(1, 1, y_factor);
+
+	return matrix;
+}
+
+Matrix<3, 3, double> GraphicObject::_buildRotationMatrix(double angle) {
+	Matrix<3, 3, double> matrix = Matrix<3, 3, double>::buildIdentity();
+
+	matrix.setValueOn(0, 0, cos(angle));
+	matrix.setValueOn(0, 1, -sin(angle));
+	matrix.setValueOn(1, 1, sin(angle));
+	matrix.setValueOn(1, 1, cos(angle));
+
+	return matrix;
+}
