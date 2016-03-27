@@ -18,7 +18,7 @@ run:
 
 pre-build: clean
 
-main-build: $(LIST)
+main-build: $(BIN)SGI
 
 $(BIN)%: $(SOURCE)%.cpp
 	$(CC) -o $(LIST) $(SOURCE)* $(LDLIBS) $(CFLAGS)

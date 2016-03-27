@@ -14,8 +14,7 @@ using namespace std;
 
 struct Coordinate {
 
-	Coordinate(double x, double y): _x(x), _y(y) {
-	}
+	Coordinate(double x, double y): _x(x), _y(y) {}
 
 public:
 	double _x,_y;
@@ -37,6 +36,7 @@ public:
 	string name() const;
 	GraphicObjectType type() const;
 	vector<Coordinate> coords() const;
+	Coordinate centroid() const;
 
 protected:
 	string _name;

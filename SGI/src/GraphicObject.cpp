@@ -25,3 +25,17 @@ GraphicObjectType GraphicObject::type() const {
 vector<Coordinate> GraphicObject::coords() const {
 	return _coords;
 }
+
+Coordinate GraphicObject::centroid() const {
+	double new_x, new_y;
+
+	for(auto &coord : _coords) {
+		new_x += coord._x;
+		new_y += coord._y;
+	}
+
+	new_x = new_x / _coords.size();
+	new_y = new_y / _coords.size();
+
+	return Coordinate(new_x, new_y);
+}
