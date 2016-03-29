@@ -1,5 +1,5 @@
 /*
- * Matrix.h
+ * Matrix.hpp
  *
  * Author: plab
  */
@@ -41,11 +41,11 @@ public:
 			_values[row][col] = value;
 	}
 
-	static Matrix<M, N, T> buildIdentity() {
-		Matrix<M,N,T> matrix;
+	static Matrix<M, M, T> buildIdentity() {
+		Matrix<M,M,T> matrix;
 
 		for (int row = 0; row < M; ++row) {
-			for (int col = 0; col < N; ++col) {
+			for (int col = 0; col < M; ++col) {
 				matrix.setValueOn(row, col, (T) 0);
 			}
 		}
@@ -57,7 +57,7 @@ public:
 		return matrix;
 	}
 
-	Matrix<M, N, T> operator+(Matrix<M, N, T>& other) {
+	Matrix<M, N, T> operator+(Matrix<M, N, T> other) {
 		Matrix<M,N,T> sum;
 
 		for (int row = 0; row < M; ++row) {
@@ -70,7 +70,7 @@ public:
 	}
 
 	template<uint N1>
-	Matrix<M, N1, T> operator*(Matrix<N, N1, T>& other) {
+	Matrix<M, N1, T> operator*(Matrix<N, N1, T> other) {
 		Matrix<M,N1,T> mult;
 		T value;
 
