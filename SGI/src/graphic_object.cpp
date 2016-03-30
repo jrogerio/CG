@@ -1,10 +1,4 @@
-/*
- * GraphicObject.cpp
- *
- * Author: plab
- */
-
-#include "GraphicObject.hpp"
+#include "graphic_object.hpp"
 
 GraphicObject::GraphicObject(string name, GraphicObjectType type,
 		vector<Coordinate> coords) :

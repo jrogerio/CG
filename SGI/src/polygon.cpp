@@ -1,10 +1,4 @@
-/*
- * Polygon.cpp
- *
- * Author: plab
- */
-
-#include "Polygon.hpp"
+#include "polygon.hpp"
 
 Polygon::Polygon(string name, vector<Coordinate> coords) :
 		GraphicObject(name, polygon, coords) {

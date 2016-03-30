@@ -1,13 +1,6 @@
-/*
- * MainWindow.cpp
- *
- * Author: plab
- */
-
 #include <cstdlib>
 #include <cstring>
-
-#include "MainWindow.hpp"
+#include "main_window.hpp"
 
 MainWindow::MainWindow(GtkBuilder *definitions, World *world) {
 	_definitions = definitions;

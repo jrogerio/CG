@@ -1,15 +1,8 @@
-/*
- * Polygon.h
- *
- * Author: plab
- */
-
 #ifndef SRC_POLYGON_H_
 #define SRC_POLYGON_H_
 
 #include <string>
-
-#include "GraphicObject.hpp"
+#include "graphic_object.hpp"
 
 using namespace std;
 

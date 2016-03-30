@@ -1,11 +1,5 @@
-/*
- * ListaEnc.hpp
- *
- * Author: plab
- */
-
-#include "Elemento.hpp"
 #include <iostream>
+#include "element.hpp"
 
 template<typename T>
 class ListaEnc {

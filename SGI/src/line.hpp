@@ -1,15 +1,9 @@
-/*
- * Line.h
- *
- * Author: plab
- */
-
 #ifndef SRC_LINE_H_
 #define SRC_LINE_H_
 
 #include <string>
 
-#include "GraphicObject.hpp"
+#include "graphic_object.hpp"
 
 using namespace std;
 

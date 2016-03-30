@@ -1,12 +1,5 @@
-/*
- * Point.cpp
- *
- * Author: plab
- */
-
-#include "Point.hpp"
 #include <vector>
-
+#include "point.hpp"
 
 Point::Point(string name, Coordinate coord) :
 		GraphicObject(name, point, vector<Coordinate>()) {

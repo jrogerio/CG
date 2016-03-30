@@ -1,15 +1,8 @@
-/*
- * Window.h
- *
- * Author: plab
- */
-
 #ifndef SRC_WINDOW_H_
 #define SRC_WINDOW_H_
 
 #include <math.h>
-
-#include "GraphicObject.hpp"
+#include "graphic_object.hpp"
 
 class Window {
 public:

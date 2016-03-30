@@ -1,18 +1,11 @@
-/*
- * MainWindow.h
- *
- * Author: plab
- */
-
 #ifndef VIEW_MAINWINDOW_H_
 #define VIEW_MAINWINDOW_H_
 
 #include <gtk/gtk.h>
-
-#include "World.hpp"
-#include "Window.hpp"
-#include "GraphicObject.hpp"
-#include "Matrix.hpp"
+#include "world.hpp"
+#include "window.hpp"
+#include "graphic_object.hpp"
+#include "matrix.hpp"
 
 class MainWindow {
 private:

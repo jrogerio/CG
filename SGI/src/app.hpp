@@ -2,8 +2,8 @@
 #define __APP__
 
 #include <gtk/gtk.h>
-#include "MainWindow.hpp"
-#include "World.hpp"
+#include "main_window.hpp"
+#include "world.hpp"
 
 #define UI_DEFINITIONS_FILE "ui.glade"
 #define GET_UI_ELEMENT(TYPE, ELEMENT)   TYPE *ELEMENT = (TYPE *) app_get_ui_element(app, #ELEMENT);

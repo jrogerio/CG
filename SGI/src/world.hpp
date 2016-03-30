@@ -1,19 +1,12 @@
-/*
- * World.h
- *
- * Author: joao
- */
-
 #ifndef SRC_WORLD_H_
 #define SRC_WORLD_H_
 
 #include <string>
-
-#include "GraphicObject.hpp"
-#include "Point.hpp"
-#include "Line.hpp"
-#include "Polygon.hpp"
-#include "Window.hpp"
+#include "graphic_object.hpp"
+#include "point.hpp"
+#include "line.hpp"
+#include "polygon.hpp"
+#include "window.hpp"
 
 using namespace std;
 

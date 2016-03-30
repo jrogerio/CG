@@ -1,9 +1,3 @@
-/*
- * Elemento.hpp
- *
- * Author: plab
- */
-
 #ifndef LINKEDLIST_ELEMENTO_HPP_
 #define LINKEDLIST_ELEMENTO_HPP_
 

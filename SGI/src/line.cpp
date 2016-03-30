@@ -1,10 +1,4 @@
-/*
- * Line.cpp
- *
- * Author: plab
- */
-
-#include "Line.hpp"
+#include "line.hpp"
 
 Line::Line(string name, Coordinate first, Coordinate second) :
 	GraphicObject(name, line, vector<Coordinate>()) {

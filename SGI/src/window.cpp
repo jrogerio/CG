@@ -1,15 +1,7 @@
-/*
- * Window.cpp
- *
- * Author: plab
- */
-
-#include "Window.hpp"
+#include "window.hpp"
 
 Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
-		_lowerLeftCorner(lowerLeftCorner), _upperRightCorner(upperRightCorner) {
-
-}
+		_lowerLeftCorner(lowerLeftCorner), _upperRightCorner(upperRightCorner) {}
 
 void Window::move(Coordinate step) {
 	double xFactor = (_upperRightCorner._x - _lowerLeftCorner._x) * step._x / 100.0;

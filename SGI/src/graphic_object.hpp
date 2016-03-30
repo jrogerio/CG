@@ -1,16 +1,10 @@
-/*
- * GraphicObject.h
- *
- * Author: plab
- */
-
 #ifndef SRC_GRAPHICOBJECT_H_
 #define SRC_GRAPHICOBJECT_H_
 
 #include <string>
 #include <vector>
 #include <cmath>
-#include "Matrix.hpp"
+#include "matrix.hpp"
 
 #define PI 3.14159265358979323846
 #define DEG2RAD(DEG) (DEG*PI/180.0)

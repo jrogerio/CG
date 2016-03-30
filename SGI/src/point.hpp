@@ -1,15 +1,8 @@
-/*
- * Point.h
- *
- * Author: plab
- */
-
 #ifndef SRC_GRAPHICOBJECT_POINT_H_
 #define SRC_GRAPHICOBJECT_POINT_H_
 
 #include <string>
-
-#include "GraphicObject.hpp"
+#include "graphic_object.hpp"
 
 using namespace std;
 

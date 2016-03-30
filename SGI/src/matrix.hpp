@@ -1,9 +1,3 @@
-/*
- * Matrix.hpp
- *
- * Author: plab
- */
-
 #include <cstddef>
 
 #ifndef SRC_MATRIX_H_
