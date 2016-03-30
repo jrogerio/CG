@@ -9,195 +9,16 @@
 
 #include "MainWindow.hpp"
 
-extern "C"
-{
-	gboolean draw_cb(GtkWidget *widget, cairo_t *cr, MainWindow *window)
-	{
-		window->drawObjects(cr);
-
-		return FALSE;
-	}
-
-	void add_object_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->showAddPopup();
-	}
-
-	void add_coord_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addCoordComponent();
-	}
-
-	void remove_coord_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->removeCoordComponent();
-	}
-
-	void close_add_popup_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->closeAddPopup();
-	}
-
-	void add_obj_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->addObject();
-	}
-
-	void move_up_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->moveUp();
-	}
-
-	void move_down_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->moveDown();
-	}
-
-	void move_left_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->moveLeft();
-	}
-
-	void move_right_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->moveRight();
-	}
-
-	void zoom_in_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->zoomIn();
-	}
-
-	void zoom_out_cb(GtkWidget *widget, MainWindow *window)
-	{
-		window->zoomOut();
-	}
+MainWindow::MainWindow(GtkBuilder *definitions, World *world) {
+	_definitions = definitions;
+	_world = world;
 }
 
-
-MainWindow::MainWindow() {
-	builder = gtk_builder_new ();
-	gtk_builder_add_from_file(builder, "main.glade", NULL);
-
-	world = new World();
-	connectSignals();
-
-	GtkWidget *window = GTK_WIDGET (gtk_builder_get_object (builder, MAIN_WINDOW));
-	gtk_widget_show_all (window);
-	gtk_main ();
-}
-
-MainWindow::~MainWindow() {
-}
-
-void MainWindow::connectSignals() {
-	GtkWidget *drawingArea = GTK_WIDGET (gtk_builder_get_object (builder, "drawingArea"));
-	g_signal_connect (G_OBJECT (drawingArea), "draw",
-						G_CALLBACK (draw_cb), this);
-
-	GtkWidget *btnAddObject = GTK_WIDGET (gtk_builder_get_object (builder, "addObj"));
-	g_signal_connect (G_OBJECT(btnAddObject), "clicked",
-						G_CALLBACK(add_object_cb), this);
-
-	GtkWidget *addButton = GTK_WIDGET (gtk_builder_get_object(builder, "addCoord"));
-	g_signal_connect (G_OBJECT(addButton), "clicked",
-							G_CALLBACK(add_coord_cb), this);
-
-	GtkWidget *removeButton = GTK_WIDGET (gtk_builder_get_object(builder, "removeCoord"));
-	g_signal_connect (G_OBJECT(removeButton), "clicked",
-							G_CALLBACK(remove_coord_cb), this);
-
-	GtkWidget *cancelButton = GTK_WIDGET (gtk_builder_get_object(builder, "cancelButton"));
-	g_signal_connect (G_OBJECT(cancelButton), "clicked",
-							G_CALLBACK(close_add_popup_cb), this);
-
-	GtkWidget *okButton = GTK_WIDGET (gtk_builder_get_object(builder, "okButton"));
-	g_signal_connect (G_OBJECT(okButton), "clicked",
-								G_CALLBACK(add_obj_cb), this);
-
-	GtkWidget *addObjWindow = GTK_WIDGET (gtk_builder_get_object (builder, ADD_OBJ_WINDOW));
-	g_signal_connect (G_OBJECT(addObjWindow), "delete_event",
-							G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-
-	GtkWidget *moveUpButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_UP_BTN));
-	g_signal_connect (G_OBJECT(moveUpButton), "clicked",
-							G_CALLBACK(move_up_cb), this);
-
-	GtkWidget *moveDownButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_DOWN_BTN));
-	g_signal_connect (G_OBJECT(moveDownButton), "clicked",
-							G_CALLBACK(move_down_cb), this);
-
-	GtkWidget *moveLeftButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_LEFT_BTN));
-	g_signal_connect (G_OBJECT(moveLeftButton), "clicked",
-							G_CALLBACK(move_left_cb), this);
-
-	GtkWidget *moveRightButton = GTK_WIDGET (gtk_builder_get_object (builder, MOVE_RIGHT_BTN));
-	g_signal_connect (G_OBJECT(moveRightButton), "clicked",
-							G_CALLBACK(move_right_cb), this);
-
-	GtkWidget *zoomIntButton = GTK_WIDGET (gtk_builder_get_object (builder, ZOOM_IN_BTN));
-	g_signal_connect (G_OBJECT(zoomIntButton), "clicked",
-							G_CALLBACK(zoom_in_cb), this);
-
-	GtkWidget *zoomOutButton = GTK_WIDGET (gtk_builder_get_object (builder, ZOOM_OUT_BTN));
-	g_signal_connect (G_OBJECT(zoomOutButton), "clicked",
-							G_CALLBACK(zoom_out_cb), this);
-}
+MainWindow::~MainWindow() {}
 
 void MainWindow::updateViewport() {
-	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
-	gtk_widget_queue_draw( drawingArea );
-}
-
-void MainWindow::addObject()
-{
-	GtkGrid *objGrid;
-	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
-	GtkEntry *objName = GTK_ENTRY( gtk_builder_get_object( builder, OBJ_NAME ) );
-	GtkNotebook *objNotebook = GTK_NOTEBOOK( gtk_builder_get_object( builder, OBJ_NOTEBOOK ) );
-	GtkListStore *objStore = GTK_LIST_STORE( gtk_builder_get_object( builder, OBJ_STORE ) );
-
-	const char* name = gtk_entry_get_text( objName );
-	name = (name[0] == '\0') ? "objeto" : name;
-	
-	int pageIndex = gtk_notebook_get_current_page( GTK_NOTEBOOK(objNotebook) );
-
-	switch (pageIndex) {
-		case 0:
-			// addPoint
-			objGrid = GTK_GRID( gtk_notebook_get_nth_page( GTK_NOTEBOOK(objNotebook), pageIndex ) );
-			world->addPoint(name, readCoordFrom(objGrid, 1));
-
-			break;
-		case 1:
-			// addLine
-			objGrid = GTK_GRID( gtk_notebook_get_nth_page( GTK_NOTEBOOK(objNotebook), pageIndex ) );
-			world->addLine(name, readCoordFrom(objGrid, 1), readCoordFrom(objGrid, 3));
-
-			break;
-		default:
-			// addPolygon
-			vector<Coordinate> coords;
-			objGrid = GTK_GRID( gtk_builder_get_object( builder, POLYGON_GRID ) );
-
-			for (int i = 1; i < rowCount; i += 2) {
-				coords.push_back( readCoordFrom(objGrid, i) );
-			}
-
-			world->addPolygon(name, coords);
-
-			break;
-	}
-
-	GtkTreeIter iter;
-	gtk_list_store_append(objStore, &iter);
-	gtk_list_store_set(  objStore, &iter,
-			0, name,
-			-1);
-
-	gtk_widget_queue_draw( drawingArea );
-
-	closeAddPopup();
+	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
+	gtk_widget_queue_draw(drawingArea);
 }
 
 Coordinate MainWindow::readCoordFrom(GtkGrid *objGrid, int lineIndicator) {
@@ -205,11 +26,11 @@ Coordinate MainWindow::readCoordFrom(GtkGrid *objGrid, int lineIndicator) {
 
 	// posicao (0,1) -> valor de x
 	// posicao (0,3) -> valor de y
-	GtkGrid *coordGrid = GTK_GRID( gtk_grid_get_child_at( objGrid, 0, lineIndicator ) );
-	input = GTK_SPIN_BUTTON( gtk_grid_get_child_at( coordGrid, 1, 0 ) );
+	GtkGrid *coordGrid = GTK_GRID( gtk_grid_get_child_at(objGrid, 0, lineIndicator));
+	input = GTK_SPIN_BUTTON(gtk_grid_get_child_at(coordGrid, 1, 0));
 	int x = gtk_spin_button_get_value(input);
 
-	input = GTK_SPIN_BUTTON( gtk_grid_get_child_at(coordGrid, 3, 0) );
+	input = GTK_SPIN_BUTTON(gtk_grid_get_child_at(coordGrid, 3, 0));
 	int y = gtk_spin_button_get_value(input);
 
 	return Coordinate(x, y);
@@ -238,7 +59,6 @@ void MainWindow::drawObjects(cairo_t *cr) {
 }
 
 void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
-
 	cairo_move_to(cr, coords[0]._x, coords[0]._y);
 	cairo_line_to(cr, coords.front()._x, coords.front()._y);
 
@@ -254,129 +74,12 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 	cairo_stroke(cr);
 }
 
-void MainWindow::addCoordComponent() {
-	GtkGrid *polygonGrid = GTK_GRID( gtk_builder_get_object( builder, POLYGON_GRID ) );
-	GtkWidget *buttonsGrid = GTK_WIDGET( gtk_builder_get_object( builder, BUTTONS_GRID ) );
-
-	GtkAdjustment *adjustment1 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
-	GtkAdjustment *adjustment2 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
-
-	GtkWidget *coordGrid = gtk_grid_new();
-	GtkWidget *labelX = gtk_label_new("X: ");
-	GtkWidget *labelY = gtk_label_new("Y: ");
-	GtkWidget *entry1 = gtk_spin_button_new(adjustment1, 1, 0);
-	GtkWidget *entry2 = gtk_spin_button_new(adjustment2, 1, 0);
-
-	gtk_widget_set_size_request(entry1, 50, -1);
-	gtk_widget_set_size_request(entry2, 50, -1);
-
-	gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(entry1), true );
-	gtk_spin_button_set_numeric( GTK_SPIN_BUTTON(entry2), true );
-
-	gtk_widget_show(labelX);
-	gtk_widget_show(labelY);
-	gtk_widget_show(entry1);
-	gtk_widget_show(entry2);
-
-	gtk_grid_attach( GTK_GRID(coordGrid), labelX, 0,0,1,1);
-	gtk_grid_attach(GTK_GRID(coordGrid), entry1, 1,0,1,1);
-	gtk_grid_attach(GTK_GRID(coordGrid), labelY, 2,0,1,1);
-	gtk_grid_attach(GTK_GRID(coordGrid), entry2, 3,0,1,1);
-
-	gtk_widget_show(coordGrid);
-
-	GtkWidget *coordLabel = gtk_label_new("Coordenada:");
-	gtk_widget_show(coordLabel);
-	gtk_label_set_justify( GTK_LABEL(coordLabel), GTK_JUSTIFY_LEFT);
-
-	gtk_widget_set_halign(coordLabel, GTK_ALIGN_START);
-	gtk_widget_set_margin_left(coordLabel, 5);
-	gtk_widget_set_margin_left(labelX, 5);
-	gtk_widget_set_margin_left(labelY, 5);
-
-	gtk_grid_insert_next_to(polygonGrid, buttonsGrid, GTK_POS_TOP);
-	gtk_grid_insert_next_to(polygonGrid, buttonsGrid, GTK_POS_TOP);
-
-	gtk_grid_attach(polygonGrid, coordLabel, 0, rowCount - 1, 1, 1);
-	gtk_grid_attach(polygonGrid, coordGrid, 0, rowCount, 1, 1);
-
-	rowCount += 2;
-}
-
-void MainWindow::removeCoordComponent() {
-	GtkGrid *polygonGrid = GTK_GRID( gtk_builder_get_object( builder, POLYGON_GRID ) );
-
-	if (rowCount > 7) {
-		gtk_grid_remove_row(polygonGrid, rowCount - 2);
-		gtk_grid_remove_row(polygonGrid, rowCount - 3);
-
-		rowCount -= 2;
-	}
-}
-
-GtkWidget* MainWindow::createSpinButton() {
-	GtkAdjustment *adjustment = gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1, 1, 1);
-	return gtk_spin_button_new(adjustment, 1, G_MAXUINT);
-}
-
-void MainWindow::showAddPopup() {
-	GtkWindow *addObjWindow = GTK_WINDOW( gtk_builder_get_object( builder, ADD_OBJ_WINDOW ) );
-	gtk_window_present( addObjWindow );
-}
-
-void MainWindow::closeAddPopup() {
-	GtkWindow *addObjWindow = GTK_WINDOW( gtk_builder_get_object( builder, ADD_OBJ_WINDOW ) );
-	gtk_window_close( addObjWindow );
-}
-
-void MainWindow::moveUp() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->moveUpWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-void MainWindow::moveDown() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->moveDownWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-void MainWindow::moveLeft() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->moveLeftWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-void MainWindow::moveRight() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->moveRightWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-void MainWindow::zoomIn() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->zoomInWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-void MainWindow::zoomOut() {
-	GtkSpinButton *stepInput = GTK_SPIN_BUTTON( gtk_builder_get_object( builder, STEP_SPIN_BTN ) );
-	world->zoomOutWindow( gtk_spin_button_get_value( stepInput ) );
-
-	updateViewport();
-}
-
-vector<vector<Coordinate> > MainWindow::mapToViewport() {
+vector<vector<Coordinate>> MainWindow::mapToViewport() {
 	vector<vector<Coordinate> > coords;
-	vector<GraphicObject> objects = world->getObjects();
+	vector<GraphicObject> objects = _world->getObjects();
 
-	GtkWidget *drawingArea = GTK_WIDGET( gtk_builder_get_object( builder, DRAWING_AREA ) );
-	Window window = world->getWindow();
+	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
+	Window window = _world->getWindow();
 
 	int Xvmax = gtk_widget_get_allocated_width(drawingArea);
 	int Yvmax = gtk_widget_get_allocated_height(drawingArea);
@@ -398,4 +101,12 @@ vector<vector<Coordinate> > MainWindow::mapToViewport() {
 	}
 
 	return coords;
+}
+
+void MainWindow::updateRowCount(int newValue) {
+	_rowCount = newValue;
+}
+
+int MainWindow::rowCount() {
+	return _rowCount;
 }

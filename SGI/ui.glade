@@ -111,6 +111,7 @@
     <property name="default_height">600</property>
     <property name="type_hint">dialog</property>
     <property name="startup_id">mainWindow</property>
+    <signal name="destroy" handler="close_app_handler" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -206,6 +207,7 @@
                         <property name="margin_top">5</property>
                         <property name="margin_bottom">5</property>
                         <property name="relief">half</property>
+                        <signal name="clicked" handler="show_add_popup_handler" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -356,6 +358,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">45</property>
+                                        <signal name="clicked" handler="move_up_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -373,6 +376,7 @@
                                         <property name="receives_default">True</property>
                                         <property name="halign">end</property>
                                         <property name="margin_left">110</property>
+                                        <signal name="clicked" handler="zoom_in_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -400,6 +404,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">37</property>
+                                        <signal name="clicked" handler="move_right_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -416,6 +421,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">11</property>
+                                        <signal name="clicked" handler="move_left_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -443,6 +449,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">45</property>
+                                        <signal name="clicked" handler="move_down_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -459,6 +466,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="margin_left">110</property>
+                                        <signal name="clicked" handler="zoom_out_handler" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -524,6 +532,7 @@
             <property name="can_focus">False</property>
             <property name="margin_right">5</property>
             <property name="margin_bottom">5</property>
+            <signal name="draw" handler="draw_handler" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -582,6 +591,7 @@
     <property name="gravity">south-west</property>
     <property name="transient_for">mainWindow</property>
     <property name="has_resize_grip">False</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
     <child>
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
@@ -1216,6 +1226,7 @@
                                 <property name="margin_top">5</property>
                                 <property name="image">addButton</property>
                                 <property name="always_show_image">True</property>
+                                <signal name="clicked" handler="add_coord_handler" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1233,6 +1244,7 @@
                                 <property name="receives_default">True</property>
                                 <property name="margin_top">5</property>
                                 <property name="image">removeButton</property>
+                                <signal name="clicked" handler="remove_coord_handler" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1291,6 +1303,7 @@
                 <property name="margin_left">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
+                <signal name="clicked" handler="close_add_popup_handler" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -1311,6 +1324,7 @@
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="image_position">right</property>
+                <signal name="clicked" handler="add_object_handler" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
