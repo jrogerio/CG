@@ -12,6 +12,9 @@
 #include <cmath>
 #include "Matrix.hpp"
 
+#define PI 3.14159265358979323846
+#define DEG2RAD(DEG) (DEG*PI/180.0)
+
 using namespace std;
 
 struct Coordinate {
@@ -20,6 +23,8 @@ struct Coordinate {
 
 public:
 	double _x,_y;
+
+	Coordinate invert(){ return Coordinate(-_x, -_y); }
 };
 
 enum GraphicObjectType {
@@ -40,10 +45,17 @@ public:
 	vector<Coordinate> coords() const;
 	Coordinate centroid() const;
 
+	void translate(Coordinate deslocation);
+	void scaleTo(Coordinate factors);
+	void rotate(double angle);
+	void applyTransformation(Matrix<3,3,double> transfMatrix);
+
 protected:
 	string _name;
 	GraphicObjectType _type;
 	vector<Coordinate> _coords;
+
+	void positionBasedTransformation(Matrix<3,3,double> targetTransformation, Coordinate coord);
 
 	Matrix<3, 3, double> _buildTranslationMatrix(Coordinate position);
 	Matrix<3, 3, double> _buildExpansionMatrix(double x_factor, double y_factor);
