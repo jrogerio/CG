@@ -17,10 +17,7 @@ void World::addLine(string name, Coordinate begin, Coordinate end) {
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
-	Polygon pol(name, coords);
-	pol.rotate(20);
-
-	displayFile.push_back(pol);
+	displayFile.push_back(Polygon(name, coords));
 }
 
 vector<GraphicObject> World::getObjects(){
