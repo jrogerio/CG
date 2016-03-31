@@ -34,13 +34,13 @@ Coordinate GraphicObject::centroid() const {
 	return Coordinate(new_x, new_y);
 }
 
-void GraphicObject::translate(Coordinate deslocation) {
+void GraphicObject::translate(Vector deslocation) {
 	Matrix<3,3,double> translationMatrix = _buildTranslationMatrix(deslocation);
 	applyTransformation(translationMatrix);
 }
 
-void GraphicObject::scaleTo(Coordinate factors) {
-	Matrix<3,3,double> scaleMatrix = _buildExpansionMatrix(factors._x, factors._y);
+void GraphicObject::scaleTo(Vector factors) {
+	Matrix<3,3,double> scaleMatrix = _buildScaleMatrix(factors._x, factors._y);
 	positionBasedTransformation(scaleMatrix, centroid());
 }
 
@@ -77,16 +77,16 @@ void GraphicObject::positionBasedTransformation(Matrix<3,3,double> targetTransfo
 
 // Protected functions Homogeneous Coordinates
 
-Matrix<3, 3, double> GraphicObject::_buildTranslationMatrix(Coordinate position) {
+Matrix<3, 3, double> GraphicObject::_buildTranslationMatrix(Vector deslocation) {
 	Matrix<3, 3, double> matrix = Matrix<3, 3, double>::buildIdentity();
 
-	matrix.setValueOn(2, 0, position._x);
-	matrix.setValueOn(2, 1, position._y);
+	matrix.setValueOn(2, 0, deslocation._x);
+	matrix.setValueOn(2, 1, deslocation._y);
 
 	return matrix;
 }
 
-Matrix<3, 3, double> GraphicObject::_buildExpansionMatrix(double x_factor, double y_factor) {
+Matrix<3, 3, double> GraphicObject::_buildScaleMatrix(double x_factor, double y_factor) {
 	Matrix<3, 3, double> matrix = Matrix<3, 3, double>::buildIdentity();
 
 	matrix.setValueOn(0, 0, x_factor);

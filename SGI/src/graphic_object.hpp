@@ -9,6 +9,8 @@
 #define PI 3.14159265358979323846
 #define DEG2RAD(DEG) (DEG*PI/180.0)
 
+#define Vector Coordinate
+
 using namespace std;
 
 struct Coordinate {
@@ -39,8 +41,8 @@ public:
 	vector<Coordinate> coords() const;
 	Coordinate centroid() const;
 
-	void translate(Coordinate deslocation);
-	void scaleTo(Coordinate factors);
+	void translate(Vector deslocation);
+	void scaleTo(Vector factors);
 	void rotate(double angle);
 	void applyTransformation(Matrix<3,3,double> transfMatrix);
 
@@ -51,8 +53,8 @@ protected:
 
 	void positionBasedTransformation(Matrix<3,3,double> targetTransformation, Coordinate coord);
 
-	Matrix<3, 3, double> _buildTranslationMatrix(Coordinate position);
-	Matrix<3, 3, double> _buildExpansionMatrix(double x_factor, double y_factor);
+	Matrix<3, 3, double> _buildTranslationMatrix(Vector deslocation);
+	Matrix<3, 3, double> _buildScaleMatrix(double x_factor, double y_factor);
 	Matrix<3, 3, double> _buildRotationMatrix(double angle);
 };
 
