@@ -20,7 +20,15 @@ struct Coordinate {
 public:
 	double _x,_y;
 
-	Coordinate invert(){ return Coordinate(-_x, -_y); }
+	Coordinate negate(){ return Coordinate(-_x, -_y); }
+	Matrix<1,3> toHomogenousMatrix(){
+		Matrix<1,3> homogeneousMatrix;
+		homogeneousMatrix.setValueOn(0, 0, _x);
+		homogeneousMatrix.setValueOn(0, 1, _y);
+		homogeneousMatrix.setValueOn(0, 2, 1);
+
+		return homogeneousMatrix;
+	}
 };
 
 enum GraphicObjectType {
@@ -44,18 +52,18 @@ public:
 	void translate(Vector deslocation);
 	void scaleTo(Vector factors);
 	void rotate(double angle);
-	void applyTransformation(Matrix<3,3,double> transfMatrix);
+	void applyTransformation(Matrix<3,3> transfMatrix);
 
 protected:
 	string _name;
 	GraphicObjectType _type;
 	vector<Coordinate> _coords;
 
-	void positionBasedTransformation(Matrix<3,3,double> targetTransformation, Coordinate coord);
+	void positionBasedTransformation(Matrix<3,3> targetTransformation, Coordinate coord);
 
-	Matrix<3, 3, double> _buildTranslationMatrix(Vector deslocation);
-	Matrix<3, 3, double> _buildScaleMatrix(double x_factor, double y_factor);
-	Matrix<3, 3, double> _buildRotationMatrix(double angle);
+	Matrix<3, 3> _buildTranslationMatrix(Vector deslocation);
+	Matrix<3, 3> _buildScaleMatrix(double x_factor, double y_factor);
+	Matrix<3, 3> _buildRotationMatrix(double angle);
 };
 
 #endif /* SRC_GRAPHICOBJECT_H_ */

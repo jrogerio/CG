@@ -11,18 +11,18 @@
 
 using namespace std;
 
-template<uint M, uint N, class T>
+template<uint M, uint N>
 class Matrix {
 
 private:
-	T _values[M][N];
+	double _values[M][N];
 
 public:
 	Matrix(){}
 	~Matrix(){}
 
-	T valueOn(uint row, uint col) {
-		T value = 0;
+	double valueOn(uint row, uint col) {
+		double value = 0;
 
 		if (row < M && col < N)
 			value = _values[row][col];
@@ -30,29 +30,29 @@ public:
 		return value;
 	}
 
-	void setValueOn(uint row, uint col, T value) {
+	void setValueOn(uint row, uint col, double value) {
 		if (row < M && col < N)
 			_values[row][col] = value;
 	}
 
-	static Matrix<M, M, T> buildIdentity() {
-		Matrix<M,M,T> matrix;
+	static Matrix<M, M> buildIdentity() {
+		Matrix<M,M> matrix;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < M; ++col) {
-				matrix.setValueOn(row, col, (T) 0);
+				matrix.setValueOn(row, col, 0);
 			}
 		}
 
 		for(int diagonal = 0; diagonal < M; diagonal++) {
-			matrix.setValueOn(diagonal, diagonal, (T) 1);
+			matrix.setValueOn(diagonal, diagonal, 1);
 		}
 
 		return matrix;
 	}
 
-	Matrix<M, N, T> operator+(Matrix<M, N, T> other) {
-		Matrix<M,N,T> sum;
+	Matrix<M, N> operator+(Matrix<M, N> other) {
+		Matrix<M,N> sum;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
@@ -64,9 +64,9 @@ public:
 	}
 
 	template<uint N1>
-	Matrix<M, N1, T> operator*(Matrix<N, N1, T> other) {
-		Matrix<M,N1,T> mult;
-		T value;
+	Matrix<M, N1> operator*(Matrix<N, N1> other) {
+		Matrix<M,N1> mult;
+		double value;
 
 		for (uint row = 0; row < M; ++row) {
 			for (uint col = 0; col < N1; ++col) {
@@ -83,8 +83,8 @@ public:
 		return mult;
 	}
 
-	Matrix<M, N, T> operator*(T scalar) {
-		Matrix<M,N,T> mult;
+	Matrix<M, N> operator*(double scalar) {
+		Matrix<M,N> mult;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
