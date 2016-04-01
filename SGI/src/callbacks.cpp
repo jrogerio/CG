@@ -167,7 +167,7 @@ extern "C" {
 	// Zoom Handler ---------------------------------------------------------------------------
 
 	void zoom_in_handler(GtkWidget *widget, App *app) {
-		GtkSpinButton *stepInput = GTK_SPIN_BUTTON( app_get_ui_element(app, "stepSpinBtn"));
+		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
 		app->world->zoomInWindow(gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
@@ -177,5 +177,72 @@ extern "C" {
 		app->world->zoomOutWindow(gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
+	}
+
+	// Transformations ------------------------------------------------------------------------
+
+	void translate_handler(GtkWidget *widget, App *app) {
+		GtkSpinButton *xAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "xFactorBtn"));
+		GtkSpinButton *yAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "yFactorBtn"));
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(app_get_ui_element(app, "objectsList")));
+		GtkTreeModel *model;
+		GtkTreeIter iter;
+
+		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+			gchar *name;
+			
+			gtk_tree_model_get(model, &iter, 0, &name, -1);
+			app->world->translateObject(name, gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+
+			g_free(name);
+		} else {
+			GtkWindow *noObject = GTK_WINDOW(app_get_ui_element(app, "noObject"));
+			gtk_window_present(noObject);
+		}
+
+		app->mainWindow->updateViewport();
+	}
+
+	void scale_handler(GtkWidget *widget, App *app) {
+		GtkSpinButton *xAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "xFactorBtn"));
+		GtkSpinButton *yAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "yFactorBtn"));
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(app_get_ui_element(app, "objectsList")));
+		GtkTreeModel *model;
+		GtkTreeIter iter;
+
+		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+			gchar *name;
+			
+			gtk_tree_model_get(model, &iter, 0, &name, -1);
+			app->world->scaleObject(name, gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+
+			g_free(name);
+		} else {
+			GtkWindow *noObject = GTK_WINDOW(app_get_ui_element(app, "noObject"));
+			gtk_window_present(noObject);
+		}
+
+		app->mainWindow->updateViewport();		
+	}
+
+	void rotate_handler(GtkWidget *widget, App *app) {
+		GtkSpinButton *angleInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "angleBtn"));
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(app_get_ui_element(app, "objectsList")));
+		GtkTreeModel *model;
+		GtkTreeIter iter;
+
+		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+			gchar *name;
+			
+			gtk_tree_model_get(model, &iter, 0, &name, -1);
+			app->world->rotateObject(name, gtk_spin_button_get_value(angleInput));
+
+			g_free(name);
+		} else {
+			GtkWindow *noObject = GTK_WINDOW(app_get_ui_element(app, "noObject"));
+			gtk_window_present(noObject);
+		}
+
+		app->mainWindow->updateViewport();				
 	}
 }

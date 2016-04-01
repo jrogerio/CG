@@ -17,10 +17,7 @@ void World::addLine(string name, Coordinate begin, Coordinate end) {
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
-	Polygon pol(name, coords);
-	pol.rotate(20);
-
-	displayFile.push_back(pol);
+	displayFile.push_back(Polygon(name, coords));
 }
 
 vector<GraphicObject> World::getObjects(){
@@ -53,4 +50,43 @@ void World::zoomInWindow(int step) {
 
 void World::zoomOutWindow(int step) {
 	window.zoom(-step);
+}
+
+void World::translateObject(char *name, double x, double y) {
+	for (int i = 0; i < displayFile.size(); i++) {
+		if(displayFile[i].name() == name) {
+			GraphicObject updatedObject = displayFile[i];
+			updatedObject.translate(Coordinate(x, y));
+
+			displayFile[i] = updatedObject;
+
+			break;
+		}
+	}
+}
+
+void World::scaleObject(char *name, double x, double y) {
+	for (int i = 0; i < displayFile.size(); i++) {
+		if(displayFile[i].name() == name) {
+			GraphicObject updatedObject = displayFile[i];
+			updatedObject.scaleTo(Vector(x, y));
+
+			displayFile[i] = updatedObject;
+
+			break;
+		}
+	}
+}
+
+void World::rotateObject(char *name, double angle) {
+	for (int i = 0; i < displayFile.size(); i++) {
+		if(displayFile[i].name() == name) {
+			GraphicObject updatedObject = displayFile[i];
+			updatedObject.rotate(angle);
+
+			displayFile[i] = updatedObject;
+
+			break;
+		}
+	}
 }

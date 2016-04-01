@@ -32,6 +32,10 @@ public:
 	void moveRightWindow(int step);
 	void zoomInWindow(int step);
 	void zoomOutWindow(int step);
+
+	void translateObject(char *name, double x, double y);
+	void scaleObject(char *name, double x, double y);
+	void rotateObject(char *name, double angle);
 };
 
 #endif /* SRC_WORLD_H_ */
