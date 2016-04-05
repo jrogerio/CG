@@ -173,13 +173,13 @@ extern "C" {
 
 	void zoom_in_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->zoom(gtk_spin_button_get_value(stepInput));
+		app->world->zoomWindow(gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
 	}
 	void zoom_out_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->zoom(-gtk_spin_button_get_value(stepInput));
+		app->world->zoomWindow(-gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
 	}

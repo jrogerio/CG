@@ -27,7 +27,7 @@ public:
 	Window getWindow();
 
 	void moveWindow(VECTOR step);
-	void zoom(int step);
+	void zoomWindow(int step);
 
 	GraphicObject& getObjectBy(string name);
 

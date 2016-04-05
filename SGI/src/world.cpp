@@ -32,7 +32,7 @@ void World::moveWindow(VECTOR step) {
 	window.move(step);
 }
 
-void World::zoom(int step) {
+void World::zoomWindow(int step) {
 	window.zoom(step);
 }
 
