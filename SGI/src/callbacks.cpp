@@ -239,6 +239,7 @@ extern "C" {
 		GtkSpinButton *yAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "yFactorBtn"));
 		GtkSpinButton *angleInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "angleBtn"));
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(app_get_ui_element(app, "objectsList")));
+		GtkToggleButton *rotateUsingCentroid = GTK_TOGGLE_BUTTON(app_get_ui_element(app, "rotateUsingCentroid"));
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
@@ -246,7 +247,13 @@ extern "C" {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->rotateObject(string(name), gtk_spin_button_get_value(angleInput));
+
+			if(gtk_toggle_button_get_active(rotateUsingCentroid)) {
+				app->world->rotateObject(string(name), gtk_spin_button_get_value(angleInput));
+			} else {
+				Coordinate coordinate(gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+				app->world->rotateObject(string(name), gtk_spin_button_get_value(angleInput), coordinate);
+			}
 
 			g_free(name);
 		} else {
