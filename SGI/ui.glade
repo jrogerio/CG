@@ -91,8 +91,8 @@
     <property name="type_hint">dialog</property>
     <property name="has_resize_grip">False</property>
     <property name="message_type">warning</property>
-    <property name="buttons">close</property>
     <property name="text" translatable="yes">Você precisa selecionar um objeto antes de efetuar alguma transformação!</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -101,6 +101,20 @@
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="closeNoObject">
+                <property name="label" translatable="yes">Fechar</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_no_object_handler" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

@@ -133,6 +133,11 @@ extern "C" {
 		gtk_widget_hide_on_delete(addObjWindow);
 	}
 
+	void close_no_object_handler(GtkWidget *widget, App *app) {
+		GtkWidget *noObject = GTK_WIDGET(app_get_ui_element(app, "noObject"));
+		gtk_widget_hide_on_delete(noObject);
+	}
+
 	// Movements Handler ----------------------------------------------------------------------
 
 	void move_up_handler(GtkWidget *widget, App *app) {
