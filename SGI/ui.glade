@@ -394,6 +394,8 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="adjustment">xTransformation</property>
+                                            <property name="climb_rate">0.10000000000000001</property>
+                                            <property name="digits">2</property>
                                             <property name="numeric">True</property>
                                           </object>
                                           <packing>
@@ -409,7 +411,8 @@
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
                                             <property name="adjustment">yTransformation</property>
-                                            <property name="climb_rate">1</property>
+                                            <property name="climb_rate">0.10000000000000001</property>
+                                            <property name="digits">2</property>
                                             <property name="numeric">True</property>
                                           </object>
                                           <packing>
@@ -509,6 +512,7 @@
                                             <property name="caps_lock_warning">False</property>
                                             <property name="adjustment">angleOfRotation</property>
                                             <property name="climb_rate">1</property>
+                                            <property name="digits">2</property>
                                             <property name="numeric">True</property>
                                             <property name="value">45</property>
                                           </object>
