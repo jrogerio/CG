@@ -6,10 +6,13 @@
 #include <cmath>
 #include "matrix.hpp"
 
+#define SQUARE_MATRIX Matrix<3,3>
+#define ROW_VECTOR Matrix<1,3>
+
 #define PI 3.14159265358979323846
 #define DEG2RAD(DEG) (DEG*PI/180.0)
 
-#define Vector Coordinate
+#define VECTOR Coordinate
 
 using namespace std;
 
@@ -21,8 +24,8 @@ public:
 	double _x,_y;
 
 	Coordinate negate(){ return Coordinate(-_x, -_y); }
-	Matrix<1,3> toHomogenousMatrix(){
-		Matrix<1,3> homogeneousMatrix;
+	ROW_VECTOR toHomogenousMatrix(){
+		ROW_VECTOR homogeneousMatrix;
 		homogeneousMatrix.setValueOn(0, 0, _x);
 		homogeneousMatrix.setValueOn(0, 1, _y);
 		homogeneousMatrix.setValueOn(0, 2, 1);
@@ -49,21 +52,22 @@ public:
 	vector<Coordinate> coords() const;
 	Coordinate centroid() const;
 
-	void translate(Vector deslocation);
-	void scaleTo(Vector factors);
+	void translate(VECTOR deslocation);
+	void scaleTo(VECTOR factors);
 	void rotate(double angle);
-	void applyTransformation(Matrix<3,3> transfMatrix);
+	void rotate(double angle, Coordinate anchor);
+	void applyTransformation(SQUARE_MATRIX transfMatrix);
 
 protected:
 	string _name;
 	GraphicObjectType _type;
 	vector<Coordinate> _coords;
 
-	void positionBasedTransformation(Matrix<3,3> targetTransformation, Coordinate coord);
+	void positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord);
 
-	Matrix<3, 3> _buildTranslationMatrix(Vector deslocation);
-	Matrix<3, 3> _buildScaleMatrix(double x_factor, double y_factor);
-	Matrix<3, 3> _buildRotationMatrix(double angle);
+	SQUARE_MATRIX _buildTranslationMatrix(VECTOR deslocation);
+	SQUARE_MATRIX _buildScaleMatrix(double x_factor, double y_factor);
+	SQUARE_MATRIX _buildRotationMatrix(double angle);
 };
 
 #endif /* SRC_GRAPHICOBJECT_H_ */

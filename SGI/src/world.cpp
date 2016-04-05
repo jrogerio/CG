@@ -28,65 +28,38 @@ Window World::getWindow() {
 	return window;
 }
 
-void World::moveUpWindow(int step) {
-	window.move( Coordinate(0, step) );
+void World::moveWindow(VECTOR step) {
+	window.move(step);
 }
 
-void World::moveDownWindow(int step) {
-	window.move( Coordinate(0, -step) );
-}
-
-void World::moveLeftWindow(int step) {
-	window.move( Coordinate(-step, 0) );
-}
-
-void World::moveRightWindow(int step) {
-	window.move( Coordinate(step, 0) );
-}
-
-void World::zoomInWindow(int step) {
+void World::zoom(int step) {
 	window.zoom(step);
 }
 
-void World::zoomOutWindow(int step) {
-	window.zoom(-step);
-}
-
-void World::translateObject(char *name, double x, double y) {
+GraphicObject& World::getObjectBy(string name) {
 	for (int i = 0; i < displayFile.size(); i++) {
 		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.translate(Coordinate(x, y));
-
-			displayFile[i] = updatedObject;
-
-			break;
+			return displayFile[i];
 		}
 	}
 }
 
-void World::scaleObject(char *name, double x, double y) {
-	for (int i = 0; i < displayFile.size(); i++) {
-		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.scaleTo(Vector(x, y));
-
-			displayFile[i] = updatedObject;
-
-			break;
-		}
-	}
+void World::translateObject(string name, VECTOR deslocation) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->translate(deslocation);
 }
 
-void World::rotateObject(char *name, double angle) {
-	for (int i = 0; i < displayFile.size(); i++) {
-		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.rotate(angle);
+void World::scaleObject(string name, VECTOR factor) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->scaleTo(factor);
+}
 
-			displayFile[i] = updatedObject;
+void World::rotateObject(string name, double angle) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->rotate(angle);
+}
 
-			break;
-		}
-	}
+void World::rotateObject(string name, double angle, Coordinate anchor) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->rotate(angle, anchor);
 }

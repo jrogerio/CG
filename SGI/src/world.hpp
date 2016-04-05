@@ -26,16 +26,15 @@ public:
 
 	Window getWindow();
 
-	void moveUpWindow(int step);
-	void moveDownWindow(int step);
-	void moveLeftWindow(int step);
-	void moveRightWindow(int step);
-	void zoomInWindow(int step);
-	void zoomOutWindow(int step);
+	void moveWindow(VECTOR step);
+	void zoom(int step);
 
-	void translateObject(char *name, double x, double y);
-	void scaleObject(char *name, double x, double y);
-	void rotateObject(char *name, double angle);
+	GraphicObject& getObjectBy(string name);
+
+	void translateObject(string name, VECTOR deslocation);
+	void scaleObject(string name, VECTOR factor);
+	void rotateObject(string name, double angle);
+	void rotateObject(string name, double angle, Coordinate anchor);
 };
 
 #endif /* SRC_WORLD_H_ */

@@ -34,24 +34,29 @@ Coordinate GraphicObject::centroid() const {
 	return Coordinate(new_x, new_y);
 }
 
-void GraphicObject::translate(Vector deslocation) {
-	Matrix<3,3> translationMatrix = _buildTranslationMatrix(deslocation);
+void GraphicObject::translate(VECTOR deslocation) {
+	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix(deslocation);
 	applyTransformation(translationMatrix);
 }
 
-void GraphicObject::scaleTo(Vector factors) {
-	Matrix<3,3> scaleMatrix = _buildScaleMatrix(factors._x, factors._y);
+void GraphicObject::scaleTo(VECTOR factors) {
+	SQUARE_MATRIX scaleMatrix = _buildScaleMatrix(factors._x, factors._y);
 	positionBasedTransformation(scaleMatrix, centroid());
 }
 
 void GraphicObject::rotate(double angle) {
-	Matrix<3,3> rotationMatrix = _buildRotationMatrix(angle);
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(angle);
 	positionBasedTransformation(rotationMatrix, centroid());
 }
 
-void GraphicObject::applyTransformation(Matrix<3,3> transfMatrix) {
-	Matrix<1,3> sourcePosition;
-	Matrix<1,3> result;
+void GraphicObject::rotate(double angle, Coordinate anchor) {
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(angle);
+	positionBasedTransformation(rotationMatrix, anchor);
+}
+
+void GraphicObject::applyTransformation(SQUARE_MATRIX transfMatrix) {
+	ROW_VECTOR sourcePosition;
+	ROW_VECTOR result;
 
 	for (Coordinate &coord : _coords) {
 		sourcePosition = coord.toHomogenousMatrix();
@@ -62,10 +67,10 @@ void GraphicObject::applyTransformation(Matrix<3,3> transfMatrix) {
 	}
 }
 
-void GraphicObject::positionBasedTransformation(Matrix<3,3> targetTransformation, Coordinate coord) {
+void GraphicObject::positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord) {
 	Coordinate originDeslocation(-coord._x, -coord._y);
 
-	Matrix<3,3> operationMatrix = _buildTranslationMatrix(originDeslocation) *
+	SQUARE_MATRIX operationMatrix = _buildTranslationMatrix(originDeslocation) *
 			targetTransformation *
 			_buildTranslationMatrix(originDeslocation.negate());
 
@@ -74,8 +79,8 @@ void GraphicObject::positionBasedTransformation(Matrix<3,3> targetTransformation
 
 // Protected functions Homogeneous Coordinates
 
-Matrix<3, 3> GraphicObject::_buildTranslationMatrix(Vector deslocation) {
-	Matrix<3, 3> matrix = Matrix<3, 3>::buildIdentity();
+SQUARE_MATRIX GraphicObject::_buildTranslationMatrix(VECTOR deslocation) {
+	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
 
 	matrix.setValueOn(2, 0, deslocation._x);
 	matrix.setValueOn(2, 1, deslocation._y);
@@ -83,8 +88,8 @@ Matrix<3, 3> GraphicObject::_buildTranslationMatrix(Vector deslocation) {
 	return matrix;
 }
 
-Matrix<3, 3> GraphicObject::_buildScaleMatrix(double x_factor, double y_factor) {
-	Matrix<3, 3> matrix = Matrix<3, 3>::buildIdentity();
+SQUARE_MATRIX GraphicObject::_buildScaleMatrix(double x_factor, double y_factor) {
+	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
 
 	matrix.setValueOn(0, 0, x_factor);
 	matrix.setValueOn(1, 1, y_factor);
@@ -92,13 +97,13 @@ Matrix<3, 3> GraphicObject::_buildScaleMatrix(double x_factor, double y_factor) 
 	return matrix;
 }
 
-Matrix<3, 3> GraphicObject::_buildRotationMatrix(double angle) {
-	Matrix<3, 3> matrix = Matrix<3, 3>::buildIdentity();
+SQUARE_MATRIX GraphicObject::_buildRotationMatrix(double angle) {
+	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
 	double radians = DEG2RAD(angle);
 
 	matrix.setValueOn(0, 0, cos(radians));
-	matrix.setValueOn(0, 1, -sin(radians));
-	matrix.setValueOn(1, 0, sin(radians));
+	matrix.setValueOn(0, 1, sin(radians));
+	matrix.setValueOn(1, 0, -sin(radians));
 	matrix.setValueOn(1, 1, cos(radians));
 
 	return matrix;
