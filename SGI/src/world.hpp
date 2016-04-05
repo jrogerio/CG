@@ -33,9 +33,12 @@ public:
 	void zoomInWindow(int step);
 	void zoomOutWindow(int step);
 
-	void translateObject(char *name, double x, double y);
-	void scaleObject(char *name, double x, double y);
-	void rotateObject(char *name, double angle);
+	GraphicObject& getObjectBy(string name);
+
+	void translateObject(string name, double x, double y);
+	void scaleObject(string name, double x, double y);
+	void rotateObject(string name, double angle);
+	void rotateObject(string name, double angle, Coordinate anchor);
 };
 
 #endif /* SRC_WORLD_H_ */

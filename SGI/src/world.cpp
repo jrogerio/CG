@@ -13,7 +13,10 @@ void World::addPoint(string name, Coordinate point) {
 }
 
 void World::addLine(string name, Coordinate begin, Coordinate end) {
-	displayFile.push_back(Line(name, begin, end));
+	Line line(name, begin, end);
+	line.rotate(45);
+
+	displayFile.push_back(line);
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
@@ -52,41 +55,30 @@ void World::zoomOutWindow(int step) {
 	window.zoom(-step);
 }
 
-void World::translateObject(char *name, double x, double y) {
+GraphicObject& World::getObjectBy(string name) {
 	for (int i = 0; i < displayFile.size(); i++) {
 		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.translate(Coordinate(x, y));
-
-			displayFile[i] = updatedObject;
-
-			break;
+			return displayFile[i];
 		}
 	}
 }
 
-void World::scaleObject(char *name, double x, double y) {
-	for (int i = 0; i < displayFile.size(); i++) {
-		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.scaleTo(Vector(x, y));
-
-			displayFile[i] = updatedObject;
-
-			break;
-		}
-	}
+void World::translateObject(string name, double x, double y) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->translate(Coordinate(x, y));
 }
 
-void World::rotateObject(char *name, double angle) {
-	for (int i = 0; i < displayFile.size(); i++) {
-		if(displayFile[i].name() == name) {
-			GraphicObject updatedObject = displayFile[i];
-			updatedObject.rotate(angle);
+void World::scaleObject(string name, double x, double y) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->scaleTo(VECTOR(x, y));
+}
 
-			displayFile[i] = updatedObject;
+void World::rotateObject(string name, double angle) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->rotate(angle);
+}
 
-			break;
-		}
-	}
+void World::rotateObject(string name, double angle, Coordinate anchor) {
+	GraphicObject* targetObject = &getObjectBy(name);
+	targetObject->rotate(angle, anchor);
 }

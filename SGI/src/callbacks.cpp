@@ -197,7 +197,7 @@ extern "C" {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->translateObject(name, gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+			app->world->translateObject(string(name), gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
 
 			g_free(name);
 		} else {
@@ -219,7 +219,7 @@ extern "C" {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->scaleObject(name, gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+			app->world->scaleObject(string(name), gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
 
 			g_free(name);
 		} else {
@@ -231,6 +231,8 @@ extern "C" {
 	}
 
 	void rotate_handler(GtkWidget *widget, App *app) {
+		GtkSpinButton *xAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "xFactorBtn"));
+		GtkSpinButton *yAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "yFactorBtn"));
 		GtkSpinButton *angleInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "angleBtn"));
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(app_get_ui_element(app, "objectsList")));
 		GtkTreeModel *model;
@@ -240,7 +242,7 @@ extern "C" {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->rotateObject(name, gtk_spin_button_get_value(angleInput));
+			app->world->rotateObject(string(name), gtk_spin_button_get_value(angleInput));
 
 			g_free(name);
 		} else {
