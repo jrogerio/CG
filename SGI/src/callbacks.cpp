@@ -142,21 +142,21 @@ extern "C" {
 
 	void move_up_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->moveUpWindow(gtk_spin_button_get_value(stepInput));
+		app->world->moveWindow( VECTOR(0, gtk_spin_button_get_value(stepInput)) );
 
 		app->mainWindow->updateViewport();
 	}
 
 	void move_right_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->moveRightWindow(gtk_spin_button_get_value(stepInput) );
+		app->world->moveWindow( VECTOR( gtk_spin_button_get_value(stepInput), 0 ) );
 
 		app->mainWindow->updateViewport();
 	}
 	
 	void move_down_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->moveDownWindow(gtk_spin_button_get_value(stepInput));
+		app->world->moveWindow( VECTOR( 0, -gtk_spin_button_get_value(stepInput) ) );
 
 		app->mainWindow->updateViewport();
 
@@ -164,7 +164,7 @@ extern "C" {
 
 	void move_left_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->moveLeftWindow(gtk_spin_button_get_value(stepInput));
+		app->world->moveWindow( VECTOR( -gtk_spin_button_get_value(stepInput), 0 ) );
 
 		app->mainWindow->updateViewport();
 	}
@@ -173,13 +173,13 @@ extern "C" {
 
 	void zoom_in_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->zoomInWindow(gtk_spin_button_get_value(stepInput));
+		app->world->zoom(gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
 	}
 	void zoom_out_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *stepInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "stepSpinBtn"));
-		app->world->zoomOutWindow(gtk_spin_button_get_value(stepInput));
+		app->world->zoom(-gtk_spin_button_get_value(stepInput));
 
 		app->mainWindow->updateViewport();
 	}
@@ -193,11 +193,13 @@ extern "C" {
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
+		VECTOR deslocation(gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->translateObject(string(name), gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+			app->world->translateObject(string(name), deslocation);
 
 			g_free(name);
 		} else {
@@ -215,11 +217,13 @@ extern "C" {
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
+		VECTOR factor(gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gchar *name;
 			
 			gtk_tree_model_get(model, &iter, 0, &name, -1);
-			app->world->scaleObject(string(name), gtk_spin_button_get_value(xAxisInput), gtk_spin_button_get_value(yAxisInput));
+			app->world->scaleObject(string(name), factor);
 
 			g_free(name);
 		} else {

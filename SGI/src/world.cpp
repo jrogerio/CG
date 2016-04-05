@@ -13,10 +13,7 @@ void World::addPoint(string name, Coordinate point) {
 }
 
 void World::addLine(string name, Coordinate begin, Coordinate end) {
-	Line line(name, begin, end);
-	line.rotate(45);
-
-	displayFile.push_back(line);
+	displayFile.push_back(Line(name, begin, end));
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
@@ -31,28 +28,12 @@ Window World::getWindow() {
 	return window;
 }
 
-void World::moveUpWindow(int step) {
-	window.move( Coordinate(0, step) );
+void World::moveWindow(VECTOR step) {
+	window.move(step);
 }
 
-void World::moveDownWindow(int step) {
-	window.move( Coordinate(0, -step) );
-}
-
-void World::moveLeftWindow(int step) {
-	window.move( Coordinate(-step, 0) );
-}
-
-void World::moveRightWindow(int step) {
-	window.move( Coordinate(step, 0) );
-}
-
-void World::zoomInWindow(int step) {
+void World::zoom(int step) {
 	window.zoom(step);
-}
-
-void World::zoomOutWindow(int step) {
-	window.zoom(-step);
 }
 
 GraphicObject& World::getObjectBy(string name) {
@@ -63,14 +44,14 @@ GraphicObject& World::getObjectBy(string name) {
 	}
 }
 
-void World::translateObject(string name, double x, double y) {
+void World::translateObject(string name, VECTOR deslocation) {
 	GraphicObject* targetObject = &getObjectBy(name);
-	targetObject->translate(Coordinate(x, y));
+	targetObject->translate(deslocation);
 }
 
-void World::scaleObject(string name, double x, double y) {
+void World::scaleObject(string name, VECTOR factor) {
 	GraphicObject* targetObject = &getObjectBy(name);
-	targetObject->scaleTo(VECTOR(x, y));
+	targetObject->scaleTo(factor);
 }
 
 void World::rotateObject(string name, double angle) {
