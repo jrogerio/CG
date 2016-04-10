@@ -2,7 +2,10 @@
 
 GraphicObject::GraphicObject(string name, GraphicObjectType type,
 		vector<Coordinate> coords) :
-		_name(name), _type(type), _coords(coords) {
+		_name(name), _type(type), _worldCoords(coords) {
+			for(Coordinate coord : _worldCoords) {
+				_windowCoords.push_back( Coordinate(0,0) );
+			}
 }
 
 GraphicObject::~GraphicObject() {
@@ -17,21 +20,33 @@ GraphicObjectType GraphicObject::type() const {
 }
 
 vector<Coordinate> GraphicObject::coords() const {
-	return _coords;
+	return _worldCoords;
 }
 
 Coordinate GraphicObject::centroid() const {
 	double new_x = 0, new_y = 0;
 
-	for(auto coord : _coords) {
+	for(auto coord : _worldCoords) {
 		new_x += coord._x;
 		new_y += coord._y;
 	}
 
-	new_x = new_x / _coords.size();
-	new_y = new_y / _coords.size();
+	new_x = new_x / _worldCoords.size();
+	new_y = new_y / _worldCoords.size();
 
 	return Coordinate(new_x, new_y);
+}
+
+void GraphicObject::normalizeIn(Coordinate windowCenter, double width, double height) {
+	double xOffset = width / 2;
+	double yOffset = height / 2;
+
+	int numCoords = _worldCoords.size();
+
+	for (int i = 0; i < numCoords; ++i) {
+		_windowCoords[i]._x = ( _worldCoords[i]._x - xOffset ) / (windowCenter._x - xOffset);
+		_windowCoords[i]._y = ( _worldCoords[i]._y - yOffset ) / (windowCenter._y - yOffset);
+	}
 }
 
 void GraphicObject::translate(VECTOR deslocation) {
@@ -58,7 +73,7 @@ void GraphicObject::applyTransformation(SQUARE_MATRIX transfMatrix) {
 	ROW_VECTOR sourcePosition;
 	ROW_VECTOR result;
 
-	for (Coordinate &coord : _coords) {
+	for (Coordinate &coord : _worldCoords) {
 		sourcePosition = coord.toHomogenousMatrix();
 		result = sourcePosition * transfMatrix;
 

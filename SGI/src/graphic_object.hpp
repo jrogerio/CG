@@ -52,18 +52,23 @@ public:
 	vector<Coordinate> coords() const;
 	Coordinate centroid() const;
 
+	void normalizeIn(Coordinate windowCenter, double width, double height);
+
 	void translate(VECTOR deslocation);
 	void scaleTo(VECTOR factors);
 	void rotate(double angle);
 	void rotate(double angle, Coordinate anchor);
+
+private:
 	void applyTransformation(SQUARE_MATRIX transfMatrix);
+	void positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord);
 
 protected:
 	string _name;
 	GraphicObjectType _type;
-	vector<Coordinate> _coords;
+	vector<Coordinate> _worldCoords;
+	vector<Coordinate> _windowCoords;
 
-	void positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord);
 
 	SQUARE_MATRIX _buildTranslationMatrix(VECTOR deslocation);
 	SQUARE_MATRIX _buildScaleMatrix(double x_factor, double y_factor);
