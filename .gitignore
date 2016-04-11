@@ -14,5 +14,6 @@ SGI/bin/*
 .metadata
 *~
 *.save
+*.obj
 
 !SGI/bin/.gitkeep

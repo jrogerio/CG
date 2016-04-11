@@ -7,6 +7,7 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "window.hpp"
+#include "object_descriptor.hpp"
 
 using namespace std;
 
@@ -35,6 +36,8 @@ public:
 	void scaleObject(string name, VECTOR factor);
 	void rotateObject(string name, double angle);
 	void rotateObject(string name, double angle, Coordinate anchor);
+
+	void exportToObj();
 };
 
 #endif /* SRC_WORLD_H_ */

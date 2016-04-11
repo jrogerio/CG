@@ -263,4 +263,20 @@ extern "C" {
 
 		app->mainWindow->updateViewport();				
 	}
+
+	// Import/Export ----------------------------------------------------------------------------
+
+	void export_handler(GtkWidget *widget, App *app) {
+		GtkTextBuffer* buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(app_get_ui_element(app, "textview")));
+		GtkTextIter end;
+
+		app->world->exportToObj();
+
+		gtk_text_buffer_get_end_iter(buffer, &end);
+		gtk_text_buffer_insert(buffer, &end, "Criado arquivo: export.obj\n", -1);
+	}
+
+	void import_handler(GtkWidget *widget, App *app) {
+		// app->world->importFromObj();
+	}
 }

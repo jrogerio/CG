@@ -63,3 +63,13 @@ void World::rotateObject(string name, double angle, Coordinate anchor) {
 	GraphicObject* targetObject = &getObjectBy(name);
 	targetObject->rotate(angle, anchor);
 }
+
+void World::exportToObj() {
+	ObjectDescriptor* exporter = new ObjectDescriptor();
+
+	for (int i = 0; i < displayFile.size(); i++) {
+		exporter->store(displayFile[i].name(), displayFile[i].type(), displayFile[i].coords());
+	}
+
+	exporter->persist();
+}
