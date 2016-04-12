@@ -1,6 +1,6 @@
 #include "world.hpp"
 
-World::World() : window(Coordinate(0,0), Coordinate(550, 550)) {
+World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
 }
 
@@ -10,21 +10,21 @@ World::~World() {
 
 void World::addPoint(string name, Coordinate coord) {
 	Point point(name, coord);
-	point.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	normalize(point);
 
 	_displayFile.push_back(point);
 }
 
 void World::addLine(string name, Coordinate begin, Coordinate end) {
 	Line line(name, begin, end);
-	line.normalizeIn(window.center(), window.xOffset(), window.yOffset());
-	
+	normalize(line);
+
 	_displayFile.push_back(line);
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
 	Polygon polygon(name, coords);
-	polygon.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	normalize(polygon);
 	
 	_displayFile.push_back(polygon);
 }
@@ -39,19 +39,28 @@ Window World::getWindow() {
 
 void World::moveWindow(VECTOR step) {
 	window.move(step);
-	printf("\n window center: (%f, %f)", window.center()._x, window.center()._y);
-
-	for (GraphicObject &object : _displayFile) {
-		object.normalizeIn(window.center(), window.xOffset(), window.yOffset());
-	}
+	normalizeObjects();
 }
 
 void World::zoomWindow(int step) {
 	window.zoom(step);
+	normalizeObjects();
+}
 
+void World::rotateWindow(double angle) {
+	window.rotate( DEG2RAD(angle) );
+	normalizeObjects();
+}
+
+void World::normalizeObjects() {
 	for (GraphicObject &object : _displayFile) {
-		object.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+		normalize(object);
 	}
+}
+
+void World::normalize(GraphicObject& object) {
+	SQUARE_MATRIX transformation = window.normalizedTransformation();
+	object.normalizeIn(window.center(), window.xOffset(), window.yOffset(), transformation);
 }
 
 GraphicObject& World::getObjectBy(string name) {
@@ -65,21 +74,25 @@ GraphicObject& World::getObjectBy(string name) {
 void World::translateObject(string name, VECTOR deslocation) {
 	GraphicObject* targetObject = &getObjectBy(name);
 	targetObject->translate(deslocation);
+	normalize(*targetObject);
 }
 
 void World::scaleObject(string name, VECTOR factor) {
 	GraphicObject* targetObject = &getObjectBy(name);
 	targetObject->scaleTo(factor);
+	normalize(*targetObject);
 }
 
 void World::rotateObject(string name, double angle) {
 	GraphicObject* targetObject = &getObjectBy(name);
-	targetObject->rotate(angle);
+	targetObject->rotate( DEG2RAD(angle) );
+	normalize(*targetObject);
 }
 
 void World::rotateObject(string name, double angle, Coordinate anchor) {
 	GraphicObject* targetObject = &getObjectBy(name);
-	targetObject->rotate(angle, anchor);
+	targetObject->rotate(DEG2RAD(angle), anchor);
+	normalize(*targetObject);
 }
 
 void World::exportToObj() {

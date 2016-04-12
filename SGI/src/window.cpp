@@ -1,42 +1,43 @@
 #include "window.hpp"
 
-Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
-		_lowerLeftCorner(lowerLeftCorner), 
-		_upperRightCorner(upperRightCorner), 
+Window::Window(double width, double height) :
+		_width(width),
+		_height(height),
 		_center(0,0),
 		_vupVector(0,1) {
-			_xOffset = (upperRightCorner._x - lowerLeftCorner._x) / 2;
-			_yOffset = (upperRightCorner._y - lowerLeftCorner._y) / 2;
 		}
 
 void Window::move(Coordinate step) {
-	double xFactor = (_upperRightCorner._x - _lowerLeftCorner._x) * step._x / 100.0;
-	double yFactor = (_upperRightCorner._y - _lowerLeftCorner._y) * step._y / 100.0;
-
-//	_lowerLeftCorner._x += xFactor;
-//	_upperRightCorner._x += xFactor;
-//
-//	_lowerLeftCorner._y += yFactor;
-//	_upperRightCorner._y += yFactor;
+	double xFactor = _width * step._x / 100.0;
+	double yFactor = _height * step._y / 100.0;
 
 	_center._x += xFactor;
 	_center._y += yFactor;
 }
 
+void Window::rotate(double angle) {
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(angle);
+	ROW_VECTOR vupMatrix = _vupVector.toHomogenousMatrix();
+	ROW_VECTOR result = vupMatrix * rotationMatrix;
+
+	_vupVector._x = result.valueOn(0,0);
+	_vupVector._y = result.valueOn(0,1);
+
+//	if (fabs(_vupVector._x) < 0.00000001)
+//		_vupVector._x = 0;
+//
+//	if (fabs(_vupVector._y) < 0.00000001)
+//			_vupVector._y = 0;
+
+	std::cout << "\nreultado vup: (" << _vupVector._x << ", " << _vupVector._y <<")" << std::endl;
+}
+
 void Window::zoom(int step) {
-	int halfWidth = (_upperRightCorner._x - _lowerLeftCorner._x) / 2;
-	int halfHeight = (_upperRightCorner._y - _lowerLeftCorner._y) / 2;
+	double xFactor = min<double>(xOffset(), xOffset() * step / 100.0);
+	double yFactor = min<double>(yOffset(), yOffset() * step / 100.0);
 
-	double xFactor = min<double>(halfWidth - 1, halfWidth * step / 100.0);
-	double yFactor = min<double>(halfHeight - 1, halfHeight * step / 100.0);
-
-//	_lowerLeftCorner._x += xFactor;
-//	_lowerLeftCorner._y += yFactor;
-//	_upperRightCorner._x -= xFactor;
-//	_upperRightCorner._y -= yFactor;
-
-	_xOffset -= xFactor;
-	_yOffset -= yFactor;
+	_width -= (2 * xFactor);
+	_height -= (2 * yFactor);
 }
 
 Coordinate Window::center() {
@@ -44,26 +45,19 @@ Coordinate Window::center() {
 }
 
 double Window::xOffset() {
-	return _xOffset;
+	return _width / 2;
 }
 
 double Window::yOffset() {
-	return _yOffset;
+	return _height / 2;
 }
 
-int Window::Xmin() {
-	return _lowerLeftCorner._x;
-}
+SQUARE_MATRIX Window::normalizedTransformation() {
+	double angle = _vupVector.angleWith( Coordinate(0,1) );
 
-int Window::Ymin() {
-	return _lowerLeftCorner._y;
-}
+	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix( _center.negate() );
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( -angle );
 
-int Window::Xmax() {
-	return _upperRightCorner._x;
-}
-
-int Window::Ymax() {
-	return _upperRightCorner._y;
+	return translationMatrix * rotationMatrix;
 }
 

@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "graphic_object.hpp"
+#include "transformable_object.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"

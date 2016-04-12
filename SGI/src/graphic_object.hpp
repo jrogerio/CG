@@ -3,14 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <cmath>
-#include <iostream>
 
-#include "matrix.hpp"
-#include "window.hpp"
-
-#define PI 3.14159265358979323846
-#define DEG2RAD(DEG) (DEG*PI/180.0)
+#include "transformable_object.hpp"
 
 using namespace std;
 
@@ -22,7 +16,7 @@ enum GraphicObjectType {
 
 // ---------------------------
 
-class GraphicObject {
+class GraphicObject : public TransformableObject {
 public:
 	GraphicObject(string name,  GraphicObjectType type, vector<Coordinate> coords);
 	virtual ~GraphicObject();
@@ -32,27 +26,22 @@ public:
 	vector<Coordinate> coords() const;
 	Coordinate centroid() const;
 
-	void normalizeIn(Coordinate windowCenter, double xOffset, double yOffset);
+	void normalizeIn(Coordinate windowCenter, double xOffset, double yOffset, SQUARE_MATRIX transformation);
 
 	void translate(VECTOR deslocation);
 	void scaleTo(VECTOR factors);
-	void rotate(double angle);
-	void rotate(double angle, Coordinate anchor);
+	void rotate(double radians);
+	void rotate(double radians, Coordinate anchor);
 
 private:
-	void applyTransformation(SQUARE_MATRIX transfMatrix);
-	void positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord);
+	void applyTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX transfMatrix);
+	void positionBasedTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX targetTransformation, Coordinate coord);
 
 protected:
 	string _name;
 	GraphicObjectType _type;
 	vector<Coordinate> _worldCoords;
 	vector<Coordinate> _windowCoords;
-
-
-	SQUARE_MATRIX _buildTranslationMatrix(VECTOR deslocation);
-	SQUARE_MATRIX _buildScaleMatrix(double x_factor, double y_factor);
-	SQUARE_MATRIX _buildRotationMatrix(double angle);
 };
 
 #endif /* SRC_GRAPHICOBJECT_H_ */

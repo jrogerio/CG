@@ -186,6 +186,13 @@ extern "C" {
 
 	// Transformations ------------------------------------------------------------------------
 
+	void window_rotate_handler(GtkWidget *widget, App *app) {
+		GtkSpinButton *angleInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "windowAngleSpin"));
+		app->world->rotateWindow( gtk_spin_button_get_value(angleInput) );
+
+		app->mainWindow->updateViewport();
+	}
+
 	void translate_handler(GtkWidget *widget, App *app) {
 		GtkSpinButton *xAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "xFactorBtn"));
 		GtkSpinButton *yAxisInput = GTK_SPIN_BUTTON(app_get_ui_element(app, "yFactorBtn"));

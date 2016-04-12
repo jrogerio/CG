@@ -2,66 +2,31 @@
 #define SRC_WINDOW_H_
 
 #include <algorithm>
-#include "matrix.hpp"
+#include <iostream>
 
-#define VECTOR Coordinate
+#include "transformable_object.hpp"
 
-#define SQUARE_MATRIX Matrix<3,3>
-#define ROW_VECTOR Matrix<1,3>
-
-struct Coordinate {
-
-	Coordinate(double x, double y): _x(x), _y(y) {}
-	Coordinate(): _x(0), _y(0) {}
-
+class Window : public TransformableObject {
 public:
-	double _x,_y;
-
-	Coordinate negate(){ return Coordinate(-_x, -_y); }
-	ROW_VECTOR toHomogenousMatrix(){
-		ROW_VECTOR homogeneousMatrix;
-		homogeneousMatrix.setValueOn(0, 0, _x);
-		homogeneousMatrix.setValueOn(0, 1, _y);
-		homogeneousMatrix.setValueOn(0, 2, 1);
-
-		return homogeneousMatrix;
-	}
-
-	double length() {
-		return sqrt( pow(_x, 2) + pow(_y, 2) );
-	}
-
-	double dotProduct( Coordinate other ) {
-		return (_x * other._x) + (_y * other._y);
-	}
-
-	double angleWith( Coordinate target ) {
-		return dotProduct(target) / (length() * target.length());
-	}
-};
-
-class Window {
-public:
-	Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner);
+	Window(double width, double height);
 
 	void move(Coordinate step);
 	void zoom(int step);
+	void rotate(double angle);
 
 	Coordinate center();
 
 	double xOffset();
 	double yOffset();
 
-	int Xmin();
-	int Ymin();
-	int Xmax();
-	int Ymax();
+	SQUARE_MATRIX normalizedTransformation();
 
 private:
-	Coordinate _lowerLeftCorner, _upperRightCorner, _center;
-	Coordinate _vupVector;
+	//Coordinate _lowerLeftCorner, _upperRightCorner;
+	Coordinate _center;
+	VECTOR _vupVector;
 
-	double _xOffset, _yOffset;
+	double _width, _height;
 };
 
 #endif /* SRC_WINDOW_H_ */

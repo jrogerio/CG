@@ -37,87 +37,63 @@ Coordinate GraphicObject::centroid() const {
 	return Coordinate(new_x, new_y);
 }
 
-void GraphicObject::normalizeIn(Coordinate windowCenter, double xOffset, double yOffset) {
+void GraphicObject::normalizeIn(Coordinate windowCenter, double xOffset, double yOffset, SQUARE_MATRIX transformation) {
 	int numCoords = _worldCoords.size();
-	uint size = _windowCoords.size();
+
+	ROW_VECTOR result;
 
 	for (int i = 0; i < numCoords; ++i) {
-		_windowCoords[i]._x = ( _worldCoords[i]._x - windowCenter._x ) / (xOffset);
-		_windowCoords[i]._y = ( _worldCoords[i]._y - windowCenter._y ) / (yOffset);
+		result = _worldCoords[i].toHomogenousMatrix() * transformation;
+
+		_windowCoords[i]._x = ( result.valueOn(0,0) - windowCenter._x ) / (xOffset);
+		_windowCoords[i]._y = ( result.valueOn(0,1) - windowCenter._y ) / (yOffset);
 	}
 }
 
 void GraphicObject::translate(VECTOR deslocation) {
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix(deslocation);
-	applyTransformation(translationMatrix);
+	applyTransformation(_worldCoords, translationMatrix);
 }
 
 void GraphicObject::scaleTo(VECTOR factors) {
 	SQUARE_MATRIX scaleMatrix = _buildScaleMatrix(factors._x, factors._y);
-	positionBasedTransformation(scaleMatrix, centroid());
+	positionBasedTransformation(_worldCoords, scaleMatrix, centroid());
 }
 
-void GraphicObject::rotate(double angle) {
-	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(angle);
-	positionBasedTransformation(rotationMatrix, centroid());
+void GraphicObject::rotate(double radians) {
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(radians);
+	positionBasedTransformation(_worldCoords, rotationMatrix, centroid());
 }
 
-void GraphicObject::rotate(double angle, Coordinate anchor) {
-	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(angle);
-	positionBasedTransformation(rotationMatrix, anchor);
+void GraphicObject::rotate(double radians, Coordinate anchor) {
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(radians);
+	positionBasedTransformation(_worldCoords, rotationMatrix, anchor);
 }
 
-void GraphicObject::applyTransformation(SQUARE_MATRIX transfMatrix) {
+void GraphicObject::applyTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX transfMatrix) {
 	ROW_VECTOR sourcePosition;
 	ROW_VECTOR result;
 
-	for (Coordinate &coord : _worldCoords) {
-		sourcePosition = coord.toHomogenousMatrix();
+	int numCoords = _worldCoords.size();
+
+	for (int i = 0; i < numCoords; ++i) {
+		sourcePosition = coordSystem[i].toHomogenousMatrix();
 		result = sourcePosition * transfMatrix;
 
-		coord._x = result.valueOn(0,0);
-		coord._y = result.valueOn(0,1);
+		coordSystem[i]._x = result.valueOn(0,0);
+		coordSystem[i]._y = result.valueOn(0,1);
+	}
+
+	for (Coordinate &coord : _worldCoords) {
 	}
 }
 
-void GraphicObject::positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord) {
+void GraphicObject::positionBasedTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX targetTransformation, Coordinate coord) {
 	Coordinate originDeslocation(-coord._x, -coord._y);
 
 	SQUARE_MATRIX operationMatrix = _buildTranslationMatrix(originDeslocation) *
 			targetTransformation *
 			_buildTranslationMatrix(originDeslocation.negate());
 
-	applyTransformation(operationMatrix);
-}
-
-// Protected functions Homogeneous Coordinates
-
-SQUARE_MATRIX GraphicObject::_buildTranslationMatrix(VECTOR deslocation) {
-	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
-
-	matrix.setValueOn(2, 0, deslocation._x);
-	matrix.setValueOn(2, 1, deslocation._y);
-
-	return matrix;
-}
-
-SQUARE_MATRIX GraphicObject::_buildScaleMatrix(double x_factor, double y_factor) {
-	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
-
-	matrix.setValueOn(0, 0, x_factor);
-	matrix.setValueOn(1, 1, y_factor);
-
-	return matrix;
-}
-
-SQUARE_MATRIX GraphicObject::_buildRotationMatrix(double angle) {
-	SQUARE_MATRIX matrix = SQUARE_MATRIX::buildIdentity();
-	double radians = DEG2RAD(angle);
-
-	matrix.setValueOn(0, 0, cos(radians));
-	matrix.setValueOn(0, 1, sin(radians));
-	matrix.setValueOn(1, 0, -sin(radians));
-	matrix.setValueOn(1, 1, cos(radians));
-
-	return matrix;
+	applyTransformation(coordSystem, operationMatrix);
 }
