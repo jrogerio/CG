@@ -13,14 +13,14 @@ using namespace std;
 
 class World {
 private:
-	vector<GraphicObject> displayFile;
+	vector<GraphicObject> _displayFile;
 	Window window;
 
 public:
 	World();
 	virtual ~World();
 
-	void addPoint(string name, Coordinate point);
+	void addPoint(string name, Coordinate coord);
 	void addLine(string name, Coordinate begin, Coordinate end);
 	void addPolygon(string name, vector<Coordinate> coords);
 	vector<GraphicObject> getObjects();

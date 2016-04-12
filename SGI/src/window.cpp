@@ -5,19 +5,22 @@ Window::Window(Coordinate lowerLeftCorner, Coordinate upperRightCorner) :
 		_upperRightCorner(upperRightCorner), 
 		_center(0,0),
 		_vupVector(0,1) {
-			_width = upperRightCorner._x - lowerLeftCorner._x;
-			_height = upperRightCorner._y - lowerLeftCorner._y;
+			_xOffset = (upperRightCorner._x - lowerLeftCorner._x) / 2;
+			_yOffset = (upperRightCorner._y - lowerLeftCorner._y) / 2;
 		}
 
 void Window::move(Coordinate step) {
 	double xFactor = (_upperRightCorner._x - _lowerLeftCorner._x) * step._x / 100.0;
 	double yFactor = (_upperRightCorner._y - _lowerLeftCorner._y) * step._y / 100.0;
 
-	_lowerLeftCorner._x += xFactor;
-	_upperRightCorner._x += xFactor;
+//	_lowerLeftCorner._x += xFactor;
+//	_upperRightCorner._x += xFactor;
+//
+//	_lowerLeftCorner._y += yFactor;
+//	_upperRightCorner._y += yFactor;
 
-	_lowerLeftCorner._y += yFactor;
-	_upperRightCorner._y += yFactor;
+	_center._x += xFactor;
+	_center._y += yFactor;
 }
 
 void Window::zoom(int step) {
@@ -27,10 +30,25 @@ void Window::zoom(int step) {
 	double xFactor = min<double>(halfWidth - 1, halfWidth * step / 100.0);
 	double yFactor = min<double>(halfHeight - 1, halfHeight * step / 100.0);
 
-	_lowerLeftCorner._x += xFactor;
-	_lowerLeftCorner._y += yFactor;
-	_upperRightCorner._x -= xFactor;
-	_upperRightCorner._y -= yFactor;
+//	_lowerLeftCorner._x += xFactor;
+//	_lowerLeftCorner._y += yFactor;
+//	_upperRightCorner._x -= xFactor;
+//	_upperRightCorner._y -= yFactor;
+
+	_xOffset -= xFactor;
+	_yOffset -= yFactor;
+}
+
+Coordinate Window::center() {
+	return _center;
+}
+
+double Window::xOffset() {
+	return _xOffset;
+}
+
+double Window::yOffset() {
+	return _yOffset;
 }
 
 int Window::Xmin() {

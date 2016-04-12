@@ -8,20 +8,29 @@ World::~World() {
 	// TODO Auto-generated destructor stub
 }
 
-void World::addPoint(string name, Coordinate point) {
-	displayFile.push_back(Point(name, point));
+void World::addPoint(string name, Coordinate coord) {
+	Point point(name, coord);
+	point.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+
+	_displayFile.push_back(point);
 }
 
 void World::addLine(string name, Coordinate begin, Coordinate end) {
-	displayFile.push_back(Line(name, begin, end));
+	Line line(name, begin, end);
+	line.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	
+	_displayFile.push_back(line);
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
-	displayFile.push_back(Polygon(name, coords));
+	Polygon polygon(name, coords);
+	polygon.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	
+	_displayFile.push_back(polygon);
 }
 
 vector<GraphicObject> World::getObjects(){
-	return displayFile;
+	return _displayFile;
 }
 
 Window World::getWindow() {
@@ -30,16 +39,25 @@ Window World::getWindow() {
 
 void World::moveWindow(VECTOR step) {
 	window.move(step);
+	printf("\n window center: (%f, %f)", window.center()._x, window.center()._y);
+
+	for (GraphicObject &object : _displayFile) {
+		object.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	}
 }
 
 void World::zoomWindow(int step) {
 	window.zoom(step);
+
+	for (GraphicObject &object : _displayFile) {
+		object.normalizeIn(window.center(), window.xOffset(), window.yOffset());
+	}
 }
 
 GraphicObject& World::getObjectBy(string name) {
-	for (int i = 0; i < displayFile.size(); i++) {
-		if(displayFile[i].name() == name) {
-			return displayFile[i];
+	for (int i = 0; i < _displayFile.size(); i++) {
+		if(_displayFile[i].name() == name) {
+			return _displayFile[i];
 		}
 	}
 }
@@ -67,8 +85,8 @@ void World::rotateObject(string name, double angle, Coordinate anchor) {
 void World::exportToObj() {
 	ObjectDescriptor* exporter = new ObjectDescriptor();
 
-	for (int i = 0; i < displayFile.size(); i++) {
-		exporter->store(displayFile[i].name(), displayFile[i].type(), displayFile[i].coords());
+	for (int i = 0; i < _displayFile.size(); i++) {
+		exporter->store(_displayFile[i].name(), _displayFile[i].type(), _displayFile[i].coords());
 	}
 
 	exporter->persist();

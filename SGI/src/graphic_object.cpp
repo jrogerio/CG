@@ -3,8 +3,8 @@
 GraphicObject::GraphicObject(string name, GraphicObjectType type,
 		vector<Coordinate> coords) :
 		_name(name), _type(type), _worldCoords(coords) {
-			for(Coordinate coord : _worldCoords) {
-				_windowCoords.push_back( Coordinate(0,0) );
+			for(Coordinate coord : coords) {
+				_windowCoords.push_back( Coordinate() );
 			}
 }
 
@@ -20,7 +20,7 @@ GraphicObjectType GraphicObject::type() const {
 }
 
 vector<Coordinate> GraphicObject::coords() const {
-	return _worldCoords;
+	return _windowCoords;
 }
 
 Coordinate GraphicObject::centroid() const {
@@ -37,15 +37,13 @@ Coordinate GraphicObject::centroid() const {
 	return Coordinate(new_x, new_y);
 }
 
-void GraphicObject::normalizeIn(Coordinate windowCenter, double width, double height) {
-	double xOffset = width / 2;
-	double yOffset = height / 2;
-
+void GraphicObject::normalizeIn(Coordinate windowCenter, double xOffset, double yOffset) {
 	int numCoords = _worldCoords.size();
+	uint size = _windowCoords.size();
 
 	for (int i = 0; i < numCoords; ++i) {
-		_windowCoords[i]._x = ( _worldCoords[i]._x - xOffset ) / (windowCenter._x - xOffset);
-		_windowCoords[i]._y = ( _worldCoords[i]._y - yOffset ) / (windowCenter._y - yOffset);
+		_windowCoords[i]._x = ( _worldCoords[i]._x - windowCenter._x ) / (xOffset);
+		_windowCoords[i]._y = ( _worldCoords[i]._y - windowCenter._y ) / (yOffset);
 	}
 }
 

@@ -84,8 +84,8 @@ vector<vector<Coordinate>> MainWindow::mapToViewport() {
 		GraphicObject obj = objects[i];
 
 		for (uint j = 0; j < obj.coords().size(); ++j) {
-			x = ((obj.coords()[j]._x - window.Xmin())/(window.Xmax() - window.Xmin())) * (Xvmax - MARGIN);
-			y = (1 - (obj.coords()[j]._y - window.Ymin())/(window.Ymax() - window.Ymin())) * (Yvmax - MARGIN);
+			x = ((obj.coords()[j]._x - (-1))/(2)) * (Xvmax);
+			y = (1 - (obj.coords()[j]._y - (-1) )/( 2 )) * (Yvmax);
 
 			newcoords.push_back(Coordinate(x, y));
 		}

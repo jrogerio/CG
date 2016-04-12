@@ -1,25 +1,41 @@
 #ifndef SRC_WINDOW_H_
 #define SRC_WINDOW_H_
 
-#include <cmath>
-#include "graphic_object.hpp"
+#include <algorithm>
 #include "matrix.hpp"
 
-struct MathVector {
-	double _x,_y;
+#define VECTOR Coordinate
+
+#define SQUARE_MATRIX Matrix<3,3>
+#define ROW_VECTOR Matrix<1,3>
+
+struct Coordinate {
+
+	Coordinate(double x, double y): _x(x), _y(y) {}
+	Coordinate(): _x(0), _y(0) {}
 
 public:
-	MathVector(double x, double y): _x(x), _y(y) {}
+	double _x,_y;
+
+	Coordinate negate(){ return Coordinate(-_x, -_y); }
+	ROW_VECTOR toHomogenousMatrix(){
+		ROW_VECTOR homogeneousMatrix;
+		homogeneousMatrix.setValueOn(0, 0, _x);
+		homogeneousMatrix.setValueOn(0, 1, _y);
+		homogeneousMatrix.setValueOn(0, 2, 1);
+
+		return homogeneousMatrix;
+	}
 
 	double length() {
 		return sqrt( pow(_x, 2) + pow(_y, 2) );
 	}
 
-	double dotProduct( MathVector other ) {
+	double dotProduct( Coordinate other ) {
 		return (_x * other._x) + (_y * other._y);
 	}
 
-	double angleWith( MathVector target ) {
+	double angleWith( Coordinate target ) {
 		return dotProduct(target) / (length() * target.length());
 	}
 };
@@ -31,6 +47,11 @@ public:
 	void move(Coordinate step);
 	void zoom(int step);
 
+	Coordinate center();
+
+	double xOffset();
+	double yOffset();
+
 	int Xmin();
 	int Ymin();
 	int Xmax();
@@ -38,9 +59,9 @@ public:
 
 private:
 	Coordinate _lowerLeftCorner, _upperRightCorner, _center;
-	MathVector _vupVector;
+	Coordinate _vupVector;
 
-	double _width, _height;
+	double _xOffset, _yOffset;
 };
 
 #endif /* SRC_WINDOW_H_ */

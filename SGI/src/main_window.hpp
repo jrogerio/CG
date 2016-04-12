@@ -12,7 +12,6 @@ private:
 	GtkBuilder *_definitions;
 	World *_world;
 
-	const int MARGIN = 0;
 	int _rowCount = 7;
 
 public:
