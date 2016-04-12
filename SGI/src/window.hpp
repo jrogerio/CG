@@ -2,9 +2,14 @@
 #define SRC_WINDOW_H_
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 
 #include "transformable_object.hpp"
+
+#define PI 3.14159265358979323846
+#define DEG2RAD(DEG) (DEG*PI/180.0)
+#define RAD2DEG(RAD) (RAD / PI*180.0)
 
 class Window : public TransformableObject {
 public:

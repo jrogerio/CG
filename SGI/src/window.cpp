@@ -53,10 +53,13 @@ double Window::yOffset() {
 }
 
 SQUARE_MATRIX Window::normalizedTransformation() {
-	double angle = _vupVector.angleWith( Coordinate(0,1) );
+	double radians = _vupVector.angleWith( Coordinate(0,1) );
+	double angle = roundf( RAD2DEG(radians) );
+
+	std::cout << "\n angulo: " << angle << std::endl;
 
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix( _center.negate() );
-	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( -angle );
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( DEG2RAD( -angle ) );
 
 	return translationMatrix * rotationMatrix;
 }
