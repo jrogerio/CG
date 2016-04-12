@@ -91,3 +91,16 @@ void World::exportToObj() {
 
 	exporter->persist();
 }
+
+vector<string> World::importFromObj(string filePath) {
+	ObjectDescriptor* importer = new ObjectDescriptor();
+	vector<string> names;
+
+	_displayFile = importer->parse(filePath);
+
+	for (int i = 0; i < _displayFile.size(); i++) {
+		names.push_back(_displayFile[i].name());
+	}
+
+	return names;
+}

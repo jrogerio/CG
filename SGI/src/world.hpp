@@ -38,6 +38,7 @@ public:
 	void rotateObject(string name, double angle, Coordinate anchor);
 
 	void exportToObj();
+	vector<string> importFromObj(string filePath);
 };
 
 #endif /* SRC_WORLD_H_ */

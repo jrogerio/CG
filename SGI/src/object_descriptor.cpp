@@ -8,6 +8,8 @@ void ObjectDescriptor::store(string name,  GraphicObjectType type, vector<Coordi
 	string object;
 	string vertex;
 
+	setlocale(LC_ALL, "en_US.utf8");
+
 	for(Coordinate coord : coords) {
 		vertex = "v " + to_string(coord._x) + ", " + to_string(coord._y) + ", 0.0";
 		_vertices.push_back(vertex);
@@ -47,4 +49,74 @@ void ObjectDescriptor::persist() {
 	}
 
 	file.close();
+}
+
+vector<GraphicObject> ObjectDescriptor::parse(string filePath) {
+	ifstream file(filePath);
+	string objectName;
+	vector<Coordinate> vertices;
+	vector<GraphicObject> newDisplayFile;
+
+	for(std::string line; getline(file, line);) {
+		vector<string> tokens = getTokens(line);
+
+		if(tokens[0] == "v") {
+			vertices.push_back(getVertexCoordinate(tokens));
+		} else if(tokens[0] == "o") {
+			objectName = tokens[1];
+		} else {
+			vector<Coordinate> objectCoordinates = getObjectCoordinates(tokens, vertices);
+
+			if(tokens[0] == "p") {
+				newDisplayFile.push_back(Point(objectName, objectCoordinates[0]));
+			} else if(objectCoordinates.size() == 2) {
+				newDisplayFile.push_back(Line(objectName, objectCoordinates[0], objectCoordinates[1]));
+			} else {
+				newDisplayFile.push_back(Polygon(objectName, objectCoordinates));
+			}
+		}
+	}	
+
+	file.close();
+
+	return newDisplayFile;
+}
+
+vector<string> ObjectDescriptor::getTokens(string line) { 
+	string buffer;
+	stringstream stream(line);
+
+	vector<string> tokens;
+
+	while (stream >> buffer) {
+		tokens.push_back(buffer);
+	}
+
+	return tokens;
+}
+
+Coordinate ObjectDescriptor::getVertexCoordinate(vector<string> tokens) {
+	vector<double> coords;
+
+	for(unsigned int i = 1; i < tokens.size(); i++) { 
+		string coord = tokens[i];
+		coord.erase(remove(coord.begin(), coord.end(), ','), coord.end());
+
+		coords.push_back(stod(coord));
+	}
+
+	return Coordinate(coords[0], coords[1]);
+}
+
+vector<Coordinate> ObjectDescriptor::getObjectCoordinates(vector<string> tokens, vector<Coordinate> vertices) {
+	vector<Coordinate> coords;
+
+	for(unsigned int i = 1; i < tokens.size(); i++) { 
+		string coordinateIndex = tokens[i];
+		coordinateIndex.erase(remove(coordinateIndex.begin(), coordinateIndex.end(), ','), coordinateIndex.end());
+
+		coords.push_back(vertices[stoi(coordinateIndex) - 1]);
+	}
+
+	return coords;
 }

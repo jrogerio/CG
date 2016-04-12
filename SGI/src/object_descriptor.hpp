@@ -1,11 +1,16 @@
 #ifndef SRC_OBJ_DESCRIPTOR_H_
 #define SRC_OBJ_DESCRIPTOR_H_
 
+#include <algorithm>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include "graphic_object.hpp"
+#include "point.hpp"
+#include "line.hpp"
+#include "polygon.hpp"
 
 using namespace std;
 
@@ -14,12 +19,18 @@ private:
 	vector<string> _vertices;
 	vector<string> _fileBody;
 
+	vector<string> getTokens(string line);
+	Coordinate getVertexCoordinate(vector<string> tokens);
+	vector<Coordinate> getObjectCoordinates(vector<string> tokens, vector<Coordinate> vertices);
+
 public:
 	ObjectDescriptor();
 	virtual ~ObjectDescriptor();
 
 	void store(string name, GraphicObjectType type, vector<Coordinate> coords);
 	void persist(void);
+
+	vector<GraphicObject> parse(string filePath);
 };
 
 #endif /* SRC_OBJ_DESCRIPTOR_H_ */
