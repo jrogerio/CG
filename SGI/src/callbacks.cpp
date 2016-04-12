@@ -277,6 +277,30 @@ extern "C" {
 	}
 
 	void import_handler(GtkWidget *widget, App *app) {
-		// app->world->importFromObj();
+		GtkWidget *dialog;
+		GtkListStore *objStore = GTK_LIST_STORE(app_get_ui_element(app, "objStore"));
+		GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+		gint response;
+		vector<string> objects;
+		GtkTreeIter iter;
+
+		dialog = gtk_file_chooser_dialog_new("Importar arquivo", NULL, action, ("_Cancelar"), GTK_RESPONSE_CANCEL, 
+											 ("_Importar"), GTK_RESPONSE_ACCEPT, NULL);
+
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		if (response == GTK_RESPONSE_ACCEPT) {
+			GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+			string filePath = gtk_file_chooser_get_filename(chooser);
+
+			objects = app->world->importFromObj(filePath);
+			app->mainWindow->updateViewport();				
+		}
+
+		for(string name : objects) {
+			gtk_list_store_append(objStore, &iter);
+			gtk_list_store_set(objStore, &iter, 0, name.c_str(), -1);
+		}
+
+		gtk_widget_destroy(dialog);
 	}
 }
