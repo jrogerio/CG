@@ -56,7 +56,9 @@ SQUARE_MATRIX Window::normalizedTransformation() {
 	double radians = _vupVector.angleWith( Coordinate(0,1) );
 	double angle = roundf( RAD2DEG(radians) );
 
-	std::cout << "\n angulo: " << angle << std::endl;
+	if(_vupVector._x < 0) {
+		angle = 360 - angle;
+	}
 
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix( _center.negate() );
 	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( DEG2RAD( -angle ) );
