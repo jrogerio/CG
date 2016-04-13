@@ -13,6 +13,8 @@ void Window::move(Coordinate step) {
 
 	_center._x += xFactor;
 	_center._y += yFactor;
+
+	std::cout << "\nreultado centro: (" << _center._x << ", " << _center._y <<")" << std::endl;
 }
 
 void Window::rotate(double angle) {
@@ -61,8 +63,9 @@ SQUARE_MATRIX Window::normalizedTransformation() {
 	}
 
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix( _center.negate() );
-	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( DEG2RAD( -angle ) );
+	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix( DEG2RAD( angle ) );
+	SQUARE_MATRIX translationBackMatrix = _buildTranslationMatrix( _center );
 
-	return translationMatrix * rotationMatrix;
+	return translationMatrix * rotationMatrix * translationBackMatrix;
 }
 

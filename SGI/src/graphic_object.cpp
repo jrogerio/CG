@@ -40,10 +40,13 @@ Coordinate GraphicObject::centroid() const {
 void GraphicObject::normalizeIn(Coordinate windowCenter, double xOffset, double yOffset, SQUARE_MATRIX transformation) {
 	int numCoords = _worldCoords.size();
 
+	std::cout << "\n\n window center: (" << windowCenter._x << ", " << windowCenter._y <<")" << std::endl;
+
 	ROW_VECTOR result;
 
 	for (int i = 0; i < numCoords; ++i) {
 		result = _worldCoords[i].toHomogenousMatrix() * transformation;
+		std::cout << "\n result: (" << result.valueOn(0,0) << ", " << result.valueOn(0,1) <<")" << std::endl;
 
 		_windowCoords[i]._x = ( result.valueOn(0,0) - windowCenter._x ) / (xOffset);
 		_windowCoords[i]._y = ( result.valueOn(0,1) - windowCenter._y ) / (yOffset);
