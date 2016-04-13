@@ -916,6 +916,8 @@
                                   <object class="GtkGrid" id="grid15">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_left">5</property>
+                                    <property name="margin_top">20</property>
                                     <child>
                                       <object class="GtkSpinButton" id="windowAngleSpin">
                                         <property name="width_request">165</property>
