@@ -25,6 +25,7 @@ public:
 	string name() const;
 	GraphicObjectType type() const;
 	vector<Coordinate> coords() const;
+	vector<Coordinate> worldCoords() const;
 	Coordinate centroid() const;
 
 	void normalizeIn(Coordinate windowCenter, double xOffset, double yOffset, SQUARE_MATRIX transformation);

@@ -300,13 +300,14 @@ extern "C" {
 			string filePath = gtk_file_chooser_get_filename(chooser);
 
 			objects = app->world->importFromObj(filePath);
-			app->mainWindow->updateViewport();				
 		}
 
 		for(string name : objects) {
 			gtk_list_store_append(objStore, &iter);
 			gtk_list_store_set(objStore, &iter, 0, name.c_str(), -1);
 		}
+
+		app->mainWindow->updateViewport();				
 
 		gtk_widget_destroy(dialog);
 	}

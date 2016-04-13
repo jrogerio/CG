@@ -99,7 +99,7 @@ void World::exportToObj() {
 	ObjectDescriptor* exporter = new ObjectDescriptor();
 
 	for (int i = 0; i < _displayFile.size(); i++) {
-		exporter->store(_displayFile[i].name(), _displayFile[i].type(), _displayFile[i].coords());
+		exporter->store(_displayFile[i].name(), _displayFile[i].type(), _displayFile[i].worldCoords());
 	}
 
 	exporter->persist();
@@ -114,6 +114,8 @@ vector<string> World::importFromObj(string filePath) {
 	for (int i = 0; i < _displayFile.size(); i++) {
 		names.push_back(_displayFile[i].name());
 	}
+
+	normalizeObjects();
 
 	return names;
 }

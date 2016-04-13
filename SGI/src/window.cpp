@@ -13,8 +13,6 @@ void Window::move(Coordinate step) {
 
 	_center._x += xFactor;
 	_center._y += yFactor;
-
-	std::cout << "\nreultado centro: (" << _center._x << ", " << _center._y <<")" << std::endl;
 }
 
 void Window::rotate(double angle) {
@@ -24,14 +22,6 @@ void Window::rotate(double angle) {
 
 	_vupVector._x = result.valueOn(0,0);
 	_vupVector._y = result.valueOn(0,1);
-
-//	if (fabs(_vupVector._x) < 0.00000001)
-//		_vupVector._x = 0;
-//
-//	if (fabs(_vupVector._y) < 0.00000001)
-//			_vupVector._y = 0;
-
-	std::cout << "\nreultado vup: (" << _vupVector._x << ", " << _vupVector._y <<")" << std::endl;
 }
 
 void Window::zoom(int step) {
