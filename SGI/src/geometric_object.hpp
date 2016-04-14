@@ -38,8 +38,8 @@ public:
 	void rotate(double radians, Coordinate anchor);
 
 private:
-	void applyTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX transfMatrix);
-	void positionBasedTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX targetTransformation, Coordinate coord);
+	void applyTransformation(SQUARE_MATRIX transfMatrix);
+	void positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord);
 
 protected:
 	string _name;

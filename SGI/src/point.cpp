@@ -6,5 +6,8 @@ Point::Point(string name, Coordinate coord) :
 }
 
 void Point::applyClipping() {
+	bool outOfRange = fabs(_windowCoords[0]._x) > 1 || fabs(_windowCoords[0]._y) > 1;
 
+	if (outOfRange)
+		_windowCoords.pop_back();
 }

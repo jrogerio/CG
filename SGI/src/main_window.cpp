@@ -104,7 +104,8 @@ vector<vector<Coordinate>> MainWindow::mapToViewport() {
 			newcoords.push_back(Coordinate(x, y));
 		}
 
-		coords.push_back(newcoords);
+		if (!newcoords.empty())
+			coords.push_back(newcoords);
 	}
 
 	return coords;

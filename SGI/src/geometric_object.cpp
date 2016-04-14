@@ -3,9 +3,9 @@
 GeometricObject::GeometricObject(string name, GeometricObjectType type,
 		vector<Coordinate> coords) :
 		_name(name), _type(type), _worldCoords(coords) {
-			for(Coordinate coord : coords) {
-				_windowCoords.push_back( Coordinate() );
-			}
+//			for(Coordinate coord : coords) {
+//				_windowCoords.push_back( Coordinate() );
+//			}
 }
 
 GeometricObject::~GeometricObject() {
@@ -43,67 +43,67 @@ Coordinate GeometricObject::centroid() const {
 
 void GeometricObject::normalizeIn(Window window) {
 	Coordinate windowCenter = window.center();
-
 	SQUARE_MATRIX transformation = window.normalizedTransformation();
 	ROW_VECTOR result;
 
 	double xOffset = window.xOffset();
 	double yOffset = window.yOffset();
+	double x,y;
 
 	int numCoords = _worldCoords.size();
+
+	_windowCoords.clear();
 
 	for (int i = 0; i < numCoords; ++i) {
 		result = _worldCoords[i].toHomogenousMatrix() * transformation;
 
-		_windowCoords[i]._x = ( result.valueOn(0,0) - windowCenter._x ) / (xOffset);
-		_windowCoords[i]._y = ( result.valueOn(0,1) - windowCenter._y ) / (yOffset);
+		x = ( result.valueOn(0,0) - windowCenter._x ) / (xOffset);
+		y = ( result.valueOn(0,1) - windowCenter._y ) / (yOffset);
+
+		_windowCoords.push_back( Coordinate(x,y) );
 	}
 }
 
 void GeometricObject::translate(VECTOR deslocation) {
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix(deslocation);
-	applyTransformation(_worldCoords, translationMatrix);
+	applyTransformation(translationMatrix);
 }
 
 void GeometricObject::scaleTo(VECTOR factors) {
 	SQUARE_MATRIX scaleMatrix = _buildScaleMatrix(factors._x, factors._y);
-	positionBasedTransformation(_worldCoords, scaleMatrix, centroid());
+	positionBasedTransformation(scaleMatrix, centroid());
 }
 
 void GeometricObject::rotate(double radians) {
 	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(radians);
-	positionBasedTransformation(_worldCoords, rotationMatrix, centroid());
+	positionBasedTransformation(rotationMatrix, centroid());
 }
 
 void GeometricObject::rotate(double radians, Coordinate anchor) {
 	SQUARE_MATRIX rotationMatrix = _buildRotationMatrix(radians);
-	positionBasedTransformation(_worldCoords, rotationMatrix, anchor);
+	positionBasedTransformation(rotationMatrix, anchor);
 }
 
-void GeometricObject::applyTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX transfMatrix) {
-	ROW_VECTOR sourcePosition;
+void GeometricObject::applyTransformation(SQUARE_MATRIX transfMatrix) {
 	ROW_VECTOR result;
 
 	int numCoords = _worldCoords.size();
 
 	for (int i = 0; i < numCoords; ++i) {
-		sourcePosition = coordSystem[i].toHomogenousMatrix();
-		result = sourcePosition * transfMatrix;
+		result = _worldCoords[i].toHomogenousMatrix() * transfMatrix;
 
-		coordSystem[i]._x = result.valueOn(0,0);
-		coordSystem[i]._y = result.valueOn(0,1);
+		_worldCoords[i]._x = result.valueOn(0,0);
+		_worldCoords[i]._y = result.valueOn(0,1);
 	}
 
-	for (Coordinate &coord : _worldCoords) {
-	}
 }
 
-void GeometricObject::positionBasedTransformation(vector<Coordinate>& coordSystem, SQUARE_MATRIX targetTransformation, Coordinate coord) {
+void GeometricObject::positionBasedTransformation(SQUARE_MATRIX targetTransformation, Coordinate coord) {
 	Coordinate originDeslocation(-coord._x, -coord._y);
 
 	SQUARE_MATRIX operationMatrix = _buildTranslationMatrix(originDeslocation) *
 			targetTransformation *
 			_buildTranslationMatrix(originDeslocation.negate());
 
-	applyTransformation(coordSystem, operationMatrix);
+	applyTransformation(operationMatrix);
 }
