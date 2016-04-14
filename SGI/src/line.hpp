@@ -3,13 +3,15 @@
 
 #include <string>
 
-#include "graphic_object.hpp"
+#include "geometric_object.hpp"
 
 using namespace std;
 
-class Line : public GraphicObject{
+class Line : public GeometricObject{
 public:
 	Line(string name, Coordinate first, Coordinate second);
+
+	virtual void applyClipping();
 };
 
 #endif /* SRC_LINE_H_ */

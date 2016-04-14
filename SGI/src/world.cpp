@@ -9,28 +9,24 @@ World::~World() {
 }
 
 void World::addPoint(string name, Coordinate coord) {
-	Point point(name, coord);
+	Point * point = new Point(name, coord);
 	normalize(point);
 
 	_displayFile.push_back(point);
 }
 
 void World::addLine(string name, Coordinate begin, Coordinate end) {
-	Line line(name, begin, end);
+	Line * line = new Line(name, begin, end);
 	normalize(line);
 
 	_displayFile.push_back(line);
 }
 
 void World::addPolygon(string name, vector<Coordinate> coords) {
-	Polygon polygon(name, coords);
+	Polygon * polygon = new Polygon(name, coords);
 	normalize(polygon);
 	
 	_displayFile.push_back(polygon);
-}
-
-vector<GraphicObject> World::getObjects(){
-	return _displayFile;
 }
 
 Window World::getWindow() {
@@ -53,53 +49,57 @@ void World::rotateWindow(double angle) {
 }
 
 void World::normalizeObjects() {
-	for (GraphicObject &object : _displayFile) {
+	for (GeometricObject * object : _displayFile) {
 		normalize(object);
 	}
 }
 
-void World::normalize(GraphicObject& object) {
-	SQUARE_MATRIX transformation = window.normalizedTransformation();
-	object.normalizeIn(window.center(), window.xOffset(), window.yOffset(), transformation);
+void World::normalize(GeometricObject* object) {
+	object->normalizeIn(window);
+	object->applyClipping();
 }
 
-GraphicObject& World::getObjectBy(string name) {
-	for (int i = 0; i < _displayFile.size(); i++) {
-		if(_displayFile[i].name() == name) {
-			return _displayFile[i];
+vector<GeometricObject*> World::getObjects(){
+	return _displayFile;
+}
+
+GeometricObject* World::getObjectBy(string name) {
+	for (GeometricObject * object : _displayFile) {
+		if(object->name() == name) {
+			return object;
 		}
 	}
 }
 
 void World::translateObject(string name, VECTOR deslocation) {
-	GraphicObject* targetObject = &getObjectBy(name);
+	GeometricObject * targetObject = getObjectBy(name);
 	targetObject->translate(deslocation);
-	normalize(*targetObject);
+	normalize(targetObject);
 }
 
 void World::scaleObject(string name, VECTOR factor) {
-	GraphicObject* targetObject = &getObjectBy(name);
+	GeometricObject* targetObject = getObjectBy(name);
 	targetObject->scaleTo(factor);
-	normalize(*targetObject);
+	normalize(targetObject);
 }
 
 void World::rotateObject(string name, double angle) {
-	GraphicObject* targetObject = &getObjectBy(name);
+	GeometricObject* targetObject = getObjectBy(name);
 	targetObject->rotate( DEG2RAD(angle) );
-	normalize(*targetObject);
+	normalize(targetObject);
 }
 
 void World::rotateObject(string name, double angle, Coordinate anchor) {
-	GraphicObject* targetObject = &getObjectBy(name);
+	GeometricObject* targetObject = getObjectBy(name);
 	targetObject->rotate(DEG2RAD(angle), anchor);
-	normalize(*targetObject);
+	normalize(targetObject);
 }
 
 void World::exportToObj() {
 	ObjectDescriptor* exporter = new ObjectDescriptor();
 
-	for (int i = 0; i < _displayFile.size(); i++) {
-		exporter->store(_displayFile[i].name(), _displayFile[i].type(), _displayFile[i].worldCoords());
+	for ( GeometricObject * object : _displayFile ) {
+		exporter->store(object->name(), object->type(),object->worldCoords());
 	}
 
 	exporter->persist();
@@ -111,8 +111,8 @@ vector<string> World::importFromObj(string filePath) {
 
 	_displayFile = importer->parse(filePath);
 
-	for (int i = 0; i < _displayFile.size(); i++) {
-		names.push_back(_displayFile[i].name());
+	for (GeometricObject * object : _displayFile) {
+		names.push_back(object->name());
 	}
 
 	normalizeObjects();

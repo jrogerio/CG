@@ -8,6 +8,7 @@ extern "C" {
 	}
 
 	gboolean draw_handler(GtkWidget *widget, cairo_t *cr, App *app) {
+		app->mainWindow->drawViewport(cr);
 		app->mainWindow->drawObjects(cr);
 
 		return FALSE;

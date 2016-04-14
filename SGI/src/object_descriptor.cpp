@@ -3,7 +3,7 @@
 ObjectDescriptor::ObjectDescriptor() {}
 ObjectDescriptor::~ObjectDescriptor() {}
 
-void ObjectDescriptor::store(string name,  GraphicObjectType type, vector<Coordinate> coords) {
+void ObjectDescriptor::store(string name,  GeometricObjectType type, vector<Coordinate> coords) {
 	size_t initialVertexPosition = _vertices.size() + 1;
 	string object;
 	string vertex;
@@ -15,7 +15,7 @@ void ObjectDescriptor::store(string name,  GraphicObjectType type, vector<Coordi
 		_vertices.push_back(vertex);
 	}
 
-	if(type == GraphicObjectType::point) {
+	if(type == GeometricObjectType::point) {
 		object = "p " + to_string(initialVertexPosition);
 	} else {
 		object = "l " + to_string(initialVertexPosition);
@@ -27,7 +27,7 @@ void ObjectDescriptor::store(string name,  GraphicObjectType type, vector<Coordi
 			object += ", " + to_string(position);
 		}
 
-		if(type == GraphicObjectType::polygon) {
+		if(type == GeometricObjectType::polygon) {
 			object += ", " + to_string(initialVertexPosition);
 		}
 	}
@@ -51,11 +51,11 @@ void ObjectDescriptor::persist() {
 	file.close();
 }
 
-vector<GraphicObject> ObjectDescriptor::parse(string filePath) {
+vector<GeometricObject*> ObjectDescriptor::parse(string filePath) {
 	ifstream file(filePath);
 	string objectName;
 	vector<Coordinate> vertices;
-	vector<GraphicObject> newDisplayFile;
+	vector<GeometricObject*> newDisplayFile;
 
 	for(std::string line; getline(file, line);) {
 		vector<string> tokens = getTokens(line);
@@ -68,11 +68,11 @@ vector<GraphicObject> ObjectDescriptor::parse(string filePath) {
 			vector<Coordinate> objectCoordinates = getObjectCoordinates(tokens, vertices);
 
 			if(tokens[0] == "p") {
-				newDisplayFile.push_back(Point(objectName, objectCoordinates[0]));
+				newDisplayFile.push_back(new Point(objectName, objectCoordinates[0]));
 			} else if(objectCoordinates.size() == 2) {
-				newDisplayFile.push_back(Line(objectName, objectCoordinates[0], objectCoordinates[1]));
+				newDisplayFile.push_back(new Line(objectName, objectCoordinates[0], objectCoordinates[1]));
 			} else {
-				newDisplayFile.push_back(Polygon(objectName, objectCoordinates));
+				newDisplayFile.push_back(new Polygon(objectName, objectCoordinates));
 			}
 		}
 	}	

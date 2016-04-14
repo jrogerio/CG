@@ -1,6 +1,10 @@
 #include "line.hpp"
 
 Line::Line(string name, Coordinate first, Coordinate second) :
-	GraphicObject(name, line, {first, second} ) {
+	GeometricObject(name, line, {first, second} ) {
+}
+
+void Line::applyClipping() {
+
 }
 

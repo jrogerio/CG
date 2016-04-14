@@ -1,15 +1,19 @@
-#ifndef SRC_GRAPHICOBJECT_POINT_H_
-#define SRC_GRAPHICOBJECT_POINT_H_
+#ifndef SRC_GeometricObject_POINT_H_
+#define SRC_GeometricObject_POINT_H_
 
 #include <string>
-#include "graphic_object.hpp"
+#include <math.h>
+
+#include "geometric_object.hpp"
 
 using namespace std;
 
-class Point : public GraphicObject {
+class Point : public GeometricObject {
 
 public:
 	Point(string name, Coordinate coord);
+
+	virtual void applyClipping();
 };
 
-#endif /* SRC_GRAPHICOBJECT_POINT_H_ */
+#endif /* SRC_GeometricObject_POINT_H_ */

@@ -7,7 +7,8 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include "graphic_object.hpp"
+
+#include "geometric_object.hpp"
 #include "transformable_object.hpp"
 #include "point.hpp"
 #include "line.hpp"
@@ -28,10 +29,10 @@ public:
 	ObjectDescriptor();
 	virtual ~ObjectDescriptor();
 
-	void store(string name, GraphicObjectType type, vector<Coordinate> coords);
+	void store(string name, GeometricObjectType type, vector<Coordinate> coords);
 	void persist(void);
 
-	vector<GraphicObject> parse(string filePath);
+	vector<GeometricObject*> parse(string filePath);
 };
 
 #endif /* SRC_OBJ_DESCRIPTOR_H_ */

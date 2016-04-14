@@ -3,26 +3,24 @@
 
 #include <string>
 
-#include "graphic_object.hpp"
+#include "geometric_object.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
 #include "window.hpp"
 #include "object_descriptor.hpp"
 
-//#define PI 3.14159265358979323846
-//#define DEG2RAD(DEG) (DEG*PI/180.0)
-//#define RAD2DEG(RAD) (DEG*PI/180.0)
-
 using namespace std;
 
 class World {
 private:
-	vector<GraphicObject> _displayFile;
+	vector<GeometricObject*> _displayFile;
 	Window window;
 
 	void normalizeObjects();
-	void normalize(GraphicObject& object);
+	void normalize(GeometricObject* object);
+
+	GeometricObject* getObjectBy(string name);
 
 public:
 	World();
@@ -38,8 +36,7 @@ public:
 	void zoomWindow(int step);
 	void rotateWindow(double angle);
 
-	vector<GraphicObject> getObjects();
-	GraphicObject& getObjectBy(string name);
+	vector<GeometricObject*> getObjects();
 
 	void translateObject(string name, VECTOR deslocation);
 	void scaleObject(string name, VECTOR factor);

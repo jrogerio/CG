@@ -2,5 +2,9 @@
 #include "point.hpp"
 
 Point::Point(string name, Coordinate coord) :
-		GraphicObject(name, point, {coord} ) {
+		GeometricObject(name, point, {coord} ) {
+}
+
+void Point::applyClipping() {
+
 }

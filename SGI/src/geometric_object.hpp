@@ -1,15 +1,16 @@
-#ifndef SRC_GRAPHICOBJECT_H_
-#define SRC_GRAPHICOBJECT_H_
+#ifndef SRC_GEOMETRICOBJECT_H_
+#define SRC_GEOMETRICOBJECT_H_
 
 #include <string>
 #include <vector>
 #include <iostream>
 
 #include "transformable_object.hpp"
+#include "window.hpp"
 
 using namespace std;
 
-enum GraphicObjectType {
+enum GeometricObjectType {
 	point,
 	line,
 	polygon
@@ -17,18 +18,19 @@ enum GraphicObjectType {
 
 // ---------------------------
 
-class GraphicObject : public TransformableObject {
+class GeometricObject : public TransformableObject {
 public:
-	GraphicObject(string name,  GraphicObjectType type, vector<Coordinate> coords);
-	virtual ~GraphicObject();
+	GeometricObject(string name,  GeometricObjectType type, vector<Coordinate> coords);
+	virtual ~GeometricObject();
 
 	string name() const;
-	GraphicObjectType type() const;
+	GeometricObjectType type() const;
 	vector<Coordinate> coords() const;
 	vector<Coordinate> worldCoords() const;
 	Coordinate centroid() const;
 
-	void normalizeIn(Coordinate windowCenter, double xOffset, double yOffset, SQUARE_MATRIX transformation);
+	void normalizeIn(Window window);
+	virtual void applyClipping() = 0;
 
 	void translate(VECTOR deslocation);
 	void scaleTo(VECTOR factors);
@@ -41,9 +43,9 @@ private:
 
 protected:
 	string _name;
-	GraphicObjectType _type;
+	GeometricObjectType _type;
 	vector<Coordinate> _worldCoords;
 	vector<Coordinate> _windowCoords;
 };
 
-#endif /* SRC_GRAPHICOBJECT_H_ */
+#endif /* SRC_GEOMETRICOBJECT_H_ */

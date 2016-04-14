@@ -29,21 +29,36 @@ Coordinate MainWindow::readCoordFrom(GtkGrid *objGrid, int lineIndicator) {
 	return Coordinate(x, y);
 }
 
-void MainWindow::drawObjects(cairo_t *cr) {
+void MainWindow::drawViewport(cairo_t *cr) {
 	/* Set color for background */
 	cairo_set_source_rgb(cr, 1, 1, 1);
 	/* fill in the background color*/
 	cairo_paint(cr);
 
+	cairo_set_source_rgb(cr, 1, 0, 0);
+	cairo_set_line_width(cr, 1);
+
+	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
+	int Xvmax = gtk_widget_get_allocated_width(drawingArea) - MARGIN;
+	int Yvmax = gtk_widget_get_allocated_height(drawingArea) - MARGIN;
+
+	cairo_move_to(cr, MARGIN, MARGIN);
+	cairo_line_to(cr, Xvmax, MARGIN);
+	cairo_line_to(cr, Xvmax, Yvmax);
+	cairo_line_to(cr, MARGIN, Yvmax);
+	cairo_line_to(cr, MARGIN, MARGIN);
+
+	cairo_stroke(cr);
+}
+
+void MainWindow::drawObjects(cairo_t *cr) {
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_set_line_width(cr, 1);
 
-	//vector<GraphicObject> objects = world->getObjects();
 	vector< vector<Coordinate> > objects = mapToViewport();
 
 	if (objects.size() > 0) {
 		for (uint i = 0; i < objects.size(); ++i) {
-			//GraphicObject go = objects[i];
 			vector<Coordinate> coords = objects[i];
 
 			drawSingleObject(cr, coords);
@@ -69,23 +84,22 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 
 vector<vector<Coordinate>> MainWindow::mapToViewport() {
 	vector<vector<Coordinate> > coords;
-	vector<GraphicObject> objects = _world->getObjects();
+	vector<GeometricObject*> objects = _world->getObjects();
 
 	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
 	Window window = _world->getWindow();
 
-	int Xvmax = gtk_widget_get_allocated_width(drawingArea);
-	int Yvmax = gtk_widget_get_allocated_height(drawingArea);
+	int Xvmax = gtk_widget_get_allocated_width(drawingArea) - MARGIN;
+	int Yvmax = gtk_widget_get_allocated_height(drawingArea) - MARGIN;
 
 	int x,y;
 
-	for (uint i = 0; i < objects.size(); ++i) {
+	for (GeometricObject * object : objects) {
 		vector<Coordinate> newcoords;
-		GraphicObject obj = objects[i];
 
-		for (uint j = 0; j < obj.coords().size(); ++j) {
-			x = ((obj.coords()[j]._x + 1) / 2) * Xvmax;
-			y = (1 - (obj.coords()[j]._y + 1 ) / 2 ) * Yvmax;
+		for (Coordinate coord : object->coords()) {
+			x = MARGIN + ( ((coord._x + 1) / 2) * (Xvmax - MARGIN) );
+			y = MARGIN + ( (1 - (coord._y + 1 ) / 2 ) * (Yvmax - MARGIN) );
 
 			newcoords.push_back(Coordinate(x, y));
 		}
