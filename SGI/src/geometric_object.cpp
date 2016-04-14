@@ -3,9 +3,6 @@
 GeometricObject::GeometricObject(string name, GeometricObjectType type,
 		vector<Coordinate> coords) :
 		_name(name), _type(type), _worldCoords(coords) {
-//			for(Coordinate coord : coords) {
-//				_windowCoords.push_back( Coordinate() );
-//			}
 }
 
 GeometricObject::~GeometricObject() {
