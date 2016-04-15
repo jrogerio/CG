@@ -20,16 +20,19 @@ class Clipper {
 	static const int SCN_MIN = -1;
 	static const int SCN_MAX = 1;
 
+private:
+	static vector<Coordinate> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
+
 public:
 	Clipper();
 	virtual ~Clipper();
 
 	//Point
-	static Point clipPoint(Point point);
+	static vector<Coordinate> clipPoint(Coordinate coord);
 
 	// Line
 	static unsigned int regionCodeOf(Coordinate coord);
-	static void cohenSutherland(vector<Coordinate> coords);
+	static vector<Coordinate> cohenSutherland(vector<Coordinate> coords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */

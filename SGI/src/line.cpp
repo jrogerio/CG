@@ -4,7 +4,7 @@ Line::Line(string name, Coordinate first, Coordinate second) :
 	GeometricObject(name, line, {first, second} ) {
 }
 
-void Line::applyClipping() {
-
+vector<Coordinate> Line::applyClipping() {
+	return Clipper::cohenSutherland(_windowCoords);
 }
 

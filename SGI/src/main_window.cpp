@@ -88,6 +88,7 @@ void MainWindow::drawSingleObject(cairo_t *cr, DrawableObject object) {
 vector<DrawableObject> MainWindow::mapToViewport() {
 	vector<GeometricObject*> objects = _world->getObjects();
 	vector<DrawableObject> drawableObjects;
+	vector<Coordinate> newcoords, clippedCoords;
 
 	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
 	Window window = _world->getWindow();
@@ -96,12 +97,16 @@ vector<DrawableObject> MainWindow::mapToViewport() {
 	int Yvmax = gtk_widget_get_allocated_height(drawingArea) - MARGIN;
 
 	int x,y;
+	bool shouldFill;
 
 	for (GeometricObject * object : objects) {
-		bool shouldFill = (object->type() == GeometricObjectType::polygon) && object->filled();
-		vector<Coordinate> newcoords;
+		clippedCoords = object->applyClipping();
+		if (clippedCoords.empty())
+			continue;
 
-		for (Coordinate coord : object->coords()) {
+		shouldFill = (object->type() == GeometricObjectType::polygon) && object->filled();
+
+		for (Coordinate coord : clippedCoords) {
 			x = MARGIN + ( ((coord._x + 1) / 2) * (Xvmax - MARGIN) );
 			y = MARGIN + ( (1 - (coord._y + 1 ) / 2 ) * (Yvmax - MARGIN) );
 

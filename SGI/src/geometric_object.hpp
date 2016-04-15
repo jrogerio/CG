@@ -32,7 +32,7 @@ public:
 	bool filled() const;
 
 	void normalizeIn(Window window);
-	virtual void applyClipping() = 0;
+	virtual vector<Coordinate> applyClipping() = 0;
 
 	void translate(VECTOR deslocation);
 	void scaleTo(VECTOR factors);

@@ -4,14 +4,15 @@
 #include <string>
 
 #include "geometric_object.hpp"
+#include "clipper.hpp"
 
 using namespace std;
 
-class Line : public GeometricObject{
+class Line : public GeometricObject {
 public:
 	Line(string name, Coordinate first, Coordinate second);
 
-	virtual void applyClipping();
+	virtual vector<Coordinate> applyClipping();
 };
 
 #endif /* SRC_LINE_H_ */

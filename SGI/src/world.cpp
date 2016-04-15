@@ -2,8 +2,7 @@
 
 World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
-	vector<Coordinate> coords = {Coordinate(-2,2), Coordinate(0.5,2)};
-	Clipper::cohenSutherland(coords);
+	vector<Coordinate> coords = {Coordinate(-1.5,-0.8), Coordinate(-0.5,0.4)};
 }
 
 World::~World() {
@@ -58,7 +57,6 @@ void World::normalizeObjects() {
 
 void World::normalize(GeometricObject* object) {
 	object->normalizeIn(window);
-	object->applyClipping();
 }
 
 vector<GeometricObject*> World::getObjects(){

@@ -11,7 +11,7 @@ class Polygon : public GeometricObject {
 public:
 	Polygon(string name, vector<Coordinate> coords, bool filled);
 
-	virtual void applyClipping();
+	virtual vector<Coordinate> applyClipping();
 };
 
 #endif /* SRC_POLYGON_H_ */
