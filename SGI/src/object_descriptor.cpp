@@ -72,10 +72,10 @@ vector<GeometricObject*> ObjectDescriptor::parse(string filePath) {
 			} else if(objectCoordinates.size() == 2) {
 				newDisplayFile.push_back(new Line(objectName, objectCoordinates[0], objectCoordinates[1]));
 			} else {
-				newDisplayFile.push_back(new Polygon(objectName, objectCoordinates));
+				newDisplayFile.push_back(new Polygon(objectName, objectCoordinates, false));
 			}
 		}
-	}	
+	}
 
 	file.close();
 

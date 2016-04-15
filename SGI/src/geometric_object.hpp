@@ -21,6 +21,7 @@ enum GeometricObjectType {
 class GeometricObject : public TransformableObject {
 public:
 	GeometricObject(string name,  GeometricObjectType type, vector<Coordinate> coords);
+	GeometricObject(string name,  GeometricObjectType type, vector<Coordinate> coords, bool filled);
 	virtual ~GeometricObject();
 
 	string name() const;
@@ -28,6 +29,7 @@ public:
 	vector<Coordinate> coords() const;
 	vector<Coordinate> worldCoords() const;
 	Coordinate centroid() const;
+	bool filled() const;
 
 	void normalizeIn(Window window);
 	virtual void applyClipping() = 0;
@@ -46,6 +48,7 @@ protected:
 	GeometricObjectType _type;
 	vector<Coordinate> _worldCoords;
 	vector<Coordinate> _windowCoords;
+	bool _filled = false;
 };
 
 #endif /* SRC_GEOMETRICOBJECT_H_ */

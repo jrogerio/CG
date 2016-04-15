@@ -55,18 +55,18 @@ void MainWindow::drawObjects(cairo_t *cr) {
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_set_line_width(cr, 1);
 
-	vector< vector<Coordinate> > objects = mapToViewport();
+	vector<DrawableObject> objects = mapToViewport();
 
 	if (objects.size() > 0) {
 		for (uint i = 0; i < objects.size(); ++i) {
-			vector<Coordinate> coords = objects[i];
-
-			drawSingleObject(cr, coords);
+			drawSingleObject(cr, objects[i]);
 		}
 	}
 }
 
-void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
+void MainWindow::drawSingleObject(cairo_t *cr, DrawableObject object) {
+	vector<Coordinate> coords = object.coords();
+
 	cairo_move_to(cr, coords[0]._x, coords[0]._y);
 	cairo_line_to(cr, coords.front()._x, coords.front()._y);
 
@@ -79,12 +79,15 @@ void MainWindow::drawSingleObject(cairo_t *cr, vector<Coordinate> coords) {
 	else
 		cairo_line_to(cr, coords.front()._x, coords.front()._y);
 
+	if(object.filled())
+		cairo_fill(cr);
+	
 	cairo_stroke(cr);
 }
 
-vector<vector<Coordinate>> MainWindow::mapToViewport() {
-	vector<vector<Coordinate> > coords;
+vector<DrawableObject> MainWindow::mapToViewport() {
 	vector<GeometricObject*> objects = _world->getObjects();
+	vector<DrawableObject> drawableObjects;
 
 	GtkWidget *drawingArea = GTK_WIDGET(gtk_builder_get_object(_definitions, "drawingArea"));
 	Window window = _world->getWindow();
@@ -95,6 +98,7 @@ vector<vector<Coordinate>> MainWindow::mapToViewport() {
 	int x,y;
 
 	for (GeometricObject * object : objects) {
+		bool shouldFill = (object->type() == GeometricObjectType::polygon) && object->filled();
 		vector<Coordinate> newcoords;
 
 		for (Coordinate coord : object->coords()) {
@@ -105,10 +109,10 @@ vector<vector<Coordinate>> MainWindow::mapToViewport() {
 		}
 
 		if (!newcoords.empty())
-			coords.push_back(newcoords);
+			drawableObjects.push_back(DrawableObject(shouldFill ,newcoords));
 	}
 
-	return coords;
+	return drawableObjects;
 }
 
 void MainWindow::updateRowCount(int newValue) {

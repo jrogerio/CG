@@ -44,12 +44,13 @@ extern "C" {
 				// addPolygon
 				vector<Coordinate> coords;
 				objGrid = GTK_GRID(app_get_ui_element(app, "polygonGrid"));
+				GtkToggleButton *fillPolygon = GTK_TOGGLE_BUTTON(app_get_ui_element(app, "fillPolygon"));
 
-				for (int i = 1; i < app->mainWindow->rowCount(); i += 2) {
+				for (int i = 2; i < app->mainWindow->rowCount(); i += 2) {
 					coords.push_back(app->mainWindow->readCoordFrom(objGrid, i) );
 				}
 
-				app->world->addPolygon(name, coords);
+				app->world->addPolygon(name, coords, gtk_toggle_button_get_active(fillPolygon));
 
 				break;
 		}

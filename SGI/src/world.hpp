@@ -28,7 +28,7 @@ public:
 
 	void addPoint(string name, Coordinate coord);
 	void addLine(string name, Coordinate begin, Coordinate end);
-	void addPolygon(string name, vector<Coordinate> coords);
+	void addPolygon(string name, vector<Coordinate> coords, bool filled);
 
 	Window getWindow();
 

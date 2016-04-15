@@ -8,6 +8,24 @@
 #include "window.hpp"
 #include "matrix.hpp"
 
+struct DrawableObject {
+
+	DrawableObject(bool filled, vector<Coordinate> coords) : _filled(filled), _coords(coords) {};
+
+private:
+	bool _filled;
+	vector<Coordinate> _coords;
+
+public:
+	bool filled() {
+		return _filled;
+	}
+
+	vector<Coordinate> coords() {
+		return _coords;
+	}	
+};
+
 class MainWindow {
 private:
 	GtkBuilder *_definitions;
@@ -23,15 +41,15 @@ public:
 
 	void updateViewport();
 	void updateRowCount(int newValue);
-	
+
 	void drawViewport(cairo_t *cr);
 	void drawObjects(cairo_t *cr);
-	void drawSingleObject(cairo_t *cr, vector<Coordinate> coords);
-	
+	void drawSingleObject(cairo_t *cr, DrawableObject object);
+
 	Coordinate readCoordFrom(GtkGrid *objGrid, int lineIndicator);
 	int rowCount();
 
-	vector<vector<Coordinate> > mapToViewport();
+	vector<DrawableObject> mapToViewport();
 };
 
 #endif /* VIEW_MAINWINDOW_H_ */
