@@ -2,6 +2,8 @@
 
 World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
+	vector<Coordinate> coords = {Coordinate(-2,2), Coordinate(0.5,2)};
+	Clipper::cohenSutherland(coords);
 }
 
 World::~World() {
