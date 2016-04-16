@@ -8,8 +8,7 @@
 #ifndef SRC_CLIPPER_HPP_
 #define SRC_CLIPPER_HPP_
 
-#include "line.hpp"
-#include "point.hpp"
+#include "geometric_object.hpp"
 
 class Clipper {
 	static const unsigned int UP = 8;
@@ -25,11 +24,12 @@ public:
 	virtual ~Clipper();
 
 	//Point
-	static Point clipPoint(Point point);
+	// static Point clipPoint(Point point);
 
 	// Line
 	static unsigned int regionCodeOf(Coordinate coord);
 	static void cohenSutherland(vector<Coordinate> coords);
+	static bool liangBarsky(vector<Coordinate> coords, vector<Coordinate> &clippedCoords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */

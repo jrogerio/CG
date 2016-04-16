@@ -2,8 +2,6 @@
 #define SRC_GEOMETRICOBJECT_H_
 
 #include <string>
-#include <vector>
-#include <iostream>
 
 #include "transformable_object.hpp"
 #include "window.hpp"

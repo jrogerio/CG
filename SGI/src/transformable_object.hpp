@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <vector>
 
 #include "matrix.hpp"
 

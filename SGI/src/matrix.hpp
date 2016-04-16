@@ -5,8 +5,6 @@
 
 #ifndef uint
 #define uint unsigned int
-#else
-#error
 #endif
 
 using namespace std;
