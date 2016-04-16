@@ -1,11 +1,12 @@
 #include "line.hpp"
-#include <iostream>
 
 Line::Line(string name, Coordinate first, Coordinate second) :
 	GeometricObject(name, line, {first, second} ) {
 }
 
-void Line::applyClipping() {
+vector<Coordinate> Line::applyClipping() {
+	//return Clipper::cohenSutherland(_windowCoords);
+
 	vector<Coordinate> clippedCoords;
 	vector<Coordinate> emptyCoords;
 
@@ -14,4 +15,7 @@ void Line::applyClipping() {
 	} else {
 		_windowCoords = emptyCoords;
 	}
+
+	return _windowCoords;
 }
+
