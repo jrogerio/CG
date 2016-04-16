@@ -8,14 +8,8 @@ vector<Coordinate> Line::applyClipping() {
 	//return Clipper::cohenSutherland(_windowCoords);
 
 	vector<Coordinate> clippedCoords;
-	vector<Coordinate> emptyCoords;
+	//vector<Coordinate> emptyCoords;
 
-	if(Clipper::liangBarsky(coords(), clippedCoords)) {
-		_windowCoords = clippedCoords;
-	} else {
-		_windowCoords = emptyCoords;
-	}
-
-	return _windowCoords;
+	return Clipper::liangBarsky(coords());
 }
 

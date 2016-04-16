@@ -92,44 +92,67 @@ vector<Coordinate> Clipper::applyCohenSutherland(vector<Coordinate> coords, vect
 	return clippedCoords;
 }
 
-bool Clipper::liangBarsky(vector<Coordinate> coords, vector<Coordinate> &clippedCoords) {
-	double xWindowMin = -1.0;
-	double xWindowMax = 1.0; 
-	double yWindowMin = -1.0;
-	double yWindowMax = 1.0; 
+vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
+	vector<Coordinate> clippedCoords;
 
-	double t0 = 0.0; 
-	double t1 = 1.0;
-	double xDelta = coords[1]._x - coords[0]._x;
-	double yDelta = coords[1]._y - coords[0]._y;
-	double p,q,r;
+	double dx = coords[1]._x - coords[0]._x;
+	double dy = coords[1]._y - coords[0]._y;
 
-	for(int edge=0; edge<4; edge++) {
-		if (edge==0) {p = -xDelta; q = (coords[0]._x - xWindowMin);  }
-		if (edge==1) {p = xDelta;  q = (xWindowMax - coords[0]._x); }
-		if (edge==2) {p = -yDelta; q = (coords[0]._y - yWindowMin);}
-		if (edge==3) {p = yDelta;  q = (yWindowMax - coords[0]._y);   }   
-		
-		r = q/p;
-		
-		if(p==0 && q<0) 
-			return false;
+	double p1 = -dx;
+	double p2 = dx;
+	double p3 = -dy;
+	double p4 = dy;
 
-		if(p<0) {
-			if(r>t1) 
-				return false;
-			else if(r>t0) 
-				t0=r;
-		} else if(p>0) {
-			if(r<t0) 
-				return false;
-			else if(r<t1) 
-				t1=r;
-		}
+	double q1 = coords[0]._x - SCN_MIN;
+	double q2 = SCN_MAX - coords[0]._x;
+	double q3 = coords[0]._y - SCN_MIN;
+	double q4 = SCN_MAX - coords[0]._y;
+
+	bool outsideWindow = (!p1 && q1 < 0) || (!p3 && q3 < 0) ||
+						(!p2 && q2 < 0) || (!p4 && q4 < 0);
+
+	if (outsideWindow)
+		return vector<Coordinate>();
+
+	double coeficient1, coeficient2, r1, r2, x, y;
+
+	// calculo primeiro ponto
+	r1 = (p1 < 0) ? (q1 / p1) : (q2 / p2);
+	r2 = (p3 < 0) ? (q3 / p3) : (q4 / p4);
+
+	r1 = (!isfinite(r1)) ? 0.0 : r1;
+	r2 = (!isfinite(r2)) ? 0.0 : r2;
+
+	coeficient1 = max(0.0, max(r1,r2));
+
+	if (coeficient1 > 0) {
+		x = coords[0]._x + coeficient1 * dx;
+		y = coords[0]._y + coeficient1 * dy;
+
+		clippedCoords.push_back( Coordinate(x,y) );
+	} else {
+		clippedCoords.push_back( coords[0] );
 	}
 
-	clippedCoords.push_back(Coordinate((coords[0]._x + t0 * xDelta), (coords[0]._y + t0 * yDelta)));
-	clippedCoords.push_back(Coordinate((coords[1]._x + t1 * xDelta), (coords[1]._y + t1 * yDelta)));
+	r1 = (p2 < 0) ? (q1 / p1) : (q2 / p2);
+	r2 = (p4 < 0) ? (q3 / p3) : (q4 / p4);
 
-	return true;
+	r1 = (!isfinite(r1)) ? 1.0 : r1;
+	r2 = (!isfinite(r2)) ? 1.0 : r2;
+
+	coeficient2 = min(1.0, min(r1,r2));
+
+	if (coeficient2 < 1) {
+		x = coords[0]._x + coeficient2 * dx;
+		y = coords[0]._y + coeficient2 * dy;
+
+		clippedCoords.push_back( Coordinate(x,y) );
+	} else {
+		clippedCoords.push_back( coords[1] );
+	}
+
+	if (coeficient1 <= coeficient2)
+		return clippedCoords;
+	else 
+		return vector<Coordinate>();
 }

@@ -8,6 +8,9 @@
 #ifndef SRC_CLIPPER_HPP_
 #define SRC_CLIPPER_HPP_
 
+#include <algorithm>
+#include <cmath>
+
 #include "line.hpp"
 #include "point.hpp"
 
@@ -33,7 +36,8 @@ public:
 	// Line
 	static unsigned int regionCodeOf(Coordinate coord);
 	static vector<Coordinate> cohenSutherland(vector<Coordinate> coords);
-	static bool liangBarsky(vector<Coordinate> coords, vector<Coordinate> &clippedCoords);
+	
+	static vector<Coordinate> liangBarsky(vector<Coordinate> coords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */
