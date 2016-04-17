@@ -26,6 +26,8 @@ class Clipper {
 private:
 	static vector<Coordinate> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
 
+	static vector<double> calculateCoeficients(vector<double> p, vector<double> q);
+
 public:
 	Clipper();
 	virtual ~Clipper();

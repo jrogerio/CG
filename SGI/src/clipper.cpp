@@ -98,61 +98,65 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 	double dx = coords[1]._x - coords[0]._x;
 	double dy = coords[1]._y - coords[0]._y;
 
-	double p1 = -dx;
-	double p2 = dx;
-	double p3 = -dy;
-	double p4 = dy;
+	vector<double> p = {-dx, dx, -dy, dy};
+	vector<double> q = {coords[0]._x - SCN_MIN,
+		SCN_MAX - coords[0]._x,
+		coords[0]._y - SCN_MIN,
+		SCN_MAX - coords[0]._y};
 
-	double q1 = coords[0]._x - SCN_MIN;
-	double q2 = SCN_MAX - coords[0]._x;
-	double q3 = coords[0]._y - SCN_MIN;
-	double q4 = SCN_MAX - coords[0]._y;
-
-	bool outsideWindow = (!p1 && q1 < 0) || (!p3 && q3 < 0) ||
-						(!p2 && q2 < 0) || (!p4 && q4 < 0);
+	bool outsideWindow = (!p[0] && q[0] < 0) || (!p[2] && q[2] < 0) ||
+						(!p[1] && q[1] < 0) || (!p[3] && q[3] < 0);
 
 	if (outsideWindow)
 		return vector<Coordinate>();
 
-	double coeficient1, coeficient2, r1, r2, x, y;
+	double x, y;
+	vector<double> coefs = calculateCoeficients(p, q);
 
-	// calculo primeiro ponto
-	r1 = (p1 < 0) ? (q1 / p1) : (q2 / p2);
-	r2 = (p3 < 0) ? (q3 / p3) : (q4 / p4);
-
-	r1 = (!isfinite(r1)) ? 0.0 : r1;
-	r2 = (!isfinite(r2)) ? 0.0 : r2;
-
-	coeficient1 = max(0.0, max(r1,r2));
-
-	if (coeficient1 > 0) {
-		x = coords[0]._x + coeficient1 * dx;
-		y = coords[0]._y + coeficient1 * dy;
+	if (coefs[0] > coefs[1])
+		return vector<Coordinate>();
+	
+	if (coefs[0] > 0) {
+		x = coords[0]._x + coefs[0] * dx;
+		y = coords[0]._y + coefs[0] * dy;
 
 		clippedCoords.push_back( Coordinate(x,y) );
 	} else {
 		clippedCoords.push_back( coords[0] );
 	}
 
-	r1 = (p2 < 0) ? (q1 / p1) : (q2 / p2);
-	r2 = (p4 < 0) ? (q3 / p3) : (q4 / p4);
-
-	r1 = (!isfinite(r1)) ? 1.0 : r1;
-	r2 = (!isfinite(r2)) ? 1.0 : r2;
-
-	coeficient2 = min(1.0, min(r1,r2));
-
-	if (coeficient2 < 1) {
-		x = coords[0]._x + coeficient2 * dx;
-		y = coords[0]._y + coeficient2 * dy;
+	if (coefs[1] < 1) {
+		x = coords[0]._x + coefs[1] * dx;
+		y = coords[0]._y + coefs[1] * dy;
 
 		clippedCoords.push_back( Coordinate(x,y) );
 	} else {
 		clippedCoords.push_back( coords[1] );
 	}
 
-	if (coeficient1 <= coeficient2)
-		return clippedCoords;
-	else 
-		return vector<Coordinate>();
+	return clippedCoords;
+}
+
+vector<double> Clipper::calculateCoeficients(vector<double> p, vector<double> q) {
+	vector<double> coefs;
+
+	//Calculo dos valores para coordenada 1
+	double r1 = (p[0] < 0) ? (q[0] / p[0]) : (q[1] / p[1]);
+	double r2 = (p[2] < 0) ? (q[2] / p[2]) : (q[3] / p[3]);
+
+	r1 = (!isfinite(r1)) ? 0.0 : r1;
+	r2 = (!isfinite(r2)) ? 0.0 : r2;
+
+	coefs.push_back( max(0.0, max(r1,r2)) );
+
+	//Calculo dos valores para coordenada 2
+	r1 = (p[1] < 0) ? (q[0] / p[0]) : (q[1] / p[1]);
+	r2 = (p[3] < 0) ? (q[2] / p[2]) : (q[3] / p[3]);
+
+	r1 = (!isfinite(r1)) ? 1.0 : r1;
+	r2 = (!isfinite(r2)) ? 1.0 : r2;
+
+	coefs.push_back( min(1.0, min(r1,r2)) );	
+
+	return coefs;	
 }
