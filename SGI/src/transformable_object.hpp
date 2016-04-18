@@ -45,6 +45,10 @@ public:
 		return (_x * other._x) + (_y * other._y);
 	}
 
+	double perpDotProduct( Coordinate other ) {
+		return (_y * other._x) - (_x * other._y);
+	}
+
 	double angleWith( Coordinate target ) {
 		return acos( dotProduct(target) / (length() * target.length()) );
 	}

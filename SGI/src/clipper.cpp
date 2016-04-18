@@ -1,26 +1,14 @@
-/*
- * clipper.cpp
- *
- *  Created on: 14 de abr de 2016
- *      Author: plab
- */
-
 #include "clipper.hpp"
-#include <iostream>
 
-Clipper::Clipper() {
-	// TODO Auto-generated constructor stub
+Clipper::Clipper() {}
+Clipper::~Clipper() {}
 
-}
-
-Clipper::~Clipper() {
-	// TODO Auto-generated destructor stub
+bool Clipper::isOutOfRange(Coordinate coord) {
+	return fabs(coord._x) > 1 || fabs(coord._y) > 1;
 }
 
 vector<Coordinate> Clipper::clipPoint(Coordinate coord) {
-	bool outOfRange = fabs(coord._x) > 1 || fabs(coord._y) > 1;
-
-	if (outOfRange)
+	if (isOutOfRange(coord))
 		return vector<Coordinate>();
 
 	return {coord};
@@ -137,6 +125,87 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 	return clippedCoords;
 }
 
+vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
+	list<ClippingPoint> object, clip, gettingIn, final;
+	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex;
+	vector<Coordinate> currentObjLine, currentWindowLine;
+	Coordinate intersection;
+
+	vector<Coordinate> windowCoords = {Coordinate(-1,1), Coordinate(1,1), Coordinate(1,-1), Coordinate(-1,-1)};
+
+	for(Coordinate vertex : objectCoords) {
+		cout << "Original" << " (" << vertex._x << ", " << vertex._y << ")" << endl;
+		object.push_back(ClippingPoint(vertex));
+	}
+
+	cout << endl;
+
+	for(Coordinate vertex : windowCoords) {
+		clip.push_back(ClippingPoint(vertex));
+	}
+
+	for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
+
+		if(!currentObjVertex->isArtificial()) {
+			nextObjectVertex = next(currentObjVertex, 1);
+			while(nextObjectVertex->isArtificial()) {
+				nextObjectVertex = next(nextObjectVertex, 1);
+			}
+
+			currentObjLine = {Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y), 
+							  Coordinate(nextObjectVertex->coord()._x, nextObjectVertex->coord()._y)};
+
+			if(isOutOfRange((*currentObjVertex).coord()) != isOutOfRange((*nextObjectVertex).coord())) {
+				for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
+					if(!currentWindowVertex->isArtificial()) {
+						nextWindowVertex = next(currentWindowVertex, 1);
+						while(nextWindowVertex->isArtificial()) {
+							nextWindowVertex = next(nextWindowVertex, 1);
+						}
+
+						currentWindowLine = {Coordinate(currentWindowVertex->coord()._x, currentWindowVertex->coord()._y), 
+											 Coordinate(nextWindowVertex->coord()._x, nextWindowVertex->coord()._y)};
+						
+						if(hasIntersection(currentObjLine, currentWindowLine, intersection)) {
+							ClippingPoint point = ClippingPoint(intersection, true);
+
+							object.insert(nextObjectVertex, point);
+							clip.insert(nextWindowVertex, point);
+
+							if(isOutOfRange(currentObjLine[0]) && !isOutOfRange(currentObjLine[1])) {
+								gettingIn.push_back(point);
+							}
+						}
+					}								
+				}
+			}
+		}
+	}
+
+	// Printing
+	int i = 1;
+	for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
+		cout << "V#" << i << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+		i++;
+	}
+
+	cout << endl;
+
+	i = 1;
+	for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
+		cout << "W#" << i << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+		i++;
+	}
+
+	cout << endl;
+
+	for(currentWindowVertex = gettingIn.begin(); currentWindowVertex != gettingIn.end(); currentWindowVertex++) {
+		cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+	}
+
+	return objectCoords;
+}
+
 vector<double> Clipper::calculateCoeficients(vector<double> p, vector<double> q) {
 	vector<double> coefs;
 
@@ -159,4 +228,38 @@ vector<double> Clipper::calculateCoeficients(vector<double> p, vector<double> q)
 	coefs.push_back( min(1.0, min(r1,r2)) );	
 
 	return coefs;	
+}
+
+bool Clipper::hasIntersection(vector<Coordinate> firstLine, vector<Coordinate> secondLine, 
+							  Coordinate &intersection) {
+	Coordinate a = Coordinate(firstLine[1]._x - firstLine[0]._x, firstLine[1]._y - firstLine[0]._y);
+	Coordinate b = Coordinate(secondLine[1]._x - secondLine[0]._x, secondLine[1]._y - secondLine[0]._y);
+
+	double f = a.perpDotProduct(b);
+
+	if(!f)
+		return false;
+	
+	Coordinate c = Coordinate(secondLine[1]._x - firstLine[1]._x, secondLine[1]._y - firstLine[1]._y);
+	
+	double aa = a.perpDotProduct(c);
+	double bb = b.perpDotProduct(c);
+
+	if(f < 0) {
+		if(aa > 0) return false;
+		if(bb > 0) return false;
+		if(aa < f) return false;
+		if(bb < f) return false;
+	} else {
+		if(aa < 0) return false;
+		if(bb < 0) return false;
+		if(aa > f) return false;
+		if(bb > f) return false;
+	}
+
+	double coef = 1.0 - (aa / f);
+	intersection = Coordinate(((secondLine[1]._x - secondLine[0]._x) * coef) + secondLine[0]._x, 
+							  ((secondLine[1]._y - secondLine[0]._y) * coef) + secondLine[0]._y);
+
+	return true;
 }

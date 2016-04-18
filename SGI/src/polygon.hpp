@@ -4,6 +4,7 @@
 #include <string>
 
 #include "geometric_object.hpp"
+#include "clipper.hpp"
 
 using namespace std;
 
