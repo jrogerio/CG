@@ -70,6 +70,10 @@ void GeometricObject::normalizeIn(Window window) {
 	}
 }
 
+vector<CLIPPED_OBJECT> GeometricObject::getClippedObjects() {
+	return _clippedObjects;
+}
+
 void GeometricObject::translate(VECTOR deslocation) {
 	SQUARE_MATRIX translationMatrix = _buildTranslationMatrix(deslocation);
 	applyTransformation(translationMatrix);

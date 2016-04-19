@@ -14,7 +14,7 @@ class Point : public GeometricObject {
 public:
 	Point(string name, Coordinate coord);
 
-	virtual vector<Coordinate> applyClipping();
+	virtual void applyClipping();
 };
 
 #endif /* SRC_GeometricObject_POINT_H_ */

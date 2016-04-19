@@ -7,11 +7,11 @@ bool Clipper::isOutOfRange(Coordinate coord) {
 	return fabs(coord._x) > 1 || fabs(coord._y) > 1;
 }
 
-vector<Coordinate> Clipper::clipPoint(Coordinate coord) {
+vector<CLIPPED_OBJECT> Clipper::clipPoint(Coordinate coord) {
 	if (isOutOfRange(coord))
-		return vector<Coordinate>();
+		return vector<CLIPPED_OBJECT>();
 
-	return {coord};
+	return { {coord} };
 }
 
 unsigned int Clipper::regionCodeOf(Coordinate coord) {
@@ -26,22 +26,22 @@ unsigned int Clipper::regionCodeOf(Coordinate coord) {
 	return code;
 }
 
-vector<Coordinate> Clipper::cohenSutherland(vector<Coordinate> coords) {
+vector<CLIPPED_OBJECT> Clipper::cohenSutherland(vector<Coordinate> coords) {
 	unsigned int rcBegin = regionCodeOf(coords[0]);
 	unsigned int rcEnd = regionCodeOf(coords[1]);
 
 	bool insideWindow = !rcBegin && !rcEnd;
 	if (insideWindow) 
-		return coords;
+		return { coords };
 
 	bool partiallyInside = (rcBegin != rcEnd) && ( !(rcBegin & rcEnd) );
 	if (partiallyInside)
 		return applyCohenSutherland(coords, {rcBegin, rcEnd});
 	
-	return vector<Coordinate>();
+	return vector<CLIPPED_OBJECT>();
 }
 
-vector<Coordinate> Clipper::applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes) {
+vector<CLIPPED_OBJECT> Clipper::applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes) {
 	double m = (coords[1]._y - coords[0]._y) / (coords[1]._x - coords[0]._x);
 
 	vector<Coordinate> clippedCoords;
@@ -77,10 +77,10 @@ vector<Coordinate> Clipper::applyCohenSutherland(vector<Coordinate> coords, vect
 		clippedCoords.push_back(coords[i]);
 	}
 
-	return clippedCoords;
+	return { clippedCoords };
 }
 
-vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
+vector<CLIPPED_OBJECT> Clipper::liangBarsky(vector<Coordinate> coords) {
 	vector<Coordinate> clippedCoords;
 
 	double dx = coords[1]._x - coords[0]._x;
@@ -96,13 +96,13 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 						(!p[1] && q[1] < 0) || (!p[3] && q[3] < 0);
 
 	if (outsideWindow)
-		return vector<Coordinate>();
+		return vector<CLIPPED_OBJECT>();
 
 	double x, y;
 	vector<double> coefs = calculateCoeficients(p, q);
 
 	if (coefs[0] > coefs[1])
-		return vector<Coordinate>();
+		return vector<CLIPPED_OBJECT>();
 	
 	if (coefs[0] > 0) {
 		x = coords[0]._x + coefs[0] * dx;
@@ -122,7 +122,7 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 		clippedCoords.push_back( coords[1] );
 	}
 
-	return clippedCoords;
+	return { clippedCoords };
 }
 
 vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {

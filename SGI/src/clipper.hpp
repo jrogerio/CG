@@ -6,8 +6,7 @@
 #include <list>
 #include <iostream>
 
-#include "line.hpp"
-#include "point.hpp"
+#include "geometric_object.hpp"
 
 struct ClippingPoint {
 
@@ -45,7 +44,7 @@ class Clipper {
 	static const int SCN_MAX = 1;
 
 private:
-	static vector<Coordinate> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
+	static vector<CLIPPED_OBJECT> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
 
 	static bool isOutOfRange(Coordinate coord);
 	static vector<double> calculateCoeficients(vector<double> p, vector<double> q);
@@ -59,13 +58,13 @@ public:
 	virtual ~Clipper();
 
 	//Point
-	static vector<Coordinate> clipPoint(Coordinate coord);
+	static vector<CLIPPED_OBJECT> clipPoint(Coordinate coord);
 
 	// Line
 	static unsigned int regionCodeOf(Coordinate coord);
-	static vector<Coordinate> cohenSutherland(vector<Coordinate> coords);
+	static vector<CLIPPED_OBJECT> cohenSutherland(vector<Coordinate> coords);
 	
-	static vector<Coordinate> liangBarsky(vector<Coordinate> coords);
+	static vector<CLIPPED_OBJECT> liangBarsky(vector<Coordinate> coords);
 	static vector<Coordinate> weilerAtherton(vector<Coordinate> coords);
 };
 
