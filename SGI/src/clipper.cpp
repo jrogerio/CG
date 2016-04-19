@@ -128,7 +128,7 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	list<ClippingPoint> object, clip, gettingIn, final;
 	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex, iter;
-	vector<Coordinate> currentObjLine, currentWindowLine;
+	vector<Coordinate> currentObjLine, currentWindowLine, result;
 	Coordinate intersection;
 	list<ClippingPoint>* container;
 
@@ -153,8 +153,7 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 			currentObjLine = {Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y), 
 							  Coordinate(nextObjectVertex->coord()._x, nextObjectVertex->coord()._y)};
 
-			// FIXME: Problema com pontos fora que cruzam a window.
-			if(isOutOfRange((*currentObjVertex).coord()) != isOutOfRange((*nextObjectVertex).coord())) {
+			// if(isOutOfRange(currentObjVertex->coord()) != isOutOfRange(nextObjectVertex->coord())) {
 				for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
 					if(!currentWindowVertex->isArtificial()) {
 						nextWindowVertex = next(currentWindowVertex, 1);
@@ -177,8 +176,12 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 						}
 					}								
 				}
-			}
+			// }
 		}
+	}
+
+	if(gettingIn.empty()) {
+		return objectCoords;
 	}
 
 	// TODO: Como lidar com polígonos que viram dois?
@@ -203,8 +206,8 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 						else
 							container = &object;
 
-						// if(find(begin(final), end(final), currentObjVertex) != end(final))
-							// objectCompleted = true;
+						if(final.front().equals(*currentObjVertex))
+							objectCompleted = true;
 
 						referenceObject = *currentObjVertex;
 						break;
@@ -213,8 +216,10 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 					}
 				}
 
-				if(next(currentObjVertex, 1) == container->end())
+				if(next(currentObjVertex, 1) == container->end()) {
+					final.push_back(*container->begin());
 					currentObjVertex = container->begin();
+				}
 			}
 		}
 	}
@@ -240,7 +245,14 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 		cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
 	}
 
-	return objectCoords;
+	cout << endl;
+
+	for(currentObjVertex = final.begin(); currentObjVertex != final.end(); currentObjVertex++) {
+		result.push_back(currentObjVertex->coord());
+		cout << "F#" << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+	}
+
+	return result;
 }
 
 vector<double> Clipper::calculateCoeficients(vector<double> p, vector<double> q) {
