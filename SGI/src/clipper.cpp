@@ -127,18 +127,16 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 
 vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	list<ClippingPoint> object, clip, gettingIn, final;
-	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex;
+	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex, iter;
 	vector<Coordinate> currentObjLine, currentWindowLine;
 	Coordinate intersection;
+	list<ClippingPoint>* container;
 
 	vector<Coordinate> windowCoords = {Coordinate(-1,1), Coordinate(1,1), Coordinate(1,-1), Coordinate(-1,-1)};
 
 	for(Coordinate vertex : objectCoords) {
-		cout << "Original" << " (" << vertex._x << ", " << vertex._y << ")" << endl;
 		object.push_back(ClippingPoint(vertex));
 	}
-
-	cout << endl;
 
 	for(Coordinate vertex : windowCoords) {
 		clip.push_back(ClippingPoint(vertex));
@@ -155,6 +153,7 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 			currentObjLine = {Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y), 
 							  Coordinate(nextObjectVertex->coord()._x, nextObjectVertex->coord()._y)};
 
+			// FIXME: Problema com pontos fora que cruzam a window.
 			if(isOutOfRange((*currentObjVertex).coord()) != isOutOfRange((*nextObjectVertex).coord())) {
 				for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
 					if(!currentWindowVertex->isArtificial()) {
@@ -181,6 +180,45 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 			}
 		}
 	}
+
+	// TODO: Como lidar com polígonos que viram dois?
+	bool objectCompleted = false;
+	bool firstIterationOnList;
+
+	// for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
+	// 	ClippingPoint referenceObject = ClippingPoint(*iter);	
+	// 	container = &object;
+
+	// 	while(!objectCompleted) {
+	// 		firstIterationOnList = true;
+
+	// 		for(currentObjVertex = getIterator(referenceObject, container); currentObjVertex != container->end(); currentObjVertex++) {
+	// 			if(firstIterationOnList) {
+	// 				final.push_back(ClippingPoint(*currentObjVertex));
+	// 				firstIterationOnList = false;
+	// 			} else {
+	// 				if(currentObjVertex->isArtificial()) {
+	// 					if(container == &object)
+	// 						container = &clip;
+	// 					else
+	// 						container = &object;
+
+	// 					if(find(begin(final), end(final), (*currentObjVertex)) != end(final))
+	// 						objectCompleted = true;
+
+	// 					referenceObject = ClippingPoint(*currentObjVertex);
+	// 					break;
+	// 				} else {
+	// 					final.push_back(ClippingPoint(*currentObjVertex));
+	// 				}
+	// 			}
+
+	// 			if(next(currentObjVertex, 1) == container->end())
+	// 				currentObjVertex = container->begin();
+	// 		}
+
+	// 	}
+	// }
 
 	// Printing
 	int i = 1;
@@ -262,4 +300,14 @@ bool Clipper::hasIntersection(vector<Coordinate> firstLine, vector<Coordinate> s
 							  ((secondLine[1]._y - secondLine[0]._y) * coef) + secondLine[0]._y);
 
 	return true;
+}
+
+list<ClippingPoint>::iterator Clipper::getIterator(ClippingPoint object, list<ClippingPoint>* container) {
+	list<ClippingPoint>::iterator iter;
+	for(iter = container->begin(); iter != container->end(); iter++) {
+		if((ClippingPoint*) iter->equals(object))
+			return iter;
+	}
+
+	return iter;
 }

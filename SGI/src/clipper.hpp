@@ -26,6 +26,13 @@ public:
 	bool isArtificial() {
 		return _artificial;
 	}
+
+	bool equals(ClippingPoint other) {
+		if(_coord._x == other.coord()._x && _coord._y == other.coord()._y && _artificial == other.isArtificial())
+			return true;
+
+		return false;
+	}
 };
 
 class Clipper {
@@ -44,6 +51,8 @@ private:
 	static vector<double> calculateCoeficients(vector<double> p, vector<double> q);
 	static bool hasIntersection(vector<Coordinate> firstLine, vector<Coordinate> secondLine, 
 								Coordinate &intersection);
+
+	static list<ClippingPoint>::iterator getIterator(ClippingPoint object, list<ClippingPoint>* container);
 
 public:
 	Clipper();
