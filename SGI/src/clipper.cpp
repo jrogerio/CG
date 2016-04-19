@@ -3,6 +3,8 @@
 Clipper::Clipper() {}
 Clipper::~Clipper() {}
 
+ClippingFunction Clipper::clippingFunction = &Clipper::cohenSutherland;
+
 bool Clipper::isOutOfRange(Coordinate coord) {
 	return fabs(coord._x) > 1 || fabs(coord._y) > 1;
 }
