@@ -185,40 +185,39 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	bool objectCompleted = false;
 	bool firstIterationOnList;
 
-	// for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
-	// 	ClippingPoint referenceObject = ClippingPoint(*iter);	
-	// 	container = &object;
+	for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
+		ClippingPoint referenceObject = *iter;	
+		container = &object;
 
-	// 	while(!objectCompleted) {
-	// 		firstIterationOnList = true;
+		while(!objectCompleted) {
+			firstIterationOnList = true;
 
-	// 		for(currentObjVertex = getIterator(referenceObject, container); currentObjVertex != container->end(); currentObjVertex++) {
-	// 			if(firstIterationOnList) {
-	// 				final.push_back(ClippingPoint(*currentObjVertex));
-	// 				firstIterationOnList = false;
-	// 			} else {
-	// 				if(currentObjVertex->isArtificial()) {
-	// 					if(container == &object)
-	// 						container = &clip;
-	// 					else
-	// 						container = &object;
+			for(currentObjVertex = getIterator(referenceObject, container); currentObjVertex != container->end(); currentObjVertex++) {
+				if(firstIterationOnList) {
+					final.push_back(*currentObjVertex);
+					firstIterationOnList = false;
+				} else {
+					if(currentObjVertex->isArtificial()) {
+						if(container == &object)
+							container = &clip;
+						else
+							container = &object;
 
-	// 					if(find(begin(final), end(final), (*currentObjVertex)) != end(final))
-	// 						objectCompleted = true;
+						// if(find(begin(final), end(final), currentObjVertex) != end(final))
+							// objectCompleted = true;
 
-	// 					referenceObject = ClippingPoint(*currentObjVertex);
-	// 					break;
-	// 				} else {
-	// 					final.push_back(ClippingPoint(*currentObjVertex));
-	// 				}
-	// 			}
+						referenceObject = *currentObjVertex;
+						break;
+					} else {
+						final.push_back(ClippingPoint(*currentObjVertex));
+					}
+				}
 
-	// 			if(next(currentObjVertex, 1) == container->end())
-	// 				currentObjVertex = container->begin();
-	// 		}
-
-	// 	}
-	// }
+				if(next(currentObjVertex, 1) == container->end())
+					currentObjVertex = container->begin();
+			}
+		}
+	}
 
 	// Printing
 	int i = 1;
