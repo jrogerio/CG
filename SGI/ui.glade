@@ -86,15 +86,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkRadioButton" id="clipping">
-    <property name="label" translatable="yes">clipping</property>
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="receives_default">False</property>
-    <property name="xalign">0</property>
-    <property name="active">True</property>
-    <property name="draw_indicator">True</property>
-  </object>
   <object class="GtkMessageDialog" id="noObject">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -685,7 +676,7 @@
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">clipping</property>
+                                    <property name="group">radioCohen</property>
                                     <signal name="activate" handler="lb_handler" swapped="no"/>
                                   </object>
                                   <packing>
@@ -703,7 +694,7 @@
                                     <property name="receives_default">False</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">clipping</property>
+                                    <property name="group">radioLiangBarsky</property>
                                     <signal name="clicked" handler="cs_handler" swapped="no"/>
                                   </object>
                                   <packing>
