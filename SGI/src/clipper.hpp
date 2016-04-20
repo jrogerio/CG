@@ -53,6 +53,7 @@ private:
 								Coordinate &intersection);
 
 	static list<ClippingPoint>::iterator getIterator(ClippingPoint object, list<ClippingPoint>* container);
+	static bool sameCoordinates(Coordinate a, Coordinate b);
 
 public:
 	Clipper();
@@ -66,7 +67,7 @@ public:
 	static vector<Coordinate> cohenSutherland(vector<Coordinate> coords);
 	
 	static vector<Coordinate> liangBarsky(vector<Coordinate> coords);
-	static vector<Coordinate> weilerAtherton(vector<Coordinate> coords);
+	static vector<vector<Coordinate>> weilerAtherton(vector<Coordinate> coords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */

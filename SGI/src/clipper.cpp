@@ -125,10 +125,11 @@ vector<Coordinate> Clipper::liangBarsky(vector<Coordinate> coords) {
 	return clippedCoords;
 }
 
-vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
-	list<ClippingPoint> object, clip, gettingIn, final;
+vector<vector<Coordinate>> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
+	list<ClippingPoint> object, clip, gettingIn;
 	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex, iter;
-	vector<Coordinate> currentObjLine, currentWindowLine, result;
+	vector<Coordinate> currentObjLine, currentWindowLine;
+	vector<vector<Coordinate>> final;
 	Coordinate intersection;
 	list<ClippingPoint>* container;
 
@@ -150,6 +151,10 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 				nextObjectVertex = next(nextObjectVertex, 1);
 			}
 
+			// cout << "VATUAL (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+			// cout << "VDEPOIS (" << nextObjectVertex->coord()._x << ", " << nextObjectVertex->coord()._y << ")" << endl;
+
+
 			currentObjLine = {Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y), 
 							  Coordinate(nextObjectVertex->coord()._x, nextObjectVertex->coord()._y)};
 
@@ -167,8 +172,22 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 						if(hasIntersection(currentObjLine, currentWindowLine, intersection)) {
 							ClippingPoint point = ClippingPoint(intersection, true);
 
-							object.insert(nextObjectVertex, point);
-							clip.insert(nextWindowVertex, point);
+							// cout << "Adicionando (" << point.coord()._x << ", " << point.coord()._y << ")\n";
+
+							if(nextObjectVertex == object.begin()) {
+								object.push_back(point);
+							} else {
+								if(currentObjVertex->coord()._x < -1.0)
+									object.insert(next(currentObjVertex, 1), point);
+								else
+									object.insert(nextObjectVertex, point);
+							}
+
+							if(nextWindowVertex == clip.begin()) {
+								clip.insert(next(currentWindowVertex, 1), point);
+							} else {
+								clip.insert(nextWindowVertex, point);
+							}
 
 							if(isOutOfRange(currentObjLine[0]) && !isOutOfRange(currentObjLine[1])) {
 								gettingIn.push_back(point);
@@ -181,12 +200,14 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	}
 
 	if(gettingIn.empty()) {
-		return objectCoords;
+		final[0] = objectCoords;
+		return final;
 	}
 
 	// TODO: Como lidar com polígonos que viram dois?
 	bool objectCompleted = false;
 	bool firstIterationOnList;
+	int i = 0;
 
 	for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
 		ClippingPoint referenceObject = *iter;	
@@ -197,7 +218,7 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 
 			for(currentObjVertex = getIterator(referenceObject, container); currentObjVertex != container->end(); currentObjVertex++) {
 				if(firstIterationOnList) {
-					final.push_back(*currentObjVertex);
+					final[i].push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
 					firstIterationOnList = false;
 				} else {
 					if(currentObjVertex->isArtificial()) {
@@ -206,53 +227,55 @@ vector<Coordinate> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 						else
 							container = &object;
 
-						if(final.front().equals(*currentObjVertex))
+						if(sameCoordinates(final[i].front(), currentObjVertex->coord()))
 							objectCompleted = true;
 
 						referenceObject = *currentObjVertex;
 						break;
 					} else {
-						final.push_back(ClippingPoint(*currentObjVertex));
+						final[i].push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
 					}
 				}
 
 				if(next(currentObjVertex, 1) == container->end()) {
-					final.push_back(*container->begin());
+					final[i].push_back(Coordinate(container->begin()->coord()._x, container->begin()->coord()._y));
 					currentObjVertex = container->begin();
 				}
 			}
 		}
+
+		i++;
 	}
 
 	// Printing
-	int i = 1;
-	for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
-		cout << "V#" << i << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
-		i++;
-	}
+	// int i = 1;
+	// for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
+	// 	cout << "V#" << i << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+	// 	i++;
+	// }
 
-	cout << endl;
+	// cout << endl;
 
-	i = 1;
-	for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
-		cout << "W#" << i << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
-		i++;
-	}
+	// i = 1;
+	// for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
+	// 	cout << "W#" << i << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+	// 	i++;
+	// }
 
-	cout << endl;
+	// cout << endl;
 
-	for(currentWindowVertex = gettingIn.begin(); currentWindowVertex != gettingIn.end(); currentWindowVertex++) {
-		cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
-	}
+	// for(currentWindowVertex = gettingIn.begin(); currentWindowVertex != gettingIn.end(); currentWindowVertex++) {
+	// 	cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+	// }
 
-	cout << endl;
+	// cout << endl;
 
-	for(currentObjVertex = final.begin(); currentObjVertex != final.end(); currentObjVertex++) {
-		result.push_back(currentObjVertex->coord());
-		cout << "F#" << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
-	}
+	// for(currentObjVertex = final.begin(); currentObjVertex != final.end(); currentObjVertex++) {
+	// 	result.push_back(currentObjVertex->coord());
+	// 	cout << "F#" << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+	// }
 
-	return result;
+	return final;
 }
 
 vector<double> Clipper::calculateCoeficients(vector<double> p, vector<double> q) {
@@ -321,4 +344,8 @@ list<ClippingPoint>::iterator Clipper::getIterator(ClippingPoint object, list<Cl
 	}
 
 	return iter;
+}
+
+bool Clipper::sameCoordinates(Coordinate a, Coordinate b) {
+	return a._x == b._x && a._y == b._y;
 }
