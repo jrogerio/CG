@@ -204,7 +204,7 @@ vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) 
 	// TODO: Como lidar com polígonos que viram dois?
 	bool objectCompleted = false;
 	bool firstIterationOnList;
-	int i = 0;
+	vector<Coordinate> temp;
 
 	for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
 		ClippingPoint referenceObject = *iter;	
@@ -215,7 +215,7 @@ vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) 
 
 			for(currentObjVertex = getIterator(referenceObject, container); currentObjVertex != container->end(); currentObjVertex++) {
 				if(firstIterationOnList) {
-					final[i].push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
+					temp.push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
 					firstIterationOnList = false;
 				} else {
 					if(currentObjVertex->isArtificial()) {
@@ -224,24 +224,24 @@ vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) 
 						else
 							container = &object;
 
-						if(sameCoordinates(final[i].front(), currentObjVertex->coord()))
+						if(sameCoordinates(temp.front(), currentObjVertex->coord()))
 							objectCompleted = true;
 
 						referenceObject = *currentObjVertex;
 						break;
 					} else {
-						final[i].push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
+						temp.push_back(Coordinate(currentObjVertex->coord()._x, currentObjVertex->coord()._y));
 					}
 				}
 
 				if(next(currentObjVertex, 1) == container->end()) {
-					final[i].push_back(Coordinate(container->begin()->coord()._x, container->begin()->coord()._y));
+					temp.push_back(Coordinate(container->begin()->coord()._x, container->begin()->coord()._y));
 					currentObjVertex = container->begin();
 				}
 			}
 		}
 
-		i++;
+		final.push_back(temp);
 	}
 
 	// Printing
