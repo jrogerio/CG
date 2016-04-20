@@ -100,21 +100,25 @@ vector<DrawableObject> MainWindow::mapToViewport() {
 	bool shouldFill;
 
 	for (GeometricObject * object : objects) {
-		clippedCoords = object->applyClipping();
-		if (clippedCoords.empty())
-			continue;
+		object->applyClipping();
+
+//		if (clippedCoords.empty())
+//			continue;
 
 		shouldFill = (object->type() == GeometricObjectType::polygon) && object->filled();
 
-		for (Coordinate coord : clippedCoords) {
-			x = MARGIN + ( ((coord._x + 1) / 2) * (Xvmax - MARGIN) );
-			y = MARGIN + ( (1 - (coord._y + 1 ) / 2 ) * (Yvmax - MARGIN) );
+		for (vector<Coordinate> clippedCoords : object->getClippedObjects()) {
+			for (Coordinate coord : clippedCoords) {
+				x = MARGIN + ( ((coord._x + 1) / 2) * (Xvmax - MARGIN) );
+				y = MARGIN + ( (1 - (coord._y + 1 ) / 2 ) * (Yvmax - MARGIN) );
 
-			newcoords.push_back(Coordinate(x, y));
+				newcoords.push_back(Coordinate(x, y));
+			}
+
+			if (!newcoords.empty())
+				drawableObjects.push_back(DrawableObject(shouldFill ,newcoords));
 		}
 
-		if (!newcoords.empty())
-			drawableObjects.push_back(DrawableObject(shouldFill ,newcoords));
 	}
 
 	return drawableObjects;

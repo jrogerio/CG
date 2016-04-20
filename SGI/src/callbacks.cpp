@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "clipper.hpp"
 
 extern "C" {
 	// General -------------------------------------------------------------------------------
@@ -271,6 +272,14 @@ extern "C" {
 		}
 
 		app->mainWindow->updateViewport();				
+	}
+
+	void lb_handler(GtkWidget *widget, App *app) {
+		Clipper::clippingFunction = Clipper::liangBarsky;
+	}
+
+	void cs_handler(GtkWidget *widget, App *app) {
+		Clipper::clippingFunction = Clipper::cohenSutherland;
 	}
 
 	// Import/Export ----------------------------------------------------------------------------

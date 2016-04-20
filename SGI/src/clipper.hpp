@@ -6,8 +6,7 @@
 #include <list>
 #include <iostream>
 
-#include "line.hpp"
-#include "point.hpp"
+#include "geometric_object.hpp"
 
 struct ClippingPoint {
 
@@ -35,6 +34,13 @@ public:
 	}
 };
 
+enum ClippingAlgorithm {
+	LIANG_BARSKY,
+	COHEN_SUTHERLAND
+};
+
+typedef vector<CLIPPED_OBJECT> (*ClippingFunction)(vector<Coordinate>);
+
 class Clipper {
 	static const unsigned int UP = 8;
 	static const unsigned int DOWN = 4;
@@ -45,7 +51,7 @@ class Clipper {
 	static const int SCN_MAX = 1;
 
 private:
-	static vector<Coordinate> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
+	static vector<CLIPPED_OBJECT> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
 
 	static bool isOutOfRange(Coordinate coord);
 	static vector<double> calculateCoeficients(vector<double> p, vector<double> q);
@@ -59,15 +65,18 @@ public:
 	Clipper();
 	virtual ~Clipper();
 
+	static ClippingFunction clippingFunction;
+
 	//Point
-	static vector<Coordinate> clipPoint(Coordinate coord);
+	static vector<CLIPPED_OBJECT> clipPoint(Coordinate coord);
 
 	// Line
+	static void setClippingAlgorithm(ClippingAlgorithm algorithm);
 	static unsigned int regionCodeOf(Coordinate coord);
-	static vector<Coordinate> cohenSutherland(vector<Coordinate> coords);
-	
-	static vector<Coordinate> liangBarsky(vector<Coordinate> coords);
-	static vector<vector<Coordinate>> weilerAtherton(vector<Coordinate> coords);
+	static vector<CLIPPED_OBJECT> cohenSutherland(vector<Coordinate> coords);
+	static vector<CLIPPED_OBJECT> liangBarsky(vector<Coordinate> coords);
+
+	static vector<CLIPPED_OBJECT> weilerAtherton(vector<Coordinate> coords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */

@@ -12,7 +12,7 @@ class Line : public GeometricObject {
 public:
 	Line(string name, Coordinate first, Coordinate second);
 
-	virtual vector<Coordinate> applyClipping();
+	virtual void applyClipping();
 };
 
 #endif /* SRC_LINE_H_ */
