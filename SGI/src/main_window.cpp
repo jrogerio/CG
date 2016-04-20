@@ -108,6 +108,8 @@ vector<DrawableObject> MainWindow::mapToViewport() {
 		shouldFill = (object->type() == GeometricObjectType::polygon) && object->filled();
 
 		for (vector<Coordinate> clippedCoords : object->getClippedObjects()) {
+			newcoords.clear();
+
 			for (Coordinate coord : clippedCoords) {
 				x = MARGIN + ( ((coord._x + 1) / 2) * (Xvmax - MARGIN) );
 				y = MARGIN + ( (1 - (coord._y + 1 ) / 2 ) * (Yvmax - MARGIN) );

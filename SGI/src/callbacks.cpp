@@ -97,12 +97,14 @@ extern "C" {
 
 		gtk_widget_show(coordGrid);
 
-		GtkWidget *coordLabel = gtk_label_new("Coordenada:");
+		GtkWidget *coordLabel = gtk_label_new("Coordenada do ponto");
 		gtk_widget_show(coordLabel);
 		gtk_label_set_justify(GTK_LABEL(coordLabel), GTK_JUSTIFY_LEFT);
 
 		gtk_widget_set_halign(coordLabel, GTK_ALIGN_START);
 		gtk_widget_set_margin_left(coordLabel, 5);
+		gtk_widget_set_margin_top(coordLabel, 5);
+		gtk_widget_set_margin_bottom(coordLabel, 5);
 		gtk_widget_set_margin_left(labelX, 5);
 		gtk_widget_set_margin_left(labelY, 5);
 

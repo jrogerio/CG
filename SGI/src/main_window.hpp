@@ -32,7 +32,7 @@ private:
 	World *_world;
 
 	const int MARGIN = 10;
-	int _rowCount = 7;
+	int _rowCount = 8;
 
 public:
 
