@@ -147,8 +147,8 @@ vector<CLIPPED_OBJECT> Clipper::clipCurve(vector<Coordinate> coords) {
 		}
 	}
 
-	if (clippedObjects.empty())
-		return { coords };
+	if (!currentObject.empty())
+		clippedObjects.push_back(currentObject);
 
 	return clippedObjects;
 }
