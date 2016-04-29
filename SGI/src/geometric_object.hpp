@@ -13,7 +13,8 @@ using namespace std;
 enum GeometricObjectType {
 	point,
 	line,
-	polygon
+	polygon,
+	cubic_bezier
 };
 
 // ---------------------------

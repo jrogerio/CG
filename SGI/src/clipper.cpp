@@ -127,6 +127,32 @@ vector<CLIPPED_OBJECT> Clipper::liangBarsky(vector<Coordinate> coords) {
 	return { clippedCoords };
 }
 
+vector<CLIPPED_OBJECT> Clipper::clipCurve(vector<Coordinate> coords) {
+	vector<CLIPPED_OBJECT> clippedObjects, clippedLine;
+	CLIPPED_OBJECT currentObject;
+
+	bool coordIn;
+
+	for (int i = 0; i < coords.size(); ++i) {
+		coordIn = !isOutOfRange(coords[i]);
+
+		if (coordIn)
+			currentObject.push_back(coords[i]);
+		else if ( !currentObject.empty() ) {
+			clippedLine = cohenSutherland({currentObject.back(), coords[i]});
+			currentObject.push_back((clippedLine[0])[1]);
+
+			clippedObjects.push_back(currentObject);
+			currentObject = CLIPPED_OBJECT();
+		}
+	}
+
+	if (clippedObjects.empty())
+		return { coords };
+
+	return clippedObjects;
+}
+
 vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	list<ClippingPoint> object, clip, gettingIn;
 	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex, iter;

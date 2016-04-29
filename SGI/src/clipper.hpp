@@ -77,6 +77,9 @@ public:
 	static vector<CLIPPED_OBJECT> liangBarsky(vector<Coordinate> coords);
 
 	static vector<CLIPPED_OBJECT> weilerAtherton(vector<Coordinate> coords);
+
+	//Curve
+	static vector<CLIPPED_OBJECT> clipCurve(vector<Coordinate> coords);
 };
 
 #endif /* SRC_CLIPPER_HPP_ */

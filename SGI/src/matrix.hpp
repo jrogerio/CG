@@ -9,18 +9,18 @@
 
 using namespace std;
 
-template<uint M, uint N>
+template<uint M, uint N, typename T>
 class Matrix {
 
 private:
-	double _values[M][N];
+	T _values[M][N];
 
 public:
 	Matrix(){}
 	~Matrix(){}
 
-	double valueOn(uint row, uint col) {
-		double value = 0;
+	T valueOn(uint row, uint col) {
+		T value;
 
 		if (row < M && col < N)
 			value = _values[row][col];
@@ -28,13 +28,13 @@ public:
 		return value;
 	}
 
-	void setValueOn(uint row, uint col, double value) {
-		if (row < M && col < N)
+	void setValueOn(uint row, uint col, T value) {
+		//if (row < M && col < N)
 			_values[row][col] = value;
 	}
 
-	static Matrix<M, M> buildIdentity() {
-		Matrix<M,M> matrix;
+	static Matrix<M, M, T> buildIdentity() {
+		Matrix<M,M, T> matrix;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < M; ++col) {
@@ -49,8 +49,8 @@ public:
 		return matrix;
 	}
 
-	Matrix<M, N> operator+(Matrix<M, N> other) {
-		Matrix<M,N> sum;
+	Matrix<M, N, T> operator+(Matrix<M, N, T> other) {
+		Matrix<M,N, T> sum;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
@@ -62,8 +62,8 @@ public:
 	}
 
 	template<uint N1>
-	Matrix<M, N1> operator*(Matrix<N, N1> other) {
-		Matrix<M,N1> mult;
+	Matrix<M, N1, T> operator*(Matrix<N, N1, T> other) {
+		Matrix<M,N1, T> mult;
 		double value;
 
 		for (uint row = 0; row < M; ++row) {
@@ -81,12 +81,43 @@ public:
 		return mult;
 	}
 
-	Matrix<M, N> operator*(double scalar) {
-		Matrix<M,N> mult;
+	template<uint N1, typename T2>
+	Matrix<M, N1, T2> operator*(Matrix<N, N1, T2> other) {
+		Matrix<M,N1, T2> mult;
+
+		for (uint row = 0; row < M; ++row) {
+			for (uint col = 0; col < N1; ++col) {
+				T2 value;
+
+				for (uint n = 0; n < N; ++n) {
+					value += _values[row][n] * other.valueOn(n, col);
+				}
+
+				mult.setValueOn(row, col, value);
+			}
+		}
+
+		return mult;
+	}
+
+	friend Matrix<M, N, T> operator*(Matrix<M,N,T> matrix, double scalar) {
+		Matrix<M,N, T> mult;
 
 		for (int row = 0; row < M; ++row) {
 			for (int col = 0; col < N; ++col) {
-				mult._values[row][col] = _values[row][col] * scalar;
+				mult._values[row][col] = matrix._values[row][col] * scalar;
+			}
+		}
+
+		return mult;
+	}
+
+	friend Matrix<M, N, T> operator*(double scalar, Matrix<M,N,T> matrix) {
+		Matrix<M,N, T> mult;
+
+		for (int row = 0; row < M; ++row) {
+			for (int col = 0; col < N; ++col) {
+				mult._values[row][col] = matrix._values[row][col] * scalar;
 			}
 		}
 
