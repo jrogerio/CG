@@ -79,11 +79,11 @@ void MainWindow::drawSingleObject(cairo_t *cr, DrawableObject object) {
 
 	if (coords.size() == 1)
 		cairo_line_to(cr, coords[0]._x + 1, coords[0]._y + 1);
-	else
+	else if (object.type() == polygon)
 		cairo_line_to(cr, coords.front()._x, coords.front()._y);
 
-	if(object.filled())
-		cairo_fill(cr);
+//	if(object.filled())
+//		cairo_fill(cr);
 	
 	cairo_stroke(cr);
 }
@@ -121,7 +121,7 @@ vector<DrawableObject> MainWindow::mapToViewport() {
 			}
 
 			if (!newcoords.empty())
-				drawableObjects.push_back(DrawableObject(shouldFill ,newcoords));
+				drawableObjects.push_back(DrawableObject(shouldFill ,newcoords, object->type()));
 		}
 
 	}

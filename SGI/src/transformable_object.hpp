@@ -11,13 +11,14 @@
 #include <cmath>
 #include <cstdio>
 #include <vector>
+#include <iostream>
 
 #include "matrix.hpp"
 
 #define VECTOR Coordinate
 
-#define SQUARE_MATRIX Matrix<3,3>
-#define ROW_VECTOR Matrix<1,3>
+#define SQUARE_MATRIX Matrix<3,3, double>
+#define ROW_VECTOR Matrix<1,3, double>
 
 struct Coordinate {
 
@@ -51,6 +52,23 @@ public:
 
 	double angleWith( Coordinate target ) {
 		return acos( dotProduct(target) / (length() * target.length()) );
+	}
+
+	Coordinate operator+( Coordinate other ) {
+			return Coordinate( _x + other._x, _y + other._y );
+		}
+
+	void operator+=( Coordinate other ) {
+		_x += other._x;
+		_y += other._y;
+	}
+
+	friend Coordinate operator*( Coordinate coord, double scalar ) {
+		return Coordinate( coord._x * scalar, coord._y * scalar );
+	}
+
+	friend Coordinate operator*( double scalar, Coordinate coord ) {
+		return Coordinate( coord._x * scalar, coord._y * scalar );
 	}
 };
 
