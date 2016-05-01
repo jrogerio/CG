@@ -21,6 +21,8 @@ extern "C" {
 		GtkNotebook *objNotebook = GTK_NOTEBOOK(app_get_ui_element(app, "objNotebook"));
 		GtkListStore *objStore = GTK_LIST_STORE(app_get_ui_element(app, "objStore"));
 		GtkTreeModel *treeModel;
+		GtkToggleButton *fillPolygon;
+		GtkSpinButton *curveStep;
 		vector<Coordinate> coords;
 		
 		const char* name = gtk_entry_get_text(objName);
@@ -43,13 +45,22 @@ extern "C" {
 				app->world->addLine(name, coords[0], coords[1]);
 
 				break;
-			default:
+			case 2:
 				// addPolygon
-				GtkToggleButton *fillPolygon = GTK_TOGGLE_BUTTON(app_get_ui_element(app, "fillPolygon"));
+				fillPolygon = GTK_TOGGLE_BUTTON(app_get_ui_element(app, "fillPolygon"));
 				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newPolygonCoordinates")));
 				coords = app->mainWindow->readCoordFrom(treeModel);
 
 				app->world->addPolygon(name, coords, gtk_toggle_button_get_active(fillPolygon));
+
+				break;
+			default:
+				// addCurve
+				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates")));
+				coords = app->mainWindow->readCoordFrom(treeModel);
+				curveStep = GTK_SPIN_BUTTON(app_get_ui_element(app, "spinCurveStep"));
+
+				app->world->addCurve(name, coords, gtk_spin_button_get_value(curveStep));
 
 				break;
 		}

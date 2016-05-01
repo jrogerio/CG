@@ -2,23 +2,6 @@
 
 World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
-	vector<Coordinate> coords = {Coordinate(-1.5,-0.8), Coordinate(-0.5,0.4)};
-
-	vector<Coordinate> controlPoints = {
-			Coordinate(0,0),
-			Coordinate(50,100),
-			Coordinate(100,100),
-			Coordinate(150,0),
-			Coordinate(200,-100),
-			Coordinate(250,200),
-			Coordinate(275,250)
-	};
-
-	CubicBezier* bezier = new CubicBezier("bezier", controlPoints, .025);
-	//bezier->rotate(90);
-	normalize(bezier);
-
-	_displayFile.push_back(bezier);
 }
 
 World::~World() {
@@ -44,6 +27,13 @@ void World::addPolygon(string name, vector<Coordinate> coords, bool filled) {
 	normalize(polygon);
 
 	_displayFile.push_back(polygon);
+}
+
+void World::addCurve(string name, vector<Coordinate> coords, double step) {
+	CubicBezier * bezier = new CubicBezier(name, coords, step);
+	normalize(bezier);
+
+	_displayFile.push_back(bezier);
 }
 
 Window World::getWindow() {
