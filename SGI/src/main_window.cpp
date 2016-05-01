@@ -14,19 +14,22 @@ void MainWindow::updateViewport() {
 	gtk_widget_queue_draw(drawingArea);
 }
 
-Coordinate MainWindow::readCoordFrom(GtkGrid *objGrid, int lineIndicator) {
-	GtkSpinButton *input;
+vector<Coordinate> MainWindow::readCoordFrom(GtkTreeModel *treeModel) {
+	GtkTreeIter valuesIterator;
+	vector<Coordinate> coords;
+	gdouble x_axis_value, y_axis_value;
+	bool valid;
 
-	// posicao (0,1) -> valor de x
-	// posicao (0,3) -> valor de y
-	GtkGrid *coordGrid = GTK_GRID( gtk_grid_get_child_at(objGrid, 0, lineIndicator));
-	input = GTK_SPIN_BUTTON(gtk_grid_get_child_at(coordGrid, 1, 0));
-	int x = gtk_spin_button_get_value(input);
+	valid = gtk_tree_model_get_iter_first(treeModel, &valuesIterator);
 
-	input = GTK_SPIN_BUTTON(gtk_grid_get_child_at(coordGrid, 3, 0));
-	int y = gtk_spin_button_get_value(input);
+	while(valid) {
+		gtk_tree_model_get(treeModel, &valuesIterator, X_AXIS, &x_axis_value, Y_AXIS, &y_axis_value, -1);
+		coords.push_back(Coordinate(x_axis_value, y_axis_value));
 
-	return Coordinate(x, y);
+		valid = gtk_tree_model_iter_next(treeModel, &valuesIterator);
+	}
+	
+	return coords;
 }
 
 void MainWindow::drawViewport(cairo_t *cr) {

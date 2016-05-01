@@ -16,12 +16,13 @@ extern "C" {
 	}
 
 	void add_object_handler(GtkWidget *widget, App *app) {
-		GtkGrid *objGrid;
 		GtkWidget *drawingArea = GTK_WIDGET(app_get_ui_element(app, "drawingArea"));
 		GtkEntry *objName = GTK_ENTRY(app_get_ui_element(app, "objName"));
 		GtkNotebook *objNotebook = GTK_NOTEBOOK(app_get_ui_element(app, "objNotebook"));
 		GtkListStore *objStore = GTK_LIST_STORE(app_get_ui_element(app, "objStore"));
-
+		GtkTreeModel *treeModel;
+		vector<Coordinate> coords;
+		
 		const char* name = gtk_entry_get_text(objName);
 		name = (name[0] == '\0') ? "objeto" : name;
 		
@@ -30,26 +31,23 @@ extern "C" {
 		switch (pageIndex) {
 			case 0:
 				// addPoint
-				objGrid = GTK_GRID(gtk_notebook_get_nth_page(GTK_NOTEBOOK(objNotebook), pageIndex));
-				app->world->addPoint(name, app->mainWindow->readCoordFrom(objGrid, 1));
+				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newPointCoordinate")));
+				app->world->addPoint(name, app->mainWindow->readCoordFrom(treeModel)[0]);
 
 				break;
 			case 1:
 				// addLine
-				objGrid = GTK_GRID(gtk_notebook_get_nth_page(GTK_NOTEBOOK(objNotebook), pageIndex));
-				app->world->addLine(name, app->mainWindow->readCoordFrom(objGrid, 1), 
-										  app->mainWindow->readCoordFrom(objGrid, 3));
+				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newLineCoordinates")));
+				coords = app->mainWindow->readCoordFrom(treeModel);
+
+				app->world->addLine(name, coords[0], coords[1]);
 
 				break;
 			default:
 				// addPolygon
-				vector<Coordinate> coords;
-				objGrid = GTK_GRID(app_get_ui_element(app, "polygonGrid"));
 				GtkToggleButton *fillPolygon = GTK_TOGGLE_BUTTON(app_get_ui_element(app, "fillPolygon"));
-
-				for (int i = 2; i < app->mainWindow->rowCount(); i += 2) {
-					coords.push_back(app->mainWindow->readCoordFrom(objGrid, i) );
-				}
+				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newPolygonCoordinates")));
+				coords = app->mainWindow->readCoordFrom(treeModel);
 
 				app->world->addPolygon(name, coords, gtk_toggle_button_get_active(fillPolygon));
 
@@ -66,65 +64,61 @@ extern "C" {
 		gtk_window_close(addObjWindow);
 	}
 
-	void add_coord_handler(GtkWidget *widget, App *app) {
-		GtkGrid *polygonGrid = GTK_GRID(app_get_ui_element(app, "polygonGrid"));
-		GtkWidget *buttonsGrid = GTK_WIDGET(app_get_ui_element(app, "buttonsGrid" ) );
+	void add_polygon_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newPolygonCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreeIter iter;
 
-		GtkAdjustment *adjustment1 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
-		GtkAdjustment *adjustment2 = gtk_adjustment_new(0, -9999999, 9999999, 1, 1, 1);
-
-		GtkWidget *coordGrid = gtk_grid_new();
-		GtkWidget *labelX = gtk_label_new("X: ");
-		GtkWidget *labelY = gtk_label_new("Y: ");
-		GtkWidget *entry1 = gtk_spin_button_new(adjustment1, 1, 0);
-		GtkWidget *entry2 = gtk_spin_button_new(adjustment2, 1, 0);
-
-		gtk_widget_set_size_request(entry1, 50, -1);
-		gtk_widget_set_size_request(entry2, 50, -1);
-
-		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(entry1), true);
-		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(entry2), true);
-
-		gtk_widget_show(labelX);
-		gtk_widget_show(labelY);
-		gtk_widget_show(entry1);
-		gtk_widget_show(entry2);
-
-		gtk_grid_attach( GTK_GRID(coordGrid), labelX, 0,0,1,1);
-		gtk_grid_attach(GTK_GRID(coordGrid), entry1, 1,0,1,1);
-		gtk_grid_attach(GTK_GRID(coordGrid), labelY, 2,0,1,1);
-		gtk_grid_attach(GTK_GRID(coordGrid), entry2, 3,0,1,1);
-
-		gtk_widget_show(coordGrid);
-
-		GtkWidget *coordLabel = gtk_label_new("Coordenada do ponto");
-		gtk_widget_show(coordLabel);
-		gtk_label_set_justify(GTK_LABEL(coordLabel), GTK_JUSTIFY_LEFT);
-
-		gtk_widget_set_halign(coordLabel, GTK_ALIGN_START);
-		gtk_widget_set_margin_left(coordLabel, 5);
-		gtk_widget_set_margin_top(coordLabel, 5);
-		gtk_widget_set_margin_bottom(coordLabel, 5);
-		gtk_widget_set_margin_left(labelX, 5);
-		gtk_widget_set_margin_left(labelY, 5);
-
-		gtk_grid_insert_next_to(polygonGrid, buttonsGrid, GTK_POS_TOP);
-		gtk_grid_insert_next_to(polygonGrid, buttonsGrid, GTK_POS_TOP);
-
-		gtk_grid_attach(polygonGrid, coordLabel, 0, app->mainWindow->rowCount() - 1, 1, 1);
-		gtk_grid_attach(polygonGrid, coordGrid, 0, app->mainWindow->rowCount(), 1, 1);
-
-		app->mainWindow->updateRowCount(app->mainWindow->rowCount() + 2);
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set (store, &iter, X_AXIS, 0, Y_AXIS, 0, Z_AXIS, 0, -1);
 	}
 
-	void remove_coord_handler(GtkWidget *widget, App *app) {
-		GtkGrid *polygonGrid = GTK_GRID(app_get_ui_element(app, "polygonGrid"));
+	void remove_polygon_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newPolygonCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreePath *path;
+		GtkTreeIter iter;
 
-		if (app->mainWindow->rowCount() > 7) {
-			gtk_grid_remove_row(polygonGrid, app->mainWindow->rowCount() - 2);
-			gtk_grid_remove_row(polygonGrid, app->mainWindow->rowCount() - 3);
+		gint rows = gtk_tree_model_iter_n_children(model, NULL);
 
-			app->mainWindow->updateRowCount(app->mainWindow->rowCount() - 2);
+		if(rows > 3) {
+			path = gtk_tree_path_new_from_indices(rows-1, -1);
+
+			gtk_tree_model_get_iter(model, &iter, path);
+			gtk_list_store_remove(store, &iter);
+			gtk_tree_path_free(path);
+		}
+	}
+
+	void add_curve_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreeIter iter;
+
+		for(int i=0; i < 3; i++) {
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set (store, &iter, X_AXIS, 0, Y_AXIS, 0, Z_AXIS, 0, -1);
+		}
+	}
+
+	void remove_curve_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreePath *path;
+		GtkTreeIter iter;
+
+		gint rows = gtk_tree_model_iter_n_children(model, NULL);
+
+		if(rows > 4) {
+			path = gtk_tree_path_new_from_indices(rows-1, -1);
+
+			gtk_tree_model_get_iter(model, &iter, path);
+			gtk_list_store_remove(store, &iter);
+			gtk_tree_path_free(path);
 		}
 	}
 
@@ -141,6 +135,32 @@ extern "C" {
 	void close_no_object_handler(GtkWidget *widget, App *app) {
 		GtkWidget *noObject = GTK_WIDGET(app_get_ui_element(app, "noObject"));
 		gtk_widget_hide_on_delete(noObject);
+	}
+
+	void update_cell(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer user_data, int column) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(user_data);
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkTreeIter iter;
+		GValue new_value = G_VALUE_INIT;
+		
+		gtk_tree_model_get_iter_from_string(model, &iter, path_string);
+		
+		g_value_init (&new_value, G_TYPE_DOUBLE);
+		g_value_set_double (&new_value, atof(new_text));
+		
+		gtk_list_store_set_value(GTK_LIST_STORE(model), &iter, column, &new_value);		
+	}
+
+	void x_axis_cell_updated(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer user_data) {
+		update_cell(cell, path_string, new_text, user_data, 0);
+	}
+
+	void y_axis_cell_updated(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer user_data) {
+		update_cell(cell, path_string, new_text, user_data, 1);
+	}
+
+	void z_axis_cell_updated(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer user_data) {
+		update_cell(cell, path_string, new_text, user_data, 2);
 	}
 
 	// Movements Handler ----------------------------------------------------------------------

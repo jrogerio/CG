@@ -8,6 +8,10 @@
 #include "window.hpp"
 #include "matrix.hpp"
 
+const int X_AXIS = 0;
+const int Y_AXIS = 1;
+const int Z_AXIS = 2;
+
 struct DrawableObject {
 
 	DrawableObject(bool filled, vector<Coordinate> coords) : _filled(filled), _coords(coords) {};
@@ -46,7 +50,7 @@ public:
 	void drawObjects(cairo_t *cr);
 	void drawSingleObject(cairo_t *cr, DrawableObject object);
 
-	Coordinate readCoordFrom(GtkGrid *objGrid, int lineIndicator);
+	vector<Coordinate> readCoordFrom(GtkTreeModel *treeModel);
 	int rowCount();
 
 	vector<DrawableObject> mapToViewport();
