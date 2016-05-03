@@ -5,6 +5,6 @@ Line::Line(string name, Coordinate first, Coordinate second) :
 }
 
 void Line::applyClipping() {
-	_clippedObjects = Clipper::clippingFunction(coords());
+	_clippedObjects = { Clipper::clippingFunction(coords()) };
 }
 

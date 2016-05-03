@@ -39,7 +39,7 @@ enum ClippingAlgorithm {
 	COHEN_SUTHERLAND
 };
 
-typedef vector<CLIPPED_OBJECT> (*ClippingFunction)(vector<Coordinate>);
+typedef CLIPPED_OBJECT (*ClippingFunction)(vector<Coordinate>);
 
 class Clipper {
 	static const unsigned int UP = 8;
@@ -51,7 +51,7 @@ class Clipper {
 	static const int SCN_MAX = 1;
 
 private:
-	static vector<CLIPPED_OBJECT> applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
+	static CLIPPED_OBJECT applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes);
 
 	static bool isOutOfRange(Coordinate coord);
 	static vector<double> calculateCoeficients(vector<double> p, vector<double> q);
@@ -73,8 +73,8 @@ public:
 	// Line
 	static void setClippingAlgorithm(ClippingAlgorithm algorithm);
 	static unsigned int regionCodeOf(Coordinate coord);
-	static vector<CLIPPED_OBJECT> cohenSutherland(vector<Coordinate> coords);
-	static vector<CLIPPED_OBJECT> liangBarsky(vector<Coordinate> coords);
+	static CLIPPED_OBJECT cohenSutherland(vector<Coordinate> coords);
+	static CLIPPED_OBJECT liangBarsky(vector<Coordinate> coords);
 
 	static vector<CLIPPED_OBJECT> weilerAtherton(vector<Coordinate> coords);
 
