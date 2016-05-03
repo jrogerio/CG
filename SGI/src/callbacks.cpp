@@ -125,11 +125,15 @@ extern "C" {
 		gint rows = gtk_tree_model_iter_n_children(model, NULL);
 
 		if(rows > 4) {
-			path = gtk_tree_path_new_from_indices(rows-1, -1);
+			for(int i=0; i<3; i++) {
+				path = gtk_tree_path_new_from_indices(rows-1, -1);
 
-			gtk_tree_model_get_iter(model, &iter, path);
-			gtk_list_store_remove(store, &iter);
-			gtk_tree_path_free(path);
+				gtk_tree_model_get_iter(model, &iter, path);
+				gtk_list_store_remove(store, &iter);
+				gtk_tree_path_free(path);
+
+				rows--;
+			}
 		}
 	}
 
