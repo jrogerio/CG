@@ -1465,65 +1465,72 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkTreeView" id="newPolygonCoordinates">
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">newPolygonStore</property>
-                    <property name="rules_hint">True</property>
-                    <property name="enable_search">False</property>
-                    <property name="search_column">0</property>
-                    <property name="enable_grid_lines">both</property>
-                    <property name="activate_on_single_click">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection9"/>
-                    </child>
+                    <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="column7">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em X</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cell7">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="x_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
+                      <object class="GtkTreeView" id="newPolygonCoordinates">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">newPolygonStore</property>
+                        <property name="rules_hint">True</property>
+                        <property name="enable_search">False</property>
+                        <property name="search_column">0</property>
+                        <property name="enable_grid_lines">both</property>
+                        <property name="activate_on_single_click">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection9"/>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column8">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em Y</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cell8">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="y_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
+                          <object class="GtkTreeViewColumn" id="column7">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em X</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell7">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="x_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
                           </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column9">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em Z</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cell9">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="y_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
+                          <object class="GtkTreeViewColumn" id="column8">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em Y</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell8">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="y_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
                           </object>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column9">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em Z</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell9">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="y_axis_cell_updated" object="newPolygonCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -1531,7 +1538,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -1606,7 +1613,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -1631,65 +1638,72 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkTreeView" id="newCurveCoordinates">
+                  <object class="GtkScrolledWindow" id="scrolledwindow3">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">newCurveStore</property>
-                    <property name="rules_hint">True</property>
-                    <property name="enable_search">False</property>
-                    <property name="search_column">0</property>
-                    <property name="enable_grid_lines">both</property>
-                    <property name="activate_on_single_click">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection7"/>
-                    </child>
+                    <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="column10">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em X</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cell10">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="x_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
+                      <object class="GtkTreeView" id="newCurveCoordinates">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">newCurveStore</property>
+                        <property name="rules_hint">True</property>
+                        <property name="enable_search">False</property>
+                        <property name="search_column">0</property>
+                        <property name="enable_grid_lines">both</property>
+                        <property name="activate_on_single_click">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection7"/>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column11">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em Y</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cell11">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="y_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
+                          <object class="GtkTreeViewColumn" id="column10">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em X</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell10">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="x_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
                           </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column12">
-                        <property name="min_width">150</property>
-                        <property name="title" translatable="yes">Ponto em Z</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cell12">
-                            <property name="editable">True</property>
-                            <property name="placeholder_text">0,00</property>
-                            <signal name="edited" handler="z_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
+                          <object class="GtkTreeViewColumn" id="column11">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em Y</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell11">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="y_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
                           </object>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column12">
+                            <property name="min_width">150</property>
+                            <property name="title" translatable="yes">Ponto em Z</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cell12">
+                                <property name="editable">True</property>
+                                <property name="placeholder_text">0,00</property>
+                                <signal name="edited" handler="z_axis_cell_updated" object="newCurveCoordinates" swapped="no"/>
+                              </object>
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -1697,7 +1711,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -1784,7 +1798,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>

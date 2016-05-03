@@ -28,22 +28,22 @@ unsigned int Clipper::regionCodeOf(Coordinate coord) {
 	return code;
 }
 
-vector<CLIPPED_OBJECT> Clipper::cohenSutherland(vector<Coordinate> coords) {
+CLIPPED_OBJECT Clipper::cohenSutherland(vector<Coordinate> coords) {
 	unsigned int rcBegin = regionCodeOf(coords[0]);
 	unsigned int rcEnd = regionCodeOf(coords[1]);
 
 	bool insideWindow = !rcBegin && !rcEnd;
 	if (insideWindow) 
-		return { coords };
+		return coords;
 
 	bool partiallyInside = (rcBegin != rcEnd) && ( !(rcBegin & rcEnd) );
 	if (partiallyInside)
 		return applyCohenSutherland(coords, {rcBegin, rcEnd});
 	
-	return vector<CLIPPED_OBJECT>();
+	return CLIPPED_OBJECT();
 }
 
-vector<CLIPPED_OBJECT> Clipper::applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes) {
+CLIPPED_OBJECT Clipper::applyCohenSutherland(vector<Coordinate> coords, vector<unsigned int> regionCodes) {
 	double m = (coords[1]._y - coords[0]._y) / (coords[1]._x - coords[0]._x);
 
 	vector<Coordinate> clippedCoords;
@@ -79,10 +79,10 @@ vector<CLIPPED_OBJECT> Clipper::applyCohenSutherland(vector<Coordinate> coords, 
 		clippedCoords.push_back(coords[i]);
 	}
 
-	return { clippedCoords };
+	return clippedCoords;
 }
 
-vector<CLIPPED_OBJECT> Clipper::liangBarsky(vector<Coordinate> coords) {
+CLIPPED_OBJECT Clipper::liangBarsky(vector<Coordinate> coords) {
 	vector<Coordinate> clippedCoords;
 
 	double dx = coords[1]._x - coords[0]._x;
@@ -98,13 +98,13 @@ vector<CLIPPED_OBJECT> Clipper::liangBarsky(vector<Coordinate> coords) {
 						(!p[1] && q[1] < 0) || (!p[3] && q[3] < 0);
 
 	if (outsideWindow)
-		return vector<CLIPPED_OBJECT>();
+		return CLIPPED_OBJECT();
 
 	double x, y;
 	vector<double> coefs = calculateCoeficients(p, q);
 
 	if (coefs[0] > coefs[1])
-		return vector<CLIPPED_OBJECT>();
+		return CLIPPED_OBJECT();
 	
 	if (coefs[0] > 0) {
 		x = coords[0]._x + coefs[0] * dx;
@@ -124,26 +124,39 @@ vector<CLIPPED_OBJECT> Clipper::liangBarsky(vector<Coordinate> coords) {
 		clippedCoords.push_back( coords[1] );
 	}
 
-	return { clippedCoords };
+	return clippedCoords;
 }
 
 vector<CLIPPED_OBJECT> Clipper::clipCurve(vector<Coordinate> coords) {
-	vector<CLIPPED_OBJECT> clippedObjects, clippedLine;
-	CLIPPED_OBJECT currentObject;
+	vector<CLIPPED_OBJECT> clippedObjects;
+	CLIPPED_OBJECT currentObject, clippedLine;
 
-	bool coordIn;
+	int firstIndex = 0;
+	bool coordIn, clipIn;
 
 	for (int i = 0; i < coords.size(); ++i) {
 		coordIn = !isOutOfRange(coords[i]);
+		clipIn = ( (i - firstIndex) > 0 ) && currentObject.empty() && coordIn;
 
-		if (coordIn)
+		if (clipIn) {
+			//Clip out in
+			clippedLine = cohenSutherland({coords[i-1], coords[i]});
+
+			currentObject.push_back(clippedLine[0]);
+			currentObject.push_back(clippedLine[1]);
+		} else if (coordIn) {
+			// coord in, don't need to clip
 			currentObject.push_back(coords[i]);
-		else if ( !currentObject.empty() ) {
+		} else if ( !currentObject.empty() ) {
+			//Clip in out
 			clippedLine = cohenSutherland({currentObject.back(), coords[i]});
-			currentObject.push_back((clippedLine[0])[1]);
+			currentObject.push_back(clippedLine[1]);
 
 			clippedObjects.push_back(currentObject);
 			currentObject = CLIPPED_OBJECT();
+
+			//First index of new clipped-object
+			firstIndex = i + 1;
 		}
 	}
 
