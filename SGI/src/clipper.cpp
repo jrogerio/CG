@@ -168,11 +168,9 @@ vector<CLIPPED_OBJECT> Clipper::clipCurve(vector<Coordinate> coords) {
 
 vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) {
 	list<ClippingPoint> object, clip, gettingIn;
-	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex, iter;
+	list<ClippingPoint>::iterator currentObjVertex, nextObjectVertex, currentWindowVertex, nextWindowVertex;
 	vector<Coordinate> currentObjLine, currentWindowLine;
-	vector<CLIPPED_OBJECT> final;
 	Coordinate intersection;
-	list<ClippingPoint>* container;
 
 	vector<Coordinate> windowCoords = {Coordinate(-1,1), Coordinate(1,1), Coordinate(1,-1), Coordinate(-1,-1)};
 
@@ -236,14 +234,47 @@ vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) 
 		}
 	}
 
-	if(gettingIn.empty()) {
-		return { objectCoords };
-	}
+	return weilerAthertonPolygonGenerator(objectCoords, gettingIn, object, clip);
 
-	// TODO: Como lidar com polígonos que viram dois?
-	bool objectCompleted = false;
-	bool firstIterationOnList;
+	// Printing
+	// int i = 1;
+	// for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
+	// 	cout << "V#" << i << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
+	// 	i++;
+	// }
+
+	// cout << endl;
+
+	// i = 1;
+	// for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
+	// 	cout << "W#" << i << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+	// 	i++;
+	// }
+
+	// cout << endl;
+
+	// for(currentWindowVertex = gettingIn.begin(); currentWindowVertex != gettingIn.end(); currentWindowVertex++) {
+	// 	cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
+	// }
+
+	// cout << endl;
+}
+
+/**
+ * Performs a navigation though lists, in order to mount the final object.
+ */
+vector<CLIPPED_OBJECT> Clipper::weilerAthertonPolygonGenerator(vector<Coordinate> objectCoords, 
+	list<ClippingPoint> gettingIn, list<ClippingPoint> object, list<ClippingPoint> clip) {
+	
+	if(gettingIn.empty()) {return { objectCoords };}
+
+	vector<CLIPPED_OBJECT> final;
 	vector<Coordinate> temp;
+	list<ClippingPoint>* container;
+	list<ClippingPoint>::iterator currentObjVertex, iter;
+
+	bool firstIterationOnList;
+	bool objectCompleted = false;
 
 	for(iter = gettingIn.begin(); iter != gettingIn.end(); iter++) {
 		ClippingPoint referenceObject = *iter;	
@@ -282,29 +313,6 @@ vector<CLIPPED_OBJECT> Clipper::weilerAtherton(vector<Coordinate> objectCoords) 
 
 		final.push_back(temp);
 	}
-
-	// Printing
-	// int i = 1;
-	// for(currentObjVertex = object.begin(); currentObjVertex != object.end(); currentObjVertex++) {
-	// 	cout << "V#" << i << " (" << currentObjVertex->coord()._x << ", " << currentObjVertex->coord()._y << ")" << endl;
-	// 	i++;
-	// }
-
-	// cout << endl;
-
-	// i = 1;
-	// for(currentWindowVertex = clip.begin(); currentWindowVertex != clip.end(); currentWindowVertex++) {
-	// 	cout << "W#" << i << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
-	// 	i++;
-	// }
-
-	// cout << endl;
-
-	// for(currentWindowVertex = gettingIn.begin(); currentWindowVertex != gettingIn.end(); currentWindowVertex++) {
-	// 	cout << "GI#" << " (" << currentWindowVertex->coord()._x << ", " << currentWindowVertex->coord()._y << ")" << endl;
-	// }
-
-	// cout << endl;
 
 	// for(currentObjVertex = final.begin(); currentObjVertex != final.end(); currentObjVertex++) {
 	// 	result.push_back(currentObjVertex->coord());

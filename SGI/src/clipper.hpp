@@ -77,6 +77,8 @@ public:
 	static CLIPPED_OBJECT liangBarsky(vector<Coordinate> coords);
 
 	static vector<CLIPPED_OBJECT> weilerAtherton(vector<Coordinate> coords);
+	static vector<CLIPPED_OBJECT> weilerAthertonPolygonGenerator(vector<Coordinate> objectCoords, 
+				list<ClippingPoint> gettingIn, list<ClippingPoint> object, list<ClippingPoint> clip);
 
 	//Curve
 	static vector<CLIPPED_OBJECT> clipCurve(vector<Coordinate> coords);
