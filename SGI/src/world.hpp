@@ -8,6 +8,7 @@
 #include "line.hpp"
 #include "polygon.hpp"
 #include "cubic_bezier.h"
+#include "b_spline.h"
 #include "window.hpp"
 #include "object_descriptor.hpp"
 #include "clipper.hpp"

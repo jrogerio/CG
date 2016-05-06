@@ -2,6 +2,7 @@
 
 World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
+	new BSpline("teste", vector<Coordinate>(), 1);
 }
 
 World::~World() {
