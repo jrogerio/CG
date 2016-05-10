@@ -3,12 +3,12 @@
 
 #include <string>
 
+#include "b_spline.hpp"
 #include "geometric_object.hpp"
 #include "point.hpp"
 #include "line.hpp"
 #include "polygon.hpp"
 #include "cubic_bezier.h"
-#include "b_spline.h"
 #include "window.hpp"
 #include "object_descriptor.hpp"
 #include "clipper.hpp"
@@ -32,7 +32,8 @@ public:
 	void addPoint(string name, Coordinate coord);
 	void addLine(string name, Coordinate begin, Coordinate end);
 	void addPolygon(string name, vector<Coordinate> coords, bool filled);
-	void addCurve(string name, vector<Coordinate> coords, double step);
+	void addBezier(string name, vector<Coordinate> controlPoints, double step);
+	void addBSpline(string name, vector<Coordinate> controlPoints, double step);
 
 	Window getWindow();
 

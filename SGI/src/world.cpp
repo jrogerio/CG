@@ -2,7 +2,6 @@
 
 World::World() : window(550, 550) {
 	// TODO Auto-generated constructor stub
-	new BSpline("teste", vector<Coordinate>(), 1);
 }
 
 World::~World() {
@@ -30,11 +29,18 @@ void World::addPolygon(string name, vector<Coordinate> coords, bool filled) {
 	_displayFile.push_back(polygon);
 }
 
-void World::addCurve(string name, vector<Coordinate> coords, double step) {
-	CubicBezier * bezier = new CubicBezier(name, coords, step);
+void World::addBezier(string name, vector<Coordinate> controlPoints, double step) {
+	CubicBezier * bezier = new CubicBezier(name, controlPoints, step);
 	normalize(bezier);
 
 	_displayFile.push_back(bezier);
+}
+
+void World::addBSpline(string name, vector<Coordinate> controlPoints, double step) {
+	BSpline * spline = new BSpline(name, controlPoints, step);
+	normalize(spline);
+
+	_displayFile.push_back(spline);
 }
 
 Window World::getWindow() {

@@ -55,7 +55,7 @@ vector< Matrix<4,1, Coordinate> > CubicBezier::_createGeometryMatrices(vector<Co
 	vector< Matrix<4,1, Coordinate> > geometryMatrices;
 	Matrix<4,1, Coordinate> geometryMatrix;
 
-	int curvesCount = ( (controlPoints.size() - 4) / 3 ) + 1;
+	int curvesCount = int( (controlPoints.size() - 4) / 3 ) + 1;
 
 	for (int i = 0; i < curvesCount; ++i) {
 		geometryMatrix = Matrix<4,1,Coordinate>();

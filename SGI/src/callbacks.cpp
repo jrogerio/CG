@@ -55,12 +55,12 @@ extern "C" {
 
 				break;
 			default:
-				// addCurve
+				// addBezier
 				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates")));
 				coords = app->mainWindow->readCoordFrom(treeModel);
 				curveStep = GTK_SPIN_BUTTON(app_get_ui_element(app, "spinCurveStep"));
 
-				app->world->addCurve(name, coords, gtk_spin_button_get_value(curveStep));
+				app->world->addBezier(name, coords, gtk_spin_button_get_value(curveStep));
 
 				break;
 		}
