@@ -54,13 +54,22 @@ extern "C" {
 				app->world->addPolygon(name, coords, gtk_toggle_button_get_active(fillPolygon));
 
 				break;
-			default:
+			case 3:
 				// addBezier
 				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates")));
 				coords = app->mainWindow->readCoordFrom(treeModel);
 				curveStep = GTK_SPIN_BUTTON(app_get_ui_element(app, "spinCurveStep"));
 
 				app->world->addBezier(name, coords, gtk_spin_button_get_value(curveStep));
+
+				break;
+			default:
+				// addBSplines
+				treeModel = gtk_tree_view_get_model(GTK_TREE_VIEW(app_get_ui_element(app, "newBSplineCoordinates")));
+				coords = app->mainWindow->readCoordFrom(treeModel);
+				curveStep = GTK_SPIN_BUTTON(app_get_ui_element(app, "spinBSplineStep"));
+
+				app->world->addBSpline(name, coords, gtk_spin_button_get_value(curveStep));
 
 				break;
 		}
@@ -115,6 +124,16 @@ extern "C" {
 		}
 	}
 
+	void add_bsplines_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newBSplineCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreeIter iter;
+
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set (store, &iter, X_AXIS, 0, Y_AXIS, 0, Z_AXIS, 0, -1);
+	}
+
 	void remove_curve_coord_handler(GtkWidget *widget, App *app) {
 		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates"));
 		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
@@ -134,6 +153,26 @@ extern "C" {
 
 				rows--;
 			}
+		}
+	}
+
+	void remove_bsplines_coord_handler(GtkWidget *widget, App *app) {
+		GtkTreeView *treeview = GTK_TREE_VIEW(app_get_ui_element(app, "newCurveCoordinates"));
+		GtkTreeModel *model = gtk_tree_view_get_model(treeview);
+		GtkListStore *store = GTK_LIST_STORE(model);
+		GtkTreePath *path;
+		GtkTreeIter iter;
+
+		gint rows = gtk_tree_model_iter_n_children(model, NULL);
+
+		if(rows > 4) {
+			path = gtk_tree_path_new_from_indices(rows-1, -1);
+
+			gtk_tree_model_get_iter(model, &iter, path);
+			gtk_list_store_remove(store, &iter);
+			gtk_tree_path_free(path);
+
+			rows--;
 		}
 	}
 
